@@ -292,9 +292,14 @@
         <div class="terminal-body" id="terminalBody">
             <div class="content" id="content">
                 <div class="welcome">
-                    <h1>╔═══════════════════════════════════════╗</h1>
-                    <h1>║    LIO FLEISHMAN - RESUME v2.0       ║</h1>
-                    <h1>╚═══════════════════════════════════════╝</h1>
+                    <pre style="color: #00ffff; font-family: 'Courier New', monospace; margin-bottom: 20px; white-space: pre;">██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
+██║     ██║██╔═══██╗    ██╔════╝██║     ██╔════╝██║██╔════╝██║  ██║████╗ ████║██╔══██╗████╗  ██║
+██║     ██║██║   ██║    █████╗  ██║     █████╗  ██║███████╗███████║██╔████╔██║███████║██╔██╗ ██║
+██║     ██║██║   ██║    ██╔══╝  ██║     ██╔══╝  ██║╚════██║██╔══██║██║╚██╔╝██║██╔══██║██║╚██╗██║
+███████╗██║╚██████╔╝    ██║     ███████╗███████╗██║███████║██║  ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║
+╚══════╝╚═╝ ╚═════╝     ╚═╝     ╚══════╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+
+                         RESUME v2.0</pre>
                     <p>Welcome to my interactive resume terminal!</p>
                     <p>Type <span class="info">help</span> to see available commands.</p>
                     <p>Try <span class="info">ls</span> to see available files.</p>
@@ -861,12 +866,20 @@ Then: cat <filename>`;
             content.innerHTML = '';
             const welcome = document.createElement('div');
             welcome.className = 'welcome';
-            welcome.innerHTML = `
-                <h1>╔═══════════════════════════════════════╗</h1>
-                <h1>║    LIO FLEISHMAN - RESUME v2.0        ║</h1>
-                <h1>╚═══════════════════════════════════════╝</h1>
-                <p>Terminal cleared. Type <span class="info">help</span> for commands.</p>
-            `;
+            const pre = document.createElement('pre');
+            pre.style.cssText = 'color: #00ffff; font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
+            pre.textContent = `██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
+██║     ██║██╔═══██╗    ██╔════╝██║     ██╔════╝██║██╔════╝██║  ██║████╗ ████║██╔══██╗████╗  ██║
+██║     ██║██║   ██║    █████╗  ██║     █████╗  ██║███████╗███████║██╔████╔██║███████║██╔██╗ ██║
+██║     ██║██║   ██║    ██╔══╝  ██║     ██╔══╝  ██║╚════██║██╔══██║██║╚██╔╝██║██╔══██║██║╚██╗██║
+███████╗██║╚██████╔╝    ██║     ███████╗███████╗██║███████║██║  ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║
+╚══════╝╚═╝ ╚═════╝     ╚═╝     ╚══════╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+
+                         RESUME v2.0`;
+            welcome.appendChild(pre);
+            const p = document.createElement('p');
+            p.innerHTML = 'Terminal cleared. Type <span class="info">help</span> for commands.';
+            welcome.appendChild(p);
             content.appendChild(welcome);
             scrollToBottom();
         }
