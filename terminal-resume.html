@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lio@terminal:~$ resume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            font-family: 'Courier New', monospace;
+            color: #00ff00;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .terminal-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #000;
+            border: 2px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            background: #1a1a1a;
+            padding: 10px 15px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .btn-close { background: #ff5f56; }
+        .btn-minimize { background: #ffbd2e; }
+        .btn-maximize { background: #27c93f; }
+
+        .terminal-title {
+            margin-left: 10px;
+            color: #666;
+            font-size: 12px;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            min-height: 500px;
+            background: #000;
+            position: relative;
+        }
+
+        .terminal-body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.15),
+                    rgba(0, 0, 0, 0.15) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .prompt {
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+
+        .prompt::before {
+            content: 'lio@terminal:~$ ';
+            color: #0f0;
+            font-weight: bold;
+        }
+
+        .output {
+            margin-left: 0;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #00ffff;
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+        }
+
+        h2 {
+            color: #ffff00;
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #444;
+            padding-bottom: 5px;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .item {
+            margin-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        .item-header {
+            color: #00ff00;
+            font-weight: bold;
+        }
+
+        .item-subheader {
+            color: #888;
+            font-style: italic;
+        }
+
+        .item-description {
+            color: #0f0;
+            margin-top: 5px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        ul li::before {
+            content: '> ';
+            color: #00ff00;
+        }
+
+        a {
+            color: #00ffff;
+            text-decoration: none;
+            border-bottom: 1px dotted #00ffff;
+        }
+
+        a:hover {
+            color: #ffff00;
+            border-bottom-color: #ffff00;
+        }
+
+        .command-hint {
+            color: #666;
+            font-size: 12px;
+            margin-top: 30px;
+            padding-top: 10px;
+            border-top: 1px dashed #333;
+        }
+
+        .blink {
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .tag {
+            display: inline-block;
+            background: #003300;
+            color: #00ff00;
+            padding: 2px 8px;
+            margin: 2px;
+            border: 1px solid #006600;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .terminal-body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <span class="terminal-button btn-close"></span>
+            <span class="terminal-button btn-minimize"></span>
+            <span class="terminal-button btn-maximize"></span>
+            <span class="terminal-title">lio@terminal: ~</span>
+        </div>
+        
+        <div class="terminal-body">
+            <div class="content">
+                <div class="prompt">cat resume.txt</div>
+                
+                <div class="output">
+                    <h1>╔═══════════════════════════════════════╗</h1>
+                    <h1>║    LIO FLEISHMAN - RESUME v1.0       ║</h1>
+                    <h1>╚═══════════════════════════════════════╝</h1>
+                    
+                    <div class="section">
+                        <h2>// ABOUT</h2>
+                        <div class="item">
+                            <div class="item-description">
+                                Building AI-Ready Organizations | Sales Engineering for Generative AI & Data Intelligence
+                                <br><br>
+                                Leading Sales Engineering at Illumex.ai, helping companies put GenAI into practice by 
+                                building scalable data infrastructure with AI at its core. With 15+ years of experience 
+                                in software engineering and architecture, I've led the design and deployment of AI-powered 
+                                systems used by Fortune 500 companies, reducing time-to-insight by up to 90% and enabling 
+                                trusted AI use across hundreds of users.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>// CONTACT</h2>
+                        <div class="item">
+                            <ul>
+                                <li>LinkedIn: linkedin.com/in/lio-fleishman</li>
+                                <li>Location: Leander, Texas, United States</li>
+                                <li>Network: 1,621 followers · 500+ connections</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>// TECHNICAL_SKILLS</h2>
+                        <div class="item">
+                            <div class="item-header">Core Technologies</div>
+                            <div class="item-description" style="margin-top: 8px;">
+                                <span class="tag">Python</span>
+                                <span class="tag">TypeScript</span>
+                                <span class="tag">CSS</span>
+                                <span class="tag">JavaScript</span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-header">AI & Data Intelligence</div>
+                            <div class="item-description" style="margin-top: 8px;">
+                                <span class="tag">Generative AI</span>
+                                <span class="tag">Large Language Models</span>
+                                <span class="tag">Data Analytics</span>
+                                <span class="tag">GenAI Strategies</span>
+                                <span class="tag">Data Governance</span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-header">Cloud & Infrastructure</div>
+                            <div class="item-description" style="margin-top: 8px;">
+                                <span class="tag">Google Cloud Platform</span>
+                                <span class="tag">Cloud Infrastructure</span>
+                                <span class="tag">Cloud Security</span>
+                                <span class="tag">AWS Certified</span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-header">Business & Product</div>
+                            <div class="item-description" style="margin-top: 8px;">
+                                <span class="tag">Sales Engineering</span>
+                                <span class="tag">Strategic Partnerships</span>
+                                <span class="tag">Product Management</span>
+                                <span class="tag">Developer Experience</span>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-header">Design & UX</div>
+                            <div class="item-description" style="margin-top: 8px;">
+                                <span class="tag">UI/UX Design</span>
+                                <span class="tag">User Experience</span>
+                                <span class="tag">Web Design</span>
+                                <span class="tag">Graphic Design</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>// EXPERIENCE</h2>
+                        <div class="item">
+                            <div class="item-header">Head of Sales Engineering</div>
+                            <div class="item-subheader">Illumex | Aug 2024 - Present | New York, United States</div>
+                            <div class="item-description">
+                                <ul>
+                                    <li>Lead Sales Engineering for AI-powered data infrastructure solutions</li>
+                                    <li>Help Fortune 500 companies implement scalable GenAI systems</li>
+                                    <li>Close deals with top data teams demonstrating measurable AI readiness outcomes</li>
+                                    <li>Bridge gap between technology and business for product-led growth</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-header">Head of Community and Partnerships</div>
+                            <div class="item-subheader">Illumex | Jan 2023 - Aug 2024 | United States</div>
+                            <div class="item-description">
+                                <ul>
+                                    <li>Delivered AI-driven data catalog auto-documenting 10K+ tables and metrics</li>
+                                    <li>Designed semantic context layer for safe GenAI agents in BI tools</li>
+                                    <li>Led cross-functional teams integrating LLMs with enterprise metadata</li>
+                                    <li>Built partnerships driving adoption across the data community</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-header">Team Lead, Developer Experience Advocate</div>
+                            <div class="item-subheader">Sisense | Jul 2021 - Jan 2023 | New York, NY</div>
+                            <div class="item-description">
+                                <ul>
+                                    <li>Led development of Compose SDK - developer-first BI application framework</li>
+                                    <li>Gave developers maximum flexibility free from rigid traditional systems</li>
+                                    <li>Successfully integrated into production serving enterprise customers</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-header">Senior Partner Solutions Engineer</div>
+                            <div class="item-subheader">Sisense | Apr 2021 - Jul 2021 | New York, United States</div>
+                            <div class="item-description">
+                                <ul>
+                                    <li>Built enhanced integration with Adobe XD and Photoshop for custom visuals</li>
+                                    <li>Enabled amazing custom analytics visualizations for enterprise clients</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-header">Partnership Solutions Engineer</div>
+                            <div class="item-subheader">Sisense | Jan 2019 - Apr 2021 | New York City Area</div>
+                            <div class="item-description">
+                                <ul>
+                                    <li>Partnered with Google to bring insights to everyone</li>
+                                    <li>Created innovative data solutions using Google Sheets integration</li>
+                                    <li>Drove technical partnership strategy and implementation</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-header">Senior UX Engineer</div>
+                            <div class="item-subheader">ClickSoftware | Apr 2016 - Jan 2017 | Product Management</div>
+                        </div>
+                        <div class="item">
+                            <div class="item-header">Frontend Engineer</div>
+                            <div class="item-subheader">Pigment Creative House | May 2013 - Jul 2015 | Holon</div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>// KEY_ACHIEVEMENTS</h2>
+                        <div class="item">
+                            <div class="item-header">AI-Powered Data Infrastructure</div>
+                            <div class="item-description">
+                                <ul>
+                                    <li>Reduced time-to-insight by up to 90% for Fortune 500 companies</li>
+                                    <li>Enabled trusted AI use across hundreds of enterprise users</li>
+                                    <li>Auto-documented 10K+ tables and metrics using AI-driven catalog</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-header">Compose SDK - Developer BI Framework</div>
+                            <div class="item-description">
+                                <ul>
+                                    <li>Created from idea of giving developers maximum flexibility</li>
+                                    <li>Freed developers from constraints of rigid traditional BI systems</li>
+                                    <li>Successfully integrated into production Sisense platform</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div class="item-header">GenAI Integration Leadership</div>
+                            <div class="item-description">
+                                <ul>
+                                    <li>Designed semantic context layer powering safe GenAI agents</li>
+                                    <li>Integrated with major BI tools (Tableau, Power BI)</li>
+                                    <li>Led LLM integration for real-time chatbot QA and SQL generation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>// EDUCATION</h2>
+                        <div class="item">
+                            <div class="item-header">Bachelor of Science (BSc), Computer Science</div>
+                            <div class="item-subheader">The Open University of Israel</div>
+                        </div>
+                        <div class="item">
+                            <div class="item-header">Graphic Design</div>
+                            <div class="item-subheader">University of Buenos Aires</div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2>// CERTIFICATIONS</h2>
+                        <div class="item">
+                            <ul>
+                                <li>Google Cybersecurity Specialization (Jul 2024) - Credential: Q9SNBCDXW2H7</li>
+                                <li>AWS Certified Cloud Practitioner (Dec 2019 - Dec 2022)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="prompt" style="margin-top: 30px;">
+                    <span class="blink">█</span>
+                </div>
+
+                <div class="command-hint">
+                    TIP: Available commands: help | contact | projects | skills | clear
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
