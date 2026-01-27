@@ -520,7 +520,7 @@ Thanks for exploring! 🚀`
             },
             'joke.txt': {
                 content: `╔═══════════════════════════════════════╗
-║         TERMINAL HUMOR               ║
+║         TERMINAL HUMOR                ║
 ╚═══════════════════════════════════════╝
 
 Why do programmers prefer dark mode?
@@ -559,6 +559,28 @@ Hope these made you smile! 😊`
 
         let commandHistory = [];
         let historyIndex = -1;
+        let tabCompletions = [];
+        let tabIndex = -1;
+        
+        const availableCommands = ['ls', 'cat', 'help', 'clear', 'whoami', 'pwd', 'date', 'echo', 'contact', 'projects', 'skills', 'resume', 'neofetch', 'fetch', 'banner'];
+
+        function getAutocompleteSuggestions(inputValue) {
+            const parts = inputValue.trim().split(' ');
+            const command = parts[0].toLowerCase();
+            const arg = parts.length > 1 ? parts.slice(1).join(' ') : '';
+            
+            // If we're completing a filename (after cat command)
+            if (command === 'cat' && arg) {
+                const fileList = Object.keys(files);
+                return fileList.filter(file => file.startsWith(arg));
+            }
+            // If we're completing a command
+            else if (parts.length === 1 || (command === 'cat' && !arg)) {
+                return availableCommands.filter(cmd => cmd.startsWith(command));
+            }
+            
+            return [];
+        }
 
         function createCommandLine() {
             const content = document.getElementById('content');
@@ -583,12 +605,16 @@ Hope these made you smile! 😊`
             
             input.focus();
             
+            let lastTabTime = 0;
+            
             input.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     e.preventDefault();
                     executeCommand(input.value.trim());
                     input.value = '';
                     historyIndex = -1;
+                    tabCompletions = [];
+                    tabIndex = -1;
                 } else if (e.key === 'ArrowUp') {
                     e.preventDefault();
                     if (commandHistory.length > 0) {
@@ -599,6 +625,8 @@ Hope these made you smile! 😊`
                         }
                         input.value = commandHistory[historyIndex];
                     }
+                    tabCompletions = [];
+                    tabIndex = -1;
                 } else if (e.key === 'ArrowDown') {
                     e.preventDefault();
                     if (historyIndex !== -1) {
@@ -610,6 +638,76 @@ Hope these made you smile! 😊`
                             input.value = commandHistory[historyIndex];
                         }
                     }
+                    tabCompletions = [];
+                    tabIndex = -1;
+                } else if (e.key === 'Tab') {
+                    e.preventDefault();
+                    const currentTime = Date.now();
+                    const inputValue = input.value;
+                    const parts = inputValue.trim().split(' ');
+                    const command = parts[0].toLowerCase();
+                    const arg = parts.length > 1 ? parts.slice(1).join(' ') : '';
+                    
+                    // Get completions
+                    const suggestions = getAutocompleteSuggestions(inputValue);
+                    
+                    if (suggestions.length === 0) {
+                        // No matches, beep (visual feedback)
+                        input.style.border = '1px solid #ff4444';
+                        setTimeout(() => input.style.border = '', 100);
+                        return;
+                    }
+                    
+                    // Double tab (within 500ms) - show all matches
+                    if (currentTime - lastTabTime < 500 && tabCompletions.length > 0) {
+                        if (command === 'cat' && arg) {
+                            addOutput(suggestions.join('  '), 'info');
+                        } else {
+                            addOutput(suggestions.join('  '), 'info');
+                        }
+                        tabCompletions = [];
+                        tabIndex = -1;
+                        lastTabTime = 0;
+                        return;
+                    }
+                    
+                    lastTabTime = currentTime;
+                    
+                    // Single match - complete it
+                    if (suggestions.length === 1) {
+                        if (command === 'cat' && arg) {
+                            // Complete filename
+                            const newArg = suggestions[0];
+                            input.value = `cat ${newArg}`;
+                        } else {
+                            // Complete command
+                            input.value = suggestions[0];
+                        }
+                        tabCompletions = [];
+                        tabIndex = -1;
+                    } else {
+                        // Multiple matches - cycle through them
+                        if (tabCompletions.length === 0 || tabCompletions.join('|') !== suggestions.join('|')) {
+                            tabCompletions = suggestions;
+                            tabIndex = 0;
+                        } else {
+                            tabIndex = (tabIndex + 1) % tabCompletions.length;
+                        }
+                        
+                        if (command === 'cat' && arg) {
+                            // Complete filename
+                            const newArg = tabCompletions[tabIndex];
+                            input.value = `cat ${newArg}`;
+                        } else {
+                            // Complete command
+                            input.value = tabCompletions[tabIndex];
+                        }
+                    }
+                } else {
+                    // Reset tab completions when typing
+                    tabCompletions = [];
+                    tabIndex = -1;
+                    lastTabTime = 0;
                 }
             });
             
@@ -771,7 +869,7 @@ Then: cat <filename>`;
             welcome.className = 'welcome';
             welcome.innerHTML = `
                 <h1>╔═══════════════════════════════════════╗</h1>
-                <h1>║    LIO FLEISHMAN - RESUME v2.0       ║</h1>
+                <h1>║    LIO FLEISHMAN - RESUME v2.0        ║</h1>
                 <h1>╚═══════════════════════════════════════╝</h1>
                 <p>Terminal cleared. Type <span class="info">help</span> for commands.</p>
             `;
