@@ -795,7 +795,7 @@ Hope these made you smile! 😊`
             
             switch(command.toLowerCase()) {
                 case 'ls':
-                    handleLs();
+                    handleLs(args);
                     break;
                 case 'cat':
                     if (args.length === 0) {
@@ -850,8 +850,17 @@ Hope these made you smile! 😊`
             createCommandLine();
         }
 
-        function handleLs() {
-            const fileList = Object.keys(files);
+        function handleLs(args = []) {
+            let fileList = Object.keys(files);
+            
+            // Check if -a flag is present
+            const showAll = args.includes('-a') || args.includes('--all');
+            
+            // Filter out secret.txt unless -a flag is used
+            if (!showAll) {
+                fileList = fileList.filter(file => file !== 'secret.txt');
+            }
+            
             let output = 'total ' + fileList.length + '\n';
             const fileGrid = document.createElement('div');
             fileGrid.className = 'file-list';
@@ -859,7 +868,12 @@ Hope these made you smile! 😊`
             fileList.forEach(file => {
                 const fileItem = document.createElement('div');
                 fileItem.className = 'file-item';
-                fileItem.textContent = file;
+                // Show . prefix for hidden files when using -a
+                if (file === 'secret.txt' && showAll) {
+                    fileItem.textContent = '.' + file;
+                } else {
+                    fileItem.textContent = file;
+                }
                 fileItem.style.cursor = 'pointer';
                 fileItem.addEventListener('click', () => {
                     executeCommand(`cat ${file}`);
@@ -889,7 +903,8 @@ Hope these made you smile! 😊`
         function handleHelp() {
             const helpText = `Available commands:
 
-  ls              - List all available files
+  ls              - List available files
+  ls -a           - List all files (including hidden files)
   cat <file>      - Display contents of a file
   help            - Show this help message
   clear           - Clear the terminal
