@@ -265,6 +265,14 @@
             margin-bottom: 20px;
         }
 
+        .banner-desktop {
+            display: block;
+        }
+
+        .banner-mobile {
+            display: none;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -276,6 +284,20 @@
             
             .terminal-body {
                 padding: 15px;
+            }
+
+            .banner-desktop {
+                display: none;
+            }
+
+            .banner-mobile {
+                display: block;
+            }
+
+            .banner-mobile pre {
+                font-size: 10px;
+                line-height: 1.2;
+                margin-bottom: 15px;
             }
         }
     </style>
@@ -292,7 +314,7 @@
         <div class="terminal-body" id="terminalBody">
             <div class="content" id="content">
                 <div class="welcome">
-                    <pre style="color: #00ffff; font-family: 'Courier New', monospace; margin-bottom: 20px; white-space: pre;">██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
+                    <pre class="banner-desktop" style="color: #00ffff; font-family: 'Courier New', monospace; margin-bottom: 20px; white-space: pre;">██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
 ██║     ██║██╔═══██╗    ██╔════╝██║     ██╔════╝██║██╔════╝██║  ██║████╗ ████║██╔══██╗████╗  ██║
 ██║     ██║██║   ██║    █████╗  ██║     █████╗  ██║███████╗███████║██╔████╔██║███████║██╔██╗ ██║
 ██║     ██║██║   ██║    ██╔══╝  ██║     ██╔══╝  ██║╚════██║██╔══██║██║╚██╔╝██║██╔══██║██║╚██╗██║
@@ -300,6 +322,10 @@
 ╚══════╝╚═╝ ╚═════╝     ╚═╝     ╚══════╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
 
                          RESUME v2.0</pre>
+                    <pre class="banner-mobile" style="color: #00ffff; font-family: 'Courier New', monospace; margin-bottom: 20px; white-space: pre;">╔═══════════════════╗
+║  LIO FLEISHMAN    ║
+║    RESUME v2.0    ║
+╚═══════════════════╝</pre>
                     <p>Welcome to my interactive resume terminal!</p>
                     <p>Type <span class="info">help</span> to see available commands.</p>
                     <p>Try <span class="info">ls</span> to see available files.</p>
@@ -866,9 +892,11 @@ Then: cat <filename>`;
             content.innerHTML = '';
             const welcome = document.createElement('div');
             welcome.className = 'welcome';
-            const pre = document.createElement('pre');
-            pre.style.cssText = 'color: #00ffff; font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
-            pre.textContent = `██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
+            
+            const preDesktop = document.createElement('pre');
+            preDesktop.className = 'banner-desktop';
+            preDesktop.style.cssText = 'color: #00ffff; font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
+            preDesktop.textContent = `██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
 ██║     ██║██╔═══██╗    ██╔════╝██║     ██╔════╝██║██╔════╝██║  ██║████╗ ████║██╔══██╗████╗  ██║
 ██║     ██║██║   ██║    █████╗  ██║     █████╗  ██║███████╗███████║██╔████╔██║███████║██╔██╗ ██║
 ██║     ██║██║   ██║    ██╔══╝  ██║     ██╔══╝  ██║╚════██║██╔══██║██║╚██╔╝██║██╔══██║██║╚██╗██║
@@ -876,7 +904,17 @@ Then: cat <filename>`;
 ╚══════╝╚═╝ ╚═════╝     ╚═╝     ╚══════╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
 
                          RESUME v2.0`;
-            welcome.appendChild(pre);
+            welcome.appendChild(preDesktop);
+            
+            const preMobile = document.createElement('pre');
+            preMobile.className = 'banner-mobile';
+            preMobile.style.cssText = 'color: #00ffff; font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
+            preMobile.textContent = `╔═══════════════════╗
+║  LIO FLEISHMAN    ║
+║    RESUME v2.0    ║
+╚═══════════════════╝`;
+            welcome.appendChild(preMobile);
+            
             const p = document.createElement('p');
             p.innerHTML = 'Terminal cleared. Type <span class="info">help</span> for commands.';
             welcome.appendChild(p);
