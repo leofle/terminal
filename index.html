@@ -759,6 +759,15 @@ Hope these made you smile! 😊`
             scrollToBottom();
         }
 
+        function addOutputHTML(html, className = '') {
+            const content = document.getElementById('content');
+            const output = document.createElement('div');
+            output.className = `output ${className}`;
+            output.innerHTML = html;
+            content.appendChild(output);
+            scrollToBottom();
+        }
+
         function scrollToBottom() {
             const terminalBody = document.getElementById('terminalBody');
             terminalBody.scrollTop = terminalBody.scrollHeight;
@@ -865,7 +874,12 @@ Hope these made you smile! 😊`
 
         function handleCat(filename) {
             if (files[filename]) {
-                addOutput(files[filename].content, '');
+                let content = files[filename].content;
+                // Convert LinkedIn links to clickable HTML links
+                content = content.replace(/linkedin\.com\/in\/[a-zA-Z0-9-]+/g, (match) => {
+                    return `<a href="https://${match}" target="_blank" rel="noopener noreferrer">${match}</a>`;
+                });
+                addOutputHTML(content, '');
             } else {
                 addOutput(`cat: ${filename}: No such file or directory`, 'error');
                 addOutput('Type "ls" to see available files.', 'info');
