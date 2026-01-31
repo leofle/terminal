@@ -1014,6 +1014,11 @@ Then: cat <filename>`;
 
         // Initialize
         createCommandLine();
+
+        // If URL has #resume, auto-show resume (e.g. leofle.github.io/terminal/#resume)
+        if (window.location.hash === '#resume') {
+            executeCommand('cat resume.txt');
+        }
     </script>
 </body>
 </html>
