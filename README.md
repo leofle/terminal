@@ -1,6 +1,6 @@
 # Terminal Resume
 
-[\![WebMCP](https://toolindex-api-production.up.railway.app/badge?origin=https://leofle.github.io/terminal)](https://www.webmcpregistry.org)
+[\![WebMCP verified](https://toolindex-api-production.up.railway.app/badge?origin=https%3A%2F%2Fleofle.github.io%2Fterminal)](https://www.webmcpregistry.org)
 
 An interactive, browser-based terminal emulator that serves as a resume. Type commands like `ls`, `cat`, `help`, `whoami`, and `neofetch` to explore.
 
