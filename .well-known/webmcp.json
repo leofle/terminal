@@ -1,0 +1,33 @@
+{
+  "manifest_version": "0.1",
+  "origin": "https://leofle.github.io/terminal",
+  "updated_at": "2026-02-17T00:00:00Z",
+  "tools": [
+    {
+      "name": "terminal_resume",
+      "description": "Interactive terminal-style resume viewer with Unix commands like ls, cat, whoami, and neofetch to explore Lio Fleishmans professional profile",
+      "version": "1.0.0",
+      "tags": ["resume", "terminal", "interactive", "portfolio"],
+      "risk_level": "low",
+      "requires_user_confirm": false,
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "Terminal command to execute (ls, cat, help, whoami, neofetch, etc.)"
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "output": {
+            "type": "string",
+            "description": "Terminal output text"
+          }
+        }
+      }
+    }
+  ]
+}
