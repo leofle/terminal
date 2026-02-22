@@ -1187,6 +1187,9 @@ Then: cat <filename>`;
             const p3 = document.createElement('p');
             p3.innerHTML = 'Try <span class="info">ls</span> to see available files.';
             welcome.appendChild(p3);
+            const p4 = document.createElement('p');
+            p4.innerHTML = 'Switch themes with <span class="info">theme</span> (try <span class="info">theme dracula</span>)';
+            welcome.appendChild(p4);
 
             content.appendChild(welcome);
             scrollToBottom();
@@ -1199,7 +1202,62 @@ Then: cat <filename>`;
             }
         }
 
-        runBootSequence();
+        function showWelcomeOnly() {
+            const content = document.getElementById('content');
+            const welcome = document.createElement('div');
+            welcome.className = 'welcome';
+
+            const preDesktop = document.createElement('pre');
+            preDesktop.className = 'banner-desktop';
+            preDesktop.style.cssText = 'color: var(--accent); font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
+            preDesktop.textContent = `██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
+██║     ██║██╔═══██╗    ██╔════╝██║     ██╔════╝██║██╔════╝██║  ██║████╗ ████║██╔══██╗████╗  ██║
+██║     ██║██║   ██║    █████╗  ██║     █████╗  ██║███████╗███████║██╔████╔██║███████║██╔██╗ ██║
+██║     ██║██║   ██║    ██╔══╝  ██║     ██╔══╝  ██║╚════██║██╔══██║██║╚██╔╝██║██╔══██║██║╚██╗██║
+███████╗██║╚██████╔╝    ██║     ███████╗███████╗██║███████║██║  ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║
+╚══════╝╚═╝ ╚═════╝     ╚═╝     ╚══════╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+
+                         RESUME v2.0`;
+            welcome.appendChild(preDesktop);
+
+            const preMobile = document.createElement('pre');
+            preMobile.className = 'banner-mobile';
+            preMobile.style.cssText = 'color: var(--accent); font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
+            preMobile.textContent = `╔═══════════════════╗
+║  LIO FLEISHMAN    ║
+║    RESUME v2.0    ║
+╚═══════════════════╝`;
+            welcome.appendChild(preMobile);
+
+            const p1 = document.createElement('p');
+            p1.textContent = 'Welcome to my interactive resume terminal!';
+            welcome.appendChild(p1);
+            const p2 = document.createElement('p');
+            p2.innerHTML = 'Type <span class="info">help</span> to see available commands.';
+            welcome.appendChild(p2);
+            const p3 = document.createElement('p');
+            p3.innerHTML = 'Try <span class="info">ls</span> to see available files.';
+            welcome.appendChild(p3);
+            const p4 = document.createElement('p');
+            p4.innerHTML = 'Switch themes with <span class="info">theme</span> (try <span class="info">theme dracula</span>)';
+            welcome.appendChild(p4);
+
+            content.appendChild(welcome);
+            scrollToBottom();
+            createCommandLine();
+
+            if (window.location.hash === '#resume') {
+                executeCommand('cat resume.txt');
+            }
+        }
+
+        // Boot sequence only on first visit per session
+        if (!sessionStorage.getItem('terminal-booted')) {
+            sessionStorage.setItem('terminal-booted', '1');
+            runBootSequence();
+        } else {
+            showWelcomeOnly();
+        }
     </script>
 </body>
 </html>
