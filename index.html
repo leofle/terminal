@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>lio@terminal:~$ resume</title>
     <style>
+        :root {
+            --bg: #000;
+            --fg: #00ff00;
+            --fg-bold: #0f0;
+            --accent: #00ffff;
+            --accent2: #ffff00;
+            --header-bg: #1a1a1a;
+            --border: #333;
+            --dim: #444;
+            --error: #ff4444;
+            --tag-bg: #003300;
+            --tag-border: #006600;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -15,7 +29,7 @@
             background: url('images/bg.JPG') center center fixed;
             background-size: cover;
             font-family: 'Courier New', monospace;
-            color: #00ff00;
+            color: var(--fg);
             padding: 20px;
             line-height: 1.6;
             min-height: 100vh;
@@ -37,8 +51,8 @@
         .terminal-container {
             max-width: 964px;
             margin: 0 auto;
-            background: #000;
-            border: 2px solid #333;
+            background: var(--bg);
+            border: 2px solid var(--border);
             border-radius: 14px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             overflow: hidden;
@@ -50,9 +64,9 @@
         }
 
         .terminal-header {
-            background: #1a1a1a;
+            background: var(--header-bg);
             padding: 10px 15px;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -78,7 +92,7 @@
 
         .terminal-body {
             padding: 20px;
-            background: #000;
+            background: var(--bg);
             position: relative;
             flex: 1;
             overflow-y: auto;
@@ -98,7 +112,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: 
+            background:
                 repeating-linear-gradient(
                     0deg,
                     rgba(0, 0, 0, 0.15),
@@ -123,13 +137,13 @@
         }
 
         .prompt {
-            color: #00ff00;
+            color: var(--fg);
             margin-right: 8px;
             white-space: nowrap;
         }
 
         .prompt-text {
-            color: #0f0;
+            color: var(--fg-bold);
             font-weight: bold;
         }
 
@@ -137,7 +151,7 @@
             background: transparent;
             border: none;
             outline: none;
-            color: #00ff00;
+            color: var(--fg);
             font-family: 'Courier New', monospace;
             font-size: 14px;
             flex: 1;
@@ -145,7 +159,7 @@
         }
 
         .command-input::placeholder {
-            color: #444;
+            color: var(--dim);
         }
 
         .output {
@@ -156,17 +170,17 @@
         }
 
         h1 {
-            color: #00ffff;
+            color: var(--accent);
             font-size: 24px;
             margin-bottom: 10px;
         }
 
         h2 {
-            color: #ffff00;
+            color: var(--accent2);
             font-size: 18px;
             margin-top: 20px;
             margin-bottom: 10px;
-            border-bottom: 1px dashed #444;
+            border-bottom: 1px dashed var(--dim);
             padding-bottom: 5px;
         }
 
@@ -180,7 +194,7 @@
         }
 
         .item-header {
-            color: #00ff00;
+            color: var(--fg);
             font-weight: bold;
         }
 
@@ -190,7 +204,7 @@
         }
 
         .item-description {
-            color: #0f0;
+            color: var(--fg-bold);
             margin-top: 5px;
         }
 
@@ -201,18 +215,18 @@
 
         ul li::before {
             content: '> ';
-            color: #00ff00;
+            color: var(--fg);
         }
 
         a {
-            color: #00ffff;
+            color: var(--accent);
             text-decoration: none;
-            border-bottom: 1px dotted #00ffff;
+            border-bottom: 1px dotted var(--accent);
         }
 
         a:hover {
-            color: #ffff00;
-            border-bottom-color: #ffff00;
+            color: var(--accent2);
+            border-bottom-color: var(--accent2);
         }
 
         .blink {
@@ -226,11 +240,11 @@
 
         .tag {
             display: inline-block;
-            background: #003300;
-            color: #00ff00;
+            background: var(--tag-bg);
+            color: var(--fg);
             padding: 2px 8px;
             margin: 2px;
-            border: 1px solid #006600;
+            border: 1px solid var(--tag-border);
             border-radius: 3px;
             font-size: 12px;
         }
@@ -243,32 +257,42 @@
         }
 
         .file-item {
-            color: #00ffff;
+            color: var(--accent);
             padding: 5px;
-            border: 1px dashed #333;
+            border: 1px dashed var(--border);
             border-radius: 3px;
         }
 
         .file-item:hover {
             background: #111;
-            border-color: #00ffff;
+            border-color: var(--accent);
         }
 
         .error {
-            color: #ff4444;
+            color: var(--error);
         }
 
         .success {
-            color: #00ff00;
+            color: var(--fg);
         }
 
         .info {
-            color: #00ffff;
+            color: var(--accent);
         }
 
         .welcome {
-            color: #ffff00;
+            color: var(--accent2);
             margin-bottom: 20px;
+        }
+
+        .boot-line {
+            color: var(--fg);
+            margin-bottom: 2px;
+            white-space: pre;
+        }
+
+        .boot-line .ok {
+            color: var(--accent);
         }
 
         .banner-desktop {
@@ -284,14 +308,14 @@
                 padding: 10px;
                 overflow-x: hidden;
             }
-            
+
             .terminal-container {
                 max-width: 100%;
                 width: 100%;
                 height: calc(100vh - 20px);
                 margin: 0;
             }
-            
+
             .terminal-body {
                 padding: 15px;
             }
@@ -327,28 +351,62 @@
         
         <div class="terminal-body" id="terminalBody">
             <div class="content" id="content">
-                <div class="welcome">
-                    <pre class="banner-desktop" style="color: #00ffff; font-family: 'Courier New', monospace; margin-bottom: 20px; white-space: pre;">██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
-██║     ██║██╔═══██╗    ██╔════╝██║     ██╔════╝██║██╔════╝██║  ██║████╗ ████║██╔══██╗████╗  ██║
-██║     ██║██║   ██║    █████╗  ██║     █████╗  ██║███████╗███████║██╔████╔██║███████║██╔██╗ ██║
-██║     ██║██║   ██║    ██╔══╝  ██║     ██╔══╝  ██║╚════██║██╔══██║██║╚██╔╝██║██╔══██║██║╚██╗██║
-███████╗██║╚██████╔╝    ██║     ███████╗███████╗██║███████║██║  ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║
-╚══════╝╚═╝ ╚═════╝     ╚═╝     ╚══════╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
-
-                         RESUME v2.0</pre>
-                    <pre class="banner-mobile" style="color: #00ffff; font-family: 'Courier New', monospace; margin-bottom: 20px; white-space: pre;">╔═══════════════════╗
-║  LIO FLEISHMAN    ║
-║    RESUME v2.0    ║
-╚═══════════════════╝</pre>
-                    <p>Welcome to my interactive resume terminal!</p>
-                    <p>Type <span class="info">help</span> to see available commands.</p>
-                    <p>Try <span class="info">ls</span> to see available files.</p>
-                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // ── Theme system ────────────────────────────────────────────────
+        const themes = {
+            matrix: {
+                '--bg': '#000', '--fg': '#00ff00', '--fg-bold': '#0f0',
+                '--accent': '#00ffff', '--accent2': '#ffff00', '--header-bg': '#1a1a1a',
+                '--border': '#333', '--dim': '#444', '--error': '#ff4444',
+                '--tag-bg': '#003300', '--tag-border': '#006600'
+            },
+            dracula: {
+                '--bg': '#282a36', '--fg': '#f8f8f2', '--fg-bold': '#f8f8f2',
+                '--accent': '#8be9fd', '--accent2': '#bd93f9', '--header-bg': '#21222c',
+                '--border': '#44475a', '--dim': '#6272a4', '--error': '#ff5555',
+                '--tag-bg': '#44475a', '--tag-border': '#6272a4'
+            },
+            monokai: {
+                '--bg': '#272822', '--fg': '#f8f8f2', '--fg-bold': '#f8f8f2',
+                '--accent': '#66d9ef', '--accent2': '#e6db74', '--header-bg': '#1e1f1c',
+                '--border': '#49483e', '--dim': '#75715e', '--error': '#f92672',
+                '--tag-bg': '#3e3d32', '--tag-border': '#49483e'
+            },
+            'retro-amber': {
+                '--bg': '#1a1000', '--fg': '#ffb000', '--fg-bold': '#ffc800',
+                '--accent': '#ffda44', '--accent2': '#ff8800', '--header-bg': '#120b00',
+                '--border': '#4a3500', '--dim': '#7a5a00', '--error': '#ff4444',
+                '--tag-bg': '#2a1a00', '--tag-border': '#4a3500'
+            },
+            catppuccin: {
+                '--bg': '#1e1e2e', '--fg': '#cdd6f4', '--fg-bold': '#cdd6f4',
+                '--accent': '#89dceb', '--accent2': '#f5c2e7', '--header-bg': '#181825',
+                '--border': '#45475a', '--dim': '#585b70', '--error': '#f38ba8',
+                '--tag-bg': '#313244', '--tag-border': '#45475a'
+            }
+        };
+
+        function applyTheme(name) {
+            const theme = themes[name];
+            if (!theme) return false;
+            const root = document.documentElement;
+            for (const [prop, value] of Object.entries(theme)) {
+                root.style.setProperty(prop, value);
+            }
+            localStorage.setItem('terminal-theme', name);
+            return true;
+        }
+
+        // Restore saved theme
+        const savedTheme = localStorage.getItem('terminal-theme');
+        if (savedTheme && themes[savedTheme]) {
+            applyTheme(savedTheme);
+        }
+
         const files = {
             'resume.txt': {
                 content: `╔═══════════════════════════════════════╗
@@ -612,7 +670,7 @@ Hope these made you smile! 😊`
         let tabCompletions = [];
         let tabIndex = -1;
         
-        const availableCommands = ['ls', 'cat', 'help', 'clear', 'whoami', 'pwd', 'date', 'echo', 'contact', 'projects', 'skills', 'resume', 'neofetch', 'fetch', 'banner'];
+        const availableCommands = ['ls', 'cat', 'help', 'clear', 'whoami', 'pwd', 'date', 'echo', 'contact', 'projects', 'skills', 'resume', 'neofetch', 'fetch', 'banner', 'theme'];
 
         function getAutocompleteSuggestions(inputValue) {
             const parts = inputValue.trim().split(' ');
@@ -859,6 +917,9 @@ Hope these made you smile! 😊`
                 case 'banner':
                     handleBanner();
                     break;
+                case 'theme':
+                    handleTheme(args);
+                    break;
                 default:
                     addOutput(`Command not found: ${command}`, 'error');
                     addOutput('Type "help" to see available commands.', 'info');
@@ -917,6 +978,22 @@ Hope these made you smile! 😊`
             }
         }
 
+        function handleTheme(args) {
+            const name = (args[0] || '').toLowerCase();
+            if (!name) {
+                const current = localStorage.getItem('terminal-theme') || 'matrix';
+                const list = Object.keys(themes).map(t => t === current ? `  * ${t} (active)` : `    ${t}`).join('\n');
+                addOutput(`Available themes:\n${list}\n\nUsage: theme <name>`, 'info');
+                return;
+            }
+            if (applyTheme(name)) {
+                addOutput(`Theme switched to "${name}"`, 'success');
+            } else {
+                addOutput(`Unknown theme: ${name}`, 'error');
+                addOutput(`Available: ${Object.keys(themes).join(', ')}`, 'info');
+            }
+        }
+
         function handleHelp() {
             const helpText = `Available commands:
 
@@ -935,6 +1012,7 @@ Hope these made you smile! 😊`
   resume          - Show full resume
   neofetch        - Display system information
   banner          - Display ASCII banner
+  theme <name>    - Switch theme (matrix, dracula, monokai, retro-amber, catppuccin)
 
 Try: ls
 Then: cat <filename>`;
@@ -949,7 +1027,7 @@ Then: cat <filename>`;
             
             const preDesktop = document.createElement('pre');
             preDesktop.className = 'banner-desktop';
-            preDesktop.style.cssText = 'color: #00ffff; font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
+            preDesktop.style.cssText = 'color: var(--accent); font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
             preDesktop.textContent = `██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
 ██║     ██║██╔═══██╗    ██╔════╝██║     ██╔════╝██║██╔════╝██║  ██║████╗ ████║██╔══██╗████╗  ██║
 ██║     ██║██║   ██║    █████╗  ██║     █████╗  ██║███████╗███████║██╔████╔██║███████║██╔██╗ ██║
@@ -962,7 +1040,7 @@ Then: cat <filename>`;
             
             const preMobile = document.createElement('pre');
             preMobile.className = 'banner-mobile';
-            preMobile.style.cssText = 'color: #00ffff; font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
+            preMobile.style.cssText = 'color: var(--accent); font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
             preMobile.textContent = `╔═══════════════════╗
 ║  LIO FLEISHMAN    ║
 ║    RESUME v2.0    ║
@@ -1021,13 +1099,107 @@ Then: cat <filename>`;
             addOutput(banner, 'info');
         }
 
-        // Initialize
-        createCommandLine();
+        // ── Boot sequence ────────────────────────────────────────────
+        const bootLines = [
+            { text: 'BIOS v3.14 ... ', delay: 80 },
+            { text: 'OK', delay: 200, cls: 'ok' },
+            { text: 'Loading kernel .............. ', delay: 60 },
+            { text: 'OK', delay: 300, cls: 'ok' },
+            { text: 'Mounting /home/lio .......... ', delay: 50 },
+            { text: 'OK', delay: 200, cls: 'ok' },
+            { text: 'Initializing network ........ ', delay: 40 },
+            { text: 'OK', delay: 250, cls: 'ok' },
+            { text: 'Loading resume data ......... ', delay: 50 },
+            { text: 'OK', delay: 200, cls: 'ok' },
+            { text: 'Starting terminal v2.0 ...... ', delay: 60 },
+            { text: 'OK', delay: 400, cls: 'ok' },
+        ];
 
-        // If URL has #resume, auto-show resume (e.g. leofle.github.io/terminal/#resume)
-        if (window.location.hash === '#resume') {
-            executeCommand('cat resume.txt');
+        async function typeText(element, text, charDelay) {
+            for (const char of text) {
+                element.textContent += char;
+                scrollToBottom();
+                await new Promise(r => setTimeout(r, charDelay));
+            }
         }
+
+        async function runBootSequence() {
+            const content = document.getElementById('content');
+            const bootContainer = document.createElement('div');
+            bootContainer.style.marginBottom = '20px';
+            content.appendChild(bootContainer);
+
+            let currentLine = null;
+
+            for (const step of bootLines) {
+                if (step.cls === 'ok') {
+                    // Append OK to current line
+                    const ok = document.createElement('span');
+                    ok.className = 'ok';
+                    ok.style.color = 'var(--accent)';
+                    if (currentLine) currentLine.appendChild(ok);
+                    await typeText(ok, step.text, 30);
+                    await new Promise(r => setTimeout(r, step.delay));
+                } else {
+                    currentLine = document.createElement('div');
+                    currentLine.className = 'boot-line';
+                    bootContainer.appendChild(currentLine);
+                    await typeText(currentLine, step.text, step.delay);
+                }
+            }
+
+            await new Promise(r => setTimeout(r, 300));
+
+            // Clear boot and show welcome
+            bootContainer.remove();
+
+            const welcome = document.createElement('div');
+            welcome.className = 'welcome';
+
+            const preDesktop = document.createElement('pre');
+            preDesktop.className = 'banner-desktop';
+            preDesktop.style.cssText = 'color: var(--accent); font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
+            preDesktop.textContent = `██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
+██║     ██║██╔═══██╗    ██╔════╝██║     ██╔════╝██║██╔════╝██║  ██║████╗ ████║██╔══██╗████╗  ██║
+██║     ██║██║   ██║    █████╗  ██║     █████╗  ██║███████╗███████║██╔████╔██║███████║██╔██╗ ██║
+██║     ██║██║   ██║    ██╔══╝  ██║     ██╔══╝  ██║╚════██║██╔══██║██║╚██╔╝██║██╔══██║██║╚██╗██║
+███████╗██║╚██████╔╝    ██║     ███████╗███████╗██║███████║██║  ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║
+╚══════╝╚═╝ ╚═════╝     ╚═╝     ╚══════╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+
+                         RESUME v2.0`;
+            welcome.appendChild(preDesktop);
+
+            const preMobile = document.createElement('pre');
+            preMobile.className = 'banner-mobile';
+            preMobile.style.cssText = 'color: var(--accent); font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
+            preMobile.textContent = `╔═══════════════════╗
+║  LIO FLEISHMAN    ║
+║    RESUME v2.0    ║
+╚═══════════════════╝`;
+            welcome.appendChild(preMobile);
+
+            const p1 = document.createElement('p');
+            p1.textContent = 'Welcome to my interactive resume terminal!';
+            welcome.appendChild(p1);
+            const p2 = document.createElement('p');
+            p2.innerHTML = 'Type <span class="info">help</span> to see available commands.';
+            welcome.appendChild(p2);
+            const p3 = document.createElement('p');
+            p3.innerHTML = 'Try <span class="info">ls</span> to see available files.';
+            welcome.appendChild(p3);
+
+            content.appendChild(welcome);
+            scrollToBottom();
+
+            createCommandLine();
+
+            // If URL has #resume, auto-show resume
+            if (window.location.hash === '#resume') {
+                executeCommand('cat resume.txt');
+            }
+        }
+
+        runBootSequence();
     </script>
 </body>
 </html>
