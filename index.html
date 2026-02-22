@@ -83,6 +83,12 @@
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .terminal-body::-webkit-scrollbar {
+            display: none;
         }
 
         .terminal-body::before {
