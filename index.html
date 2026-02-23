@@ -670,7 +670,7 @@ Hope these made you smile! 😊`
         let tabCompletions = [];
         let tabIndex = -1;
         
-        const availableCommands = ['ls', 'cat', 'help', 'clear', 'whoami', 'pwd', 'date', 'echo', 'contact', 'projects', 'skills', 'resume', 'neofetch', 'fetch', 'banner', 'theme'];
+        const availableCommands = ['ls', 'cat', 'help', 'clear', 'whoami', 'pwd', 'date', 'echo', 'contact', 'projects', 'skills', 'resume', 'neofetch', 'fetch', 'banner', 'theme', 'grep'];
 
         function getAutocompleteSuggestions(inputValue) {
             const parts = inputValue.trim().split(' ');
@@ -920,6 +920,9 @@ Hope these made you smile! 😊`
                 case 'theme':
                     handleTheme(args);
                     break;
+                case 'grep':
+                    handleGrep(args);
+                    break;
                 default:
                     addOutput(`Command not found: ${command}`, 'error');
                     addOutput('Type "help" to see available commands.', 'info');
@@ -994,12 +997,56 @@ Hope these made you smile! 😊`
             }
         }
 
+        function handleGrep(args) {
+            if (args.length === 0) {
+                addOutput('grep: missing search pattern', 'error');
+                addOutput('Usage: grep <pattern>', 'info');
+                return;
+            }
+
+            const pattern = args.join(' ').toLowerCase();
+            let results = [];
+
+            for (const [filename, file] of Object.entries(files)) {
+                const lines = file.content.split('\n');
+                for (let i = 0; i < lines.length; i++) {
+                    if (lines[i].toLowerCase().includes(pattern)) {
+                        results.push({ filename, lineNum: i + 1, line: lines[i] });
+                    }
+                }
+            }
+
+            if (results.length === 0) {
+                addOutput(`No matches found for "${args.join(' ')}"`, 'error');
+                return;
+            }
+
+            let output = '';
+            let currentFile = '';
+            for (const r of results) {
+                if (r.filename !== currentFile) {
+                    currentFile = r.filename;
+                    output += `\n${r.filename}:\n`;
+                }
+                // Highlight the match
+                const idx = r.line.toLowerCase().indexOf(pattern);
+                const before = r.line.slice(0, idx);
+                const match = r.line.slice(idx, idx + pattern.length);
+                const after = r.line.slice(idx + pattern.length);
+                output += `  ${r.lineNum}: ${before}<span style="background:var(--accent2);color:var(--bg);font-weight:bold">${match}</span>${after}\n`;
+            }
+
+            output += `\n${results.length} match${results.length === 1 ? '' : 'es'} across ${new Set(results.map(r => r.filename)).size} file${new Set(results.map(r => r.filename)).size === 1 ? '' : 's'}`;
+            addOutputHTML(output, 'info');
+        }
+
         function handleHelp() {
             const helpText = `Available commands:
 
   ls              - List available files
   ls -a           - List all files (including hidden files)
   cat <file>      - Display contents of a file
+  grep <pattern>  - Search across all files
   help            - Show this help message
   clear           - Clear the terminal
   whoami          - Display current user
