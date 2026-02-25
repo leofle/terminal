@@ -316,6 +316,26 @@
             background: rgba(0, 0, 0, 0.06);
         }
 
+        /* No scan lines in Ubuntu */
+        body.theme-ubuntu .terminal-body::before {
+            display: none;
+        }
+
+        /* Title centered, buttons on the right */
+        body.theme-ubuntu .terminal-title {
+            order: 0;
+            flex: 1;
+            text-align: center;
+            margin-left: 0;
+            color: #c0a0b8;
+            font-size: 13px;
+        }
+
+        body.theme-ubuntu .btn-minimize { order: 1; }
+        body.theme-ubuntu .btn-maximize { order: 2; }
+        body.theme-ubuntu .btn-close    { order: 3; }
+
+        /* Ubuntu GNOME-style buttons: dark, minimal, light icons */
         body.theme-ubuntu .terminal-button {
             border-radius: 4px;
             width: 16px;
@@ -325,18 +345,20 @@
             justify-content: center;
             font-size: 9px;
             font-weight: 800;
-            color: rgba(0, 0, 0, 0.55);
+            color: rgba(255, 255, 255, 0.65);
             line-height: 1;
             font-family: sans-serif;
+            background: #3d1a30;
+            border: 1px solid #5c2845;
         }
 
         body.theme-ubuntu .btn-close::after    { content: '✕'; }
         body.theme-ubuntu .btn-minimize::after { content: '−'; }
         body.theme-ubuntu .btn-maximize::after { content: '▢'; }
 
-        body.theme-ubuntu .terminal-title {
-            color: #9b6d85;
-            font-family: 'Ubuntu Mono', 'Ubuntu', monospace;
+        /* Green prompt like Ubuntu terminal */
+        body.theme-ubuntu .prompt-text {
+            color: #8ae234;
         }
 
         body.theme-ubuntu .command-input,
@@ -432,11 +454,10 @@
                 '--tag-bg': '#313244', '--tag-border': '#45475a'
             },
             ubuntu: {
-                '--bg': '#300a24', '--fg': '#eeeeec', '--fg-bold': '#ffffff',
+                '--bg': '#300a24', '--fg': '#eeeeec', '--fg-bold': '#8ae234',
                 '--accent': '#34e2e2', '--accent2': '#e95420', '--header-bg': '#2c0b1e',
                 '--border': '#5c1a3e', '--dim': '#888a85', '--error': '#cc0000',
                 '--tag-bg': '#4a1040', '--tag-border': '#5c1a3e',
-                '--btn-close': '#cc3333', '--btn-minimize': '#6e6e6e', '--btn-maximize': '#4e9a06',
                 '_class': 'theme-ubuntu'
             }
         };
