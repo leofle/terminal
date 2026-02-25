@@ -80,9 +80,9 @@
             display: inline-block;
         }
 
-        .btn-close { background: #ff5f56; }
-        .btn-minimize { background: #ffbd2e; }
-        .btn-maximize { background: #27c93f; }
+        .btn-close { background: var(--btn-close, #ff5f56); }
+        .btn-minimize { background: var(--btn-minimize, #ffbd2e); }
+        .btn-maximize { background: var(--btn-maximize, #27c93f); }
 
         .terminal-title {
             margin-left: 10px;
@@ -303,6 +303,49 @@
             display: none;
         }
 
+        /* ── Ubuntu theme overrides ─────────────────────────────────── */
+        body.theme-ubuntu {
+            background:
+                radial-gradient(ellipse at 80% 20%, rgba(120, 40, 150, 0.45) 0%, transparent 55%),
+                radial-gradient(ellipse at 15% 80%, rgba(80, 15, 110, 0.6) 0%, transparent 50%),
+                #1a0528;
+            background-attachment: fixed;
+        }
+
+        body.theme-ubuntu::before {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        body.theme-ubuntu .terminal-button {
+            border-radius: 4px;
+            width: 16px;
+            height: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: 800;
+            color: rgba(0, 0, 0, 0.55);
+            line-height: 1;
+            font-family: sans-serif;
+        }
+
+        body.theme-ubuntu .btn-close::after    { content: '✕'; }
+        body.theme-ubuntu .btn-minimize::after { content: '−'; }
+        body.theme-ubuntu .btn-maximize::after { content: '▢'; }
+
+        body.theme-ubuntu .terminal-title {
+            color: #9b6d85;
+            font-family: 'Ubuntu Mono', 'Ubuntu', monospace;
+        }
+
+        body.theme-ubuntu .command-input,
+        body.theme-ubuntu .prompt,
+        body.theme-ubuntu .output,
+        body.theme-ubuntu .boot-line {
+            font-family: 'Ubuntu Mono', 'Courier New', monospace;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -387,6 +430,14 @@
                 '--accent': '#89dceb', '--accent2': '#f5c2e7', '--header-bg': '#181825',
                 '--border': '#45475a', '--dim': '#585b70', '--error': '#f38ba8',
                 '--tag-bg': '#313244', '--tag-border': '#45475a'
+            },
+            ubuntu: {
+                '--bg': '#300a24', '--fg': '#eeeeec', '--fg-bold': '#ffffff',
+                '--accent': '#34e2e2', '--accent2': '#e95420', '--header-bg': '#2c0b1e',
+                '--border': '#5c1a3e', '--dim': '#888a85', '--error': '#cc0000',
+                '--tag-bg': '#4a1040', '--tag-border': '#5c1a3e',
+                '--btn-close': '#cc3333', '--btn-minimize': '#6e6e6e', '--btn-maximize': '#4e9a06',
+                '_class': 'theme-ubuntu'
             }
         };
 
@@ -394,9 +445,29 @@
             const theme = themes[name];
             if (!theme) return false;
             const root = document.documentElement;
+
+            // Reset all CSS vars defined across all themes
+            const allProps = new Set();
+            Object.values(themes).forEach(t => {
+                Object.keys(t).forEach(k => { if (!k.startsWith('_')) allProps.add(k); });
+            });
+            allProps.forEach(prop => root.style.removeProperty(prop));
+
+            // Remove all theme body classes
+            const toRemove = [...document.body.classList].filter(c => c.startsWith('theme-'));
+            toRemove.forEach(c => document.body.classList.remove(c));
+
+            // Apply new theme CSS vars
             for (const [prop, value] of Object.entries(theme)) {
+                if (prop.startsWith('_')) continue;
                 root.style.setProperty(prop, value);
             }
+
+            // Apply special body class (e.g. ubuntu background & button overrides)
+            if (theme._class) {
+                document.body.classList.add(theme._class);
+            }
+
             localStorage.setItem('terminal-theme', name);
             return true;
         }
@@ -1053,7 +1124,7 @@ Hope these made you smile! 😊`
   resume          - Show full resume
   neofetch        - Display system information
   banner          - Display ASCII banner
-  theme <name>    - Switch theme (matrix, dracula, monokai, retro-amber, catppuccin)
+  theme <name>    - Switch theme (matrix, dracula, monokai, retro-amber, catppuccin, ubuntu)
 
 Try: ls
 Then: cat <filename>`;
@@ -1229,7 +1300,7 @@ Then: cat <filename>`;
             p3.innerHTML = 'Try <span class="info">ls</span> to see available files.';
             welcome.appendChild(p3);
             const p4 = document.createElement('p');
-            p4.innerHTML = 'Themes: <span class="info">matrix</span> · <span class="info">dracula</span> · <span class="info">monokai</span> · <span class="info">retro-amber</span> · <span class="info">catppuccin</span> (usage: <span class="info">theme &lt;name&gt;</span>)';
+            p4.innerHTML = 'Themes: <span class="info">matrix</span> · <span class="info">dracula</span> · <span class="info">monokai</span> · <span class="info">retro-amber</span> · <span class="info">catppuccin</span> · <span class="info">ubuntu</span> (usage: <span class="info">theme &lt;name&gt;</span>)';
             welcome.appendChild(p4);
 
             content.appendChild(welcome);
@@ -1280,7 +1351,7 @@ Then: cat <filename>`;
             p3.innerHTML = 'Try <span class="info">ls</span> to see available files.';
             welcome.appendChild(p3);
             const p4 = document.createElement('p');
-            p4.innerHTML = 'Themes: <span class="info">matrix</span> · <span class="info">dracula</span> · <span class="info">monokai</span> · <span class="info">retro-amber</span> · <span class="info">catppuccin</span> (usage: <span class="info">theme &lt;name&gt;</span>)';
+            p4.innerHTML = 'Themes: <span class="info">matrix</span> · <span class="info">dracula</span> · <span class="info">monokai</span> · <span class="info">retro-amber</span> · <span class="info">catppuccin</span> · <span class="info">ubuntu</span> (usage: <span class="info">theme &lt;name&gt;</span>)';
             welcome.appendChild(p4);
 
             content.appendChild(welcome);

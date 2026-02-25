@@ -31,6 +31,10 @@ Everything lives in `index.html` (1300+ lines). `resume.html` is a static fallba
 
 `ls` (with `-a`), `cat`, `grep`, `help`, `whoami`, `pwd`, `date`, `echo`, `neofetch`/`fetch`, `banner`, `theme <name>`, `clear`, `contact`, `projects`, `skills`, `resume`
 
+### Available Themes
+
+`matrix` (default), `dracula`, `monokai`, `retro-amber`, `catppuccin`, `ubuntu`
+
 ### Terminal UX Features
 
 - Command history navigated with arrow keys
@@ -49,4 +53,6 @@ Everything lives in `index.html` (1300+ lines). `resume.html` is a static fallba
 
 1. Add an entry to the `themes` object with CSS custom property overrides
 2. The theme name becomes the argument to `theme <name>`
-3. Update the welcome/hint message if listing available themes
+3. `applyTheme()` auto-resets all CSS vars from all themes before applying, so no bleed between themes
+4. Use the special `_class` key to add a body CSS class for overrides that can't be done with CSS vars (e.g. background images/gradients, pseudo-element content like button icons). The `ubuntu` theme uses `theme-ubuntu` for its desktop gradient and GNOME-style window buttons
+5. Update welcome/hint messages (in `runBootSequence`, `showWelcomeOnly`) and `handleHelp` to list the new theme
