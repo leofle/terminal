@@ -1,0 +1,24 @@
+name: CI
+
+# Runs on every pull request (and on feature-branch pushes) so problems are
+# caught before merging to main. main itself is handled by the deploy workflows.
+on:
+  pull_request:
+  push:
+    branches-ignore:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  syntax-check:
+    name: syntax-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate inline JavaScript & HTML
+        run: node .github/scripts/check-syntax.mjs
