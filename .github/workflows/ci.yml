@@ -1,0 +1,22 @@
+name: CI
+
+# Runs on every pull request so problems are caught before merging to main.
+# (main now requires a PR, so this covers all changes; main's own pushes are
+# handled by the deploy workflows.)
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax-check:
+    name: syntax-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate inline JavaScript & HTML
+        run: node .github/scripts/check-syntax.mjs
