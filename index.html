@@ -368,6 +368,139 @@
             font-family: 'Ubuntu Mono', 'Courier New', monospace;
         }
 
+        /* ── Ghost autosuggestion (fish-style) ──────────────────────── */
+        .input-wrap {
+            position: relative;
+            flex: 1;
+            display: flex;
+            min-width: 200px;
+        }
+
+        .input-wrap .command-input {
+            position: relative;
+            z-index: 1;
+            min-width: 0;
+        }
+
+        .ghost {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            white-space: pre;
+            pointer-events: none;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: var(--dim);
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .ghost .typed {
+            visibility: hidden;
+        }
+
+        body.theme-ubuntu .ghost {
+            font-family: 'Ubuntu Mono', 'Courier New', monospace;
+        }
+
+        /* ── Quick command bar (great on mobile, handy on desktop) ──── */
+        .quickbar {
+            display: flex;
+            gap: 6px;
+            padding: 8px 12px;
+            background: var(--header-bg);
+            border-top: 1px solid var(--border);
+            overflow-x: auto;
+            flex-shrink: 0;
+            scrollbar-width: none;
+        }
+
+        .quickbar::-webkit-scrollbar { display: none; }
+
+        .chip {
+            white-space: nowrap;
+            background: var(--tag-bg);
+            color: var(--fg);
+            border: 1px solid var(--tag-border);
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-family: inherit;
+            font-size: 12px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.12s, border-color 0.12s;
+        }
+
+        .chip:hover, .chip:active {
+            background: var(--accent2);
+            color: var(--bg);
+            border-color: var(--accent2);
+        }
+
+        /* ── Matrix rain overlay (easter egg) ───────────────────────── */
+        #matrixCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: #000;
+            display: none;
+        }
+
+        #matrixCanvas.active { display: block; }
+
+        .matrix-hint {
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            opacity: 0.7;
+            display: none;
+        }
+
+        #matrixCanvas.active + .matrix-hint { display: block; }
+
+        /* ── Printable resume (clean PDF via browser print) ─────────── */
+        #printable { display: none; }
+
+        @media print {
+            body { background: #fff !important; padding: 0 !important; }
+            body::before { display: none !important; }
+            .terminal-container, .matrix-hint, #matrixCanvas { display: none !important; }
+            #printable {
+                display: block;
+                position: absolute;
+                inset: 0;
+                background: #fff;
+                color: #111;
+                font-family: Georgia, 'Times New Roman', serif;
+                line-height: 1.5;
+                padding: 0;
+                max-width: 720px;
+                margin: 0 auto;
+            }
+            #printable h1 { font-size: 26px; margin-bottom: 2px; color: #111; border: none; }
+            #printable .subtitle { font-size: 14px; color: #444; margin-bottom: 4px; }
+            #printable .contact-row { font-size: 12px; color: #333; margin-bottom: 16px; }
+            #printable h2 {
+                font-size: 13px; letter-spacing: 1px; text-transform: uppercase;
+                color: #111; border-bottom: 1.5px solid #111; padding-bottom: 3px;
+                margin: 16px 0 8px;
+            }
+            #printable .role { font-weight: bold; font-size: 13px; color: #111; }
+            #printable .role .when { float: right; font-weight: normal; color: #555; }
+            #printable ul { margin: 4px 0 10px 18px; }
+            #printable li { font-size: 12.5px; margin-bottom: 2px; }
+            #printable p { font-size: 12.5px; margin-bottom: 6px; }
+            #printable a { color: #111; text-decoration: none; }
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -386,6 +519,10 @@
             }
 
             .command-input {
+                font-size: 16px;
+            }
+
+            .ghost {
                 font-size: 16px;
             }
 
@@ -418,6 +555,83 @@
             <div class="content" id="content">
             </div>
         </div>
+
+        <div class="quickbar" id="quickbar"></div>
+    </div>
+
+    <canvas id="matrixCanvas"></canvas>
+    <div class="matrix-hint">press any key to exit the matrix</div>
+
+    <!-- Clean, print-only resume (browser "Save as PDF") -->
+    <div id="printable">
+        <h1>Lio Fleishman</h1>
+        <div class="subtitle">Sr. Systems Engineer @ NVIDIA &middot; AI &amp; Data Infrastructure</div>
+        <div class="contact-row">
+            Leander, Texas, USA &nbsp;|&nbsp;
+            <a href="mailto:leofle@gmail.com">leofle@gmail.com</a> &nbsp;|&nbsp;
+            <a href="https://linkedin.com/in/lio-fleishman">linkedin.com/in/lio-fleishman</a>
+        </div>
+
+        <h2>Summary</h2>
+        <p>Sr. Systems Engineer with 15+ years across software engineering and architecture.
+        Previously led Sales Engineering at Illumex.ai, helping companies put GenAI into practice
+        on scalable, AI-native data infrastructure. Designed and shipped AI-powered systems used by
+        Fortune 500 companies, cutting time-to-insight by up to 90% and enabling trusted AI across
+        hundreds of users.</p>
+
+        <h2>Experience</h2>
+        <div class="role">Sr. Systems Engineer &mdash; NVIDIA <span class="when">Feb 2026 &ndash; Present</span></div>
+        <ul>
+            <li>Systems engineering for GPU and AI infrastructure platforms.</li>
+        </ul>
+        <div class="role">Head of Sales Engineering &mdash; Illumex <span class="when">Aug 2024 &ndash; Feb 2026</span></div>
+        <ul>
+            <li>Led Sales Engineering for AI-powered data infrastructure solutions.</li>
+            <li>Helped Fortune 500 companies implement scalable GenAI systems.</li>
+            <li>Closed deals with top data teams on measurable AI-readiness outcomes.</li>
+        </ul>
+        <div class="role">Head of Community &amp; Partnerships &mdash; Illumex <span class="when">Jan 2023 &ndash; Aug 2024</span></div>
+        <ul>
+            <li>Delivered AI-driven data catalog auto-documenting 10K+ tables and metrics.</li>
+            <li>Designed semantic context layer for safe GenAI agents in BI tools.</li>
+            <li>Led cross-functional teams integrating LLMs with enterprise metadata.</li>
+        </ul>
+        <div class="role">Team Lead, Developer Experience Advocate &mdash; Sisense <span class="when">Jul 2021 &ndash; Jan 2023</span></div>
+        <ul>
+            <li>Led development of Compose SDK &mdash; a developer-first BI application framework.</li>
+            <li>Gave developers flexibility free from rigid traditional BI systems.</li>
+            <li>Shipped to production serving enterprise customers.</li>
+        </ul>
+
+        <h2>Key Achievements</h2>
+        <ul>
+            <li>Reduced time-to-insight by up to 90% for Fortune 500 companies.</li>
+            <li>Enabled trusted AI use across hundreds of enterprise users.</li>
+            <li>Auto-documented 10K+ tables and metrics via AI-driven catalog.</li>
+            <li>Created Compose SDK, a developer-first BI framework.</li>
+            <li>Designed the semantic context layer powering safe GenAI agents.</li>
+        </ul>
+
+        <h2>Technical Skills</h2>
+        <ul>
+            <li><b>Core:</b> Python, TypeScript, JavaScript, CSS</li>
+            <li><b>Frontend:</b> React, Vue, Next.js, styled-components, Tailwind CSS</li>
+            <li><b>AI &amp; Data:</b> Generative AI, LLMs, Data Analytics, GenAI Strategy, Data Governance</li>
+            <li><b>Cloud:</b> Google Cloud Platform, Cloud Infrastructure, Cloud Security, AWS</li>
+            <li><b>Business:</b> Sales Engineering, Strategic Partnerships, Product Management, Developer Experience</li>
+        </ul>
+
+        <h2>Education</h2>
+        <ul>
+            <li>BSc, Computer Science &mdash; The Open University of Israel</li>
+            <li>Graphic Design &mdash; University of Buenos Aires</li>
+        </ul>
+
+        <h2>Certifications</h2>
+        <ul>
+            <li>Google Cybersecurity Specialization (2024) &mdash; Credential Q9SNBCDXW2H7</li>
+            <li>AWS Certified Cloud Practitioner (2019&ndash;2022)</li>
+        </ul>
     </div>
 
     <script>
@@ -672,17 +886,19 @@ AWS Certified Cloud Practitioner (Dec 2019 - Dec 2022)`
 ║              GET IN TOUCH             ║
 ╚═══════════════════════════════════════╝
 
+📧 Email: leofle@gmail.com
+
 🔗 LinkedIn: linkedin.com/in/lio-fleishman
    Network: 1,621 followers · 500+ connections
+
+🐙 GitHub: github.com/leofle
 
 📍 Location: Leander, Texas, United States
 
 💼 Currently: Sr. Systems Engineer at NVIDIA
 
-📧 Want to connect? Reach out on LinkedIn!
-
-💡 Pro tip: Mention you found me through this terminal
-   resume for bonus points!`
+💡 Tip: type "open linkedin", "open github", "email",
+   or "download" to grab a PDF of this resume.`
             },
             'secret.txt': {
                 content: `╔═══════════════════════════════════════╗
@@ -755,24 +971,44 @@ Hope these made you smile! 😊`
         let historyIndex = -1;
         let tabCompletions = [];
         let tabIndex = -1;
+        let activeInput = null;
+
+        // Single delegated click handler keeps focus on the live prompt.
+        // (Skip when the user is selecting text or tapping a link.)
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('a')) return;
+            if (window.getSelection && window.getSelection().toString()) return;
+            if (document.getElementById('matrixCanvas').classList.contains('active')) return;
+            if (activeInput) activeInput.focus();
+        });
         
-        const availableCommands = ['ls', 'cat', 'help', 'clear', 'whoami', 'pwd', 'date', 'echo', 'contact', 'projects', 'skills', 'resume', 'neofetch', 'fetch', 'banner', 'theme', 'grep'];
+        const availableCommands = ['ls', 'cat', 'help', 'clear', 'whoami', 'pwd', 'date', 'echo', 'contact', 'projects', 'skills', 'resume', 'neofetch', 'fetch', 'banner', 'theme', 'grep', 'download', 'print', 'email', 'open', 'history', 'man', 'tree', 'cowsay', 'matrix', 'sudo', 'exit', 'sl'];
+
+        // Commands the quick-bar surfaces (great for mobile / discoverability)
+        const quickCommands = ['help', 'resume', 'projects', 'skills', 'download', 'contact', 'theme dracula', 'matrix'];
 
         function getAutocompleteSuggestions(inputValue) {
-            const parts = inputValue.trim().split(' ');
+            const parts = inputValue.trim().split(/\s+/);
             const command = parts[0].toLowerCase();
             const arg = parts.length > 1 ? parts.slice(1).join(' ') : '';
-            
-            // If we're completing a filename (after cat command)
-            if (command === 'cat' && arg) {
-                const fileList = Object.keys(files);
-                return fileList.filter(file => file.startsWith(arg));
-            }
-            // If we're completing a command
-            else if (parts.length === 1 || (command === 'cat' && !arg)) {
+
+            // Completing the command itself
+            if (parts.length === 1) {
                 return availableCommands.filter(cmd => cmd.startsWith(command));
             }
-            
+            // Completing an argument, per command
+            if (command === 'cat') {
+                return Object.keys(files).filter(f => f.startsWith(arg));
+            }
+            if (command === 'theme') {
+                return Object.keys(themes).filter(t => t.startsWith(arg));
+            }
+            if (command === 'man') {
+                return availableCommands.filter(c => c.startsWith(arg));
+            }
+            if (command === 'open') {
+                return ['linkedin', 'github', 'email', 'resume'].filter(o => o.startsWith(arg));
+            }
             return [];
         }
 
@@ -785,6 +1021,12 @@ Hope these made you smile! 😊`
             prompt.className = 'prompt';
             prompt.innerHTML = '<span class="prompt-text">lio@terminal:~$</span> ';
             
+            const inputWrap = document.createElement('span');
+            inputWrap.className = 'input-wrap';
+
+            const ghost = document.createElement('span');
+            ghost.className = 'ghost';
+
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'command-input';
@@ -792,20 +1034,88 @@ Hope these made you smile! 😊`
             input.autocapitalize = 'off';
             input.spellcheck = false;
             input.placeholder = 'Type a command...';
-            
+
+            inputWrap.appendChild(ghost);
+            inputWrap.appendChild(input);
             commandLine.appendChild(prompt);
-            commandLine.appendChild(input);
+            commandLine.appendChild(inputWrap);
             content.appendChild(commandLine);
-            
+
             input.focus();
-            
+
             let lastTabTime = 0;
+
+            // Fish-style inline suggestion: dim completion of the likeliest next command
+            function currentSuggestion() {
+                const val = input.value;
+                if (!val || val !== val.trimStart()) return '';
+                // Prefer the most recent matching history entry, else a known command
+                for (let i = commandHistory.length - 1; i >= 0; i--) {
+                    if (commandHistory[i].startsWith(val) && commandHistory[i] !== val) {
+                        return commandHistory[i];
+                    }
+                }
+                if (!val.includes(' ')) {
+                    const cmd = availableCommands.find(c => c.startsWith(val) && c !== val);
+                    if (cmd) return cmd;
+                }
+                return '';
+            }
+
+            function updateGhost() {
+                const sug = currentSuggestion();
+                if (!sug) { ghost.innerHTML = ''; return; }
+                ghost.innerHTML = `<span class="typed">${escapeHTML(input.value)}</span>${escapeHTML(sug.slice(input.value.length))}`;
+            }
+
+            function acceptGhost() {
+                const sug = currentSuggestion();
+                if (sug) { input.value = sug; updateGhost(); return true; }
+                return false;
+            }
+
+            input.addEventListener('input', updateGhost);
             
             input.addEventListener('keydown', (e) => {
+                // ── Emacs-style control keybindings (like a real shell) ──
+                if (e.ctrlKey && !e.altKey && !e.metaKey) {
+                    const k = e.key.toLowerCase();
+                    if (k === 'l') { e.preventDefault(); handleClear(); createCommandLine(); return; }
+                    if (k === 'c') {
+                        e.preventDefault();
+                        const display = document.createElement('div');
+                        display.className = 'command-line';
+                        display.innerHTML = `<span class="prompt"><span class="prompt-text">lio@terminal:~$</span> </span><span>${escapeHTML(input.value)}^C</span>`;
+                        document.getElementById('content').appendChild(display);
+                        input.value = '';
+                        updateGhost();
+                        createCommandLine();
+                        return;
+                    }
+                    if (k === 'a') { e.preventDefault(); input.setSelectionRange(0, 0); return; }
+                    if (k === 'e') { e.preventDefault(); const n = input.value.length; input.setSelectionRange(n, n); return; }
+                    if (k === 'u') { e.preventDefault(); input.value = input.value.slice(input.selectionStart); input.setSelectionRange(0, 0); updateGhost(); return; }
+                    if (k === 'k') { e.preventDefault(); input.value = input.value.slice(0, input.selectionStart); updateGhost(); return; }
+                    if (k === 'w') {
+                        e.preventDefault();
+                        const pos = input.selectionStart;
+                        const left = input.value.slice(0, pos).replace(/\s*\S+\s*$/, '');
+                        input.value = left + input.value.slice(pos);
+                        input.setSelectionRange(left.length, left.length);
+                        updateGhost();
+                        return;
+                    }
+                }
+                // Accept inline suggestion with → (when caret is at the end)
+                if (e.key === 'ArrowRight' && input.selectionStart === input.value.length) {
+                    if (acceptGhost()) { e.preventDefault(); return; }
+                }
+
                 if (e.key === 'Enter') {
                     e.preventDefault();
                     executeCommand(input.value.trim());
                     input.value = '';
+                    ghost.innerHTML = '';
                     historyIndex = -1;
                     tabCompletions = [];
                     tabIndex = -1;
@@ -821,6 +1131,7 @@ Hope these made you smile! 😊`
                     }
                     tabCompletions = [];
                     tabIndex = -1;
+                    updateGhost();
                 } else if (e.key === 'ArrowDown') {
                     e.preventDefault();
                     if (historyIndex !== -1) {
@@ -834,6 +1145,7 @@ Hope these made you smile! 😊`
                     }
                     tabCompletions = [];
                     tabIndex = -1;
+                    updateGhost();
                 } else if (e.key === 'Tab') {
                     e.preventDefault();
                     const currentTime = Date.now();
@@ -869,16 +1181,16 @@ Hope these made you smile! 😊`
                     
                     // Single match - complete it
                     if (suggestions.length === 1) {
-                        if (command === 'cat' && arg) {
-                            // Complete filename
-                            const newArg = suggestions[0];
-                            input.value = `cat ${newArg}`;
+                        if (arg) {
+                            // Complete the argument
+                            input.value = `${command} ${suggestions[0]}`;
                         } else {
                             // Complete command
                             input.value = suggestions[0];
                         }
                         tabCompletions = [];
                         tabIndex = -1;
+                        updateGhost();
                     } else {
                         // Multiple matches - cycle through them
                         if (tabCompletions.length === 0 || tabCompletions.join('|') !== suggestions.join('|')) {
@@ -888,15 +1200,15 @@ Hope these made you smile! 😊`
                             tabIndex = (tabIndex + 1) % tabCompletions.length;
                         }
                         
-                        if (command === 'cat' && arg) {
-                            // Complete filename
-                            const newArg = tabCompletions[tabIndex];
-                            input.value = `cat ${newArg}`;
+                        if (arg) {
+                            // Complete the argument
+                            input.value = `${command} ${tabCompletions[tabIndex]}`;
                         } else {
                             // Complete command
                             input.value = tabCompletions[tabIndex];
                         }
                     }
+                    updateGhost();
                 } else {
                     // Reset tab completions when typing
                     tabCompletions = [];
@@ -905,10 +1217,14 @@ Hope these made you smile! 😊`
                 }
             });
             
-            // Keep focus on input when clicking terminal
-            document.getElementById('terminalBody').addEventListener('click', () => {
-                input.focus();
-            });
+            activeInput = input;
+        }
+
+        function escapeHTML(str) {
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
         }
 
         function addOutput(text, className = '') {
@@ -939,7 +1255,22 @@ Hope these made you smile! 😊`
                 createCommandLine();
                 return;
             }
-            
+
+            // History expansion: !! (last), !n (nth), !prefix (most recent match)
+            if (cmd[0] === '!' && cmd.length > 1) {
+                const expanded = expandBang(cmd);
+                if (expanded === null) {
+                    const display = document.createElement('div');
+                    display.className = 'command-line';
+                    display.innerHTML = `<span class="prompt"><span class="prompt-text">lio@terminal:~$</span> </span><span>${escapeHTML(cmd)}</span>`;
+                    document.getElementById('content').appendChild(display);
+                    addOutput(`${cmd}: event not found`, 'error');
+                    createCommandLine();
+                    return;
+                }
+                cmd = expanded;
+            }
+
             // Add to history
             if (cmd && (!commandHistory.length || commandHistory[commandHistory.length - 1] !== cmd)) {
                 commandHistory.push(cmd);
@@ -949,7 +1280,7 @@ Hope these made you smile! 😊`
             const content = document.getElementById('content');
             const commandDisplay = document.createElement('div');
             commandDisplay.className = 'command-line';
-            commandDisplay.innerHTML = `<span class="prompt"><span class="prompt-text">lio@terminal:~$</span> </span><span>${cmd}</span>`;
+            commandDisplay.innerHTML = `<span class="prompt"><span class="prompt-text">lio@terminal:~$</span> </span><span>${escapeHTML(cmd)}</span>`;
             content.appendChild(commandDisplay);
             
             const [command, ...args] = cmd.split(' ');
@@ -1009,11 +1340,51 @@ Hope these made you smile! 😊`
                 case 'grep':
                     handleGrep(args);
                     break;
+                case 'download':
+                case 'print':
+                    handleDownload();
+                    break;
+                case 'email':
+                    handleOpen(['email']);
+                    break;
+                case 'open':
+                    handleOpen(args);
+                    break;
+                case 'history':
+                    handleHistory();
+                    break;
+                case 'man':
+                    handleMan(args);
+                    break;
+                case 'tree':
+                    handleTree();
+                    break;
+                case 'cowsay':
+                    handleCowsay(args);
+                    break;
+                case 'matrix':
+                    handleMatrix();
+                    break;
+                case 'sudo':
+                    handleSudo(args);
+                    break;
+                case 'sl':
+                    handleSl();
+                    break;
+                case 'exit':
+                case 'logout':
+                    handleExit();
+                    return; // exit takes over the screen; no new prompt
                 default:
                     addOutput(`Command not found: ${command}`, 'error');
-                    addOutput('Type "help" to see available commands.', 'info');
+                    const guess = didYouMean(command.toLowerCase());
+                    if (guess) {
+                        addOutput(`Did you mean "${guess}"?`, 'info');
+                    } else {
+                        addOutput('Type "help" to see available commands.', 'info');
+                    }
             }
-            
+
             createCommandLine();
         }
 
@@ -1055,10 +1426,18 @@ Hope these made you smile! 😊`
 
         function handleCat(filename) {
             if (files[filename]) {
-                let content = files[filename].content;
+                let content = escapeHTML(files[filename].content);
                 // Convert LinkedIn links to clickable HTML links
                 content = content.replace(/linkedin\.com\/in\/[a-zA-Z0-9-]+/g, (match) => {
                     return `<a href="https://${match}" target="_blank" rel="noopener noreferrer">${match}</a>`;
+                });
+                // GitHub
+                content = content.replace(/github\.com\/[a-zA-Z0-9-]+/g, (match) => {
+                    return `<a href="https://${match}" target="_blank" rel="noopener noreferrer">${match}</a>`;
+                });
+                // Email addresses
+                content = content.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, (match) => {
+                    return `<a href="mailto:${match}">${match}</a>`;
                 });
                 addOutputHTML(content, '');
             } else {
@@ -1129,26 +1508,43 @@ Hope these made you smile! 😊`
         function handleHelp() {
             const helpText = `Available commands:
 
-  ls              - List available files
-  ls -a           - List all files (including hidden files)
-  cat <file>      - Display contents of a file
-  grep <pattern>  - Search across all files
-  help            - Show this help message
-  clear           - Clear the terminal
-  whoami          - Display current user
-  pwd             - Print working directory
-  date            - Display current date and time
-  echo <text>     - Echo text to terminal
-  contact         - Show contact information
+  RESUME
+  resume          - Show full resume
   projects        - Show notable projects
   skills          - Show technical skills
-  resume          - Show full resume
-  neofetch        - Display system information
-  banner          - Display ASCII banner
-  theme <name>    - Switch theme (matrix, dracula, monokai, retro-amber, catppuccin, ubuntu)
+  contact         - Show contact information
+  download        - Save a clean PDF of this resume (alias: print)
+  email           - Email me (leofle@gmail.com)
+  open <where>    - Open a link (linkedin, github, email, resume)
 
-Try: ls
-Then: cat <filename>`;
+  FILES
+  ls [-a]         - List files (-a includes hidden ones)
+  cat <file>      - Display a file's contents
+  grep <pattern>  - Search across all files
+  tree            - Show files as a tree
+
+  TERMINAL
+  help            - Show this help message
+  man <command>   - Show the manual for a command
+  history         - Show command history (recall: !!, !n, !prefix)
+  clear           - Clear the terminal
+  whoami / pwd    - Current user / working directory
+  date            - Current date and time
+  echo <text>     - Echo text back
+  theme <name>    - Switch theme (matrix, dracula, monokai, retro-amber, catppuccin, ubuntu)
+  neofetch        - System information
+  banner          - ASCII name banner
+  exit            - End the session
+
+  KEYS
+  Tab             - Autocomplete   →  Accept inline suggestion
+  ↑ / ↓           - Browse history
+  Ctrl+L          - Clear screen   Ctrl+C  Cancel line
+  Ctrl+A / Ctrl+E - Start / end of line     Ctrl+U / Ctrl+K  Clear line
+
+  Hint: there are a few hidden commands. Try exploring. 🥚
+
+Try: ls   then: cat <filename>`;
             addOutput(helpText, 'info');
         }
 
@@ -1188,6 +1584,8 @@ Then: cat <filename>`;
         }
 
         function handleNeofetch() {
+            const theme = localStorage.getItem('terminal-theme') || 'matrix';
+            const pad = (s) => (s + ' '.repeat(34)).slice(0, 34);
             const neofetch = `
        ╭──────────────────────────────────────────╮
        │  lio@terminal                             │
@@ -1198,8 +1596,8 @@ Then: cat <filename>`;
        │  Uptime: Since you opened this page       │
        │  Shell: Interactive Terminal               │
        │  Editor: Your browser                     │
-       │  Theme: Matrix Green                      │
-       │                                            │
+       │  Theme: ${pad(theme)}    │
+       │  Cmds: ${pad(String(availableCommands.length) + ' available')}     │
        │  Skills: AI, GenAI, Data, Cloud           │
        │  Location: Leander, Texas                 │
        │  Status: Sr. Systems Engineer @NVIDIA     │
@@ -1230,6 +1628,276 @@ Then: cat <filename>`;
 ║                                                                           ║
 ╚═══════════════════════════════════════════════════════════════════════════╝`;
             addOutput(banner, 'info');
+        }
+
+        // ── Resume download (clean PDF via browser print) ────────────
+        function handleDownload() {
+            addOutput('Generating resume.pdf...', 'success');
+            addOutputHTML('Your browser\'s print dialog will open — choose <span class="info">"Save as PDF"</span> as the destination.', 'info');
+            setTimeout(() => window.print(), 450);
+        }
+
+        // ── open / email — jump straight to a real destination ───────
+        function handleOpen(args) {
+            const target = (args[0] || '').toLowerCase();
+            const links = {
+                linkedin: 'https://linkedin.com/in/lio-fleishman',
+                github: 'https://github.com/leofle',
+                email: 'mailto:leofle@gmail.com'
+            };
+            if (target === 'resume' || target === 'pdf') { handleDownload(); return; }
+            if (links[target]) {
+                const label = target === 'email' ? 'leofle@gmail.com' : links[target];
+                addOutputHTML(`Opening <a href="${links[target]}" target="_blank" rel="noopener noreferrer">${label}</a> ...`, 'success');
+                window.open(links[target], target === 'email' ? '_self' : '_blank');
+                return;
+            }
+            addOutput(`open: don't know how to open "${args[0] || ''}"`, 'error');
+            addOutput('Try: open linkedin | open github | email | download', 'info');
+        }
+
+        // ── history + bang expansion ─────────────────────────────────
+        function handleHistory() {
+            if (commandHistory.length === 0) {
+                addOutput('No commands in history yet.', 'info');
+                return;
+            }
+            const out = commandHistory
+                .map((c, i) => `  ${String(i + 1).padStart(3)}  ${c}`)
+                .join('\n');
+            addOutput(out, 'info');
+        }
+
+        function expandBang(cmd) {
+            if (cmd === '!!') {
+                return commandHistory.length ? commandHistory[commandHistory.length - 1] : null;
+            }
+            const numMatch = cmd.match(/^!(\d+)$/);
+            if (numMatch) {
+                const idx = parseInt(numMatch[1], 10) - 1;
+                return commandHistory[idx] || null;
+            }
+            const prefix = cmd.slice(1);
+            for (let i = commandHistory.length - 1; i >= 0; i--) {
+                if (commandHistory[i].startsWith(prefix)) return commandHistory[i];
+            }
+            return null;
+        }
+
+        // ── did-you-mean (Levenshtein) ───────────────────────────────
+        function levenshtein(a, b) {
+            const m = a.length, n = b.length;
+            const dp = Array.from({ length: m + 1 }, (_, i) => [i, ...Array(n).fill(0)]);
+            for (let j = 0; j <= n; j++) dp[0][j] = j;
+            for (let i = 1; i <= m; i++) {
+                for (let j = 1; j <= n; j++) {
+                    dp[i][j] = Math.min(
+                        dp[i - 1][j] + 1,
+                        dp[i][j - 1] + 1,
+                        dp[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+                    );
+                }
+            }
+            return dp[m][n];
+        }
+
+        function didYouMean(input) {
+            if (!input) return null;
+            let best = null, bestDist = Infinity;
+            for (const c of availableCommands) {
+                const d = levenshtein(input, c);
+                if (d < bestDist) { bestDist = d; best = c; }
+            }
+            // Only suggest if it's a close miss
+            return bestDist <= Math.max(2, Math.floor(input.length / 3)) ? best : null;
+        }
+
+        // ── man pages ────────────────────────────────────────────────
+        const manPages = {
+            ls: 'ls — list the files in this resume.\n  -a, --all   include hidden files (there\'s a secret one...)',
+            cat: 'cat — print a file to the terminal.\n  Usage: cat <filename>   e.g. cat resume.txt',
+            grep: 'grep — search every file for a pattern.\n  Usage: grep <pattern>   e.g. grep python',
+            theme: 'theme — change the color scheme.\n  Usage: theme <name>\n  Themes: matrix, dracula, monokai, retro-amber, catppuccin, ubuntu',
+            download: 'download — save a clean PDF of this resume via your browser\'s print dialog. Alias: print.',
+            print: 'print — alias of download. Save this resume as a PDF.',
+            email: 'email — open a new message to leofle@gmail.com.',
+            open: 'open — jump to a destination.\n  Usage: open <linkedin|github|email|resume>',
+            history: 'history — show the commands you\'ve run.\n  Recall with !! (last), !<n> (by number), or !<prefix>.',
+            man: 'man — show the manual for a command.\n  Usage: man <command>',
+            tree: 'tree — show the file layout as a tree.',
+            cowsay: 'cowsay — a cow says whatever you tell it.\n  Usage: cowsay <message>',
+            matrix: 'matrix — follow the white rabbit. Press any key to wake up.',
+            neofetch: 'neofetch — show a stylized system summary. Alias: fetch.',
+            banner: 'banner — print the big ASCII name banner.',
+            clear: 'clear — wipe the screen (Ctrl+L does the same).',
+            echo: 'echo — print text back.\n  Usage: echo <text>',
+            sudo: 'sudo — execute a command as the superuser. (Are you on the sudoers list?)',
+            exit: 'exit — end the session. Alias: logout.'
+        };
+
+        function handleMan(args) {
+            const name = (args[0] || '').toLowerCase();
+            if (!name) {
+                addOutput('What manual page do you want?\nUsage: man <command>   e.g. man grep', 'info');
+                return;
+            }
+            if (manPages[name]) {
+                addOutput(`${name.toUpperCase()}(1)\n\n${manPages[name]}`, 'info');
+            } else if (availableCommands.includes(name)) {
+                addOutput(`No manual entry for ${name}, but it's a real command — just try it.`, 'info');
+            } else {
+                addOutput(`No manual entry for ${name}`, 'error');
+            }
+        }
+
+        // ── tree ─────────────────────────────────────────────────────
+        function handleTree() {
+            const names = Object.keys(files);
+            let out = '/home/lio/resume\n';
+            names.forEach((f, i) => {
+                const last = i === names.length - 1;
+                out += `${last ? '└── ' : '├── '}${f}\n`;
+            });
+            out += `\n${names.length} files, 0 directories`;
+            addOutput(out, 'info');
+        }
+
+        // ── cowsay ───────────────────────────────────────────────────
+        function handleCowsay(args) {
+            const msg = args.join(' ') || 'Hire Lio. Moo.';
+            const top = ' ' + '_'.repeat(msg.length + 2);
+            const bottom = ' ' + '-'.repeat(msg.length + 2);
+            const cow = `${top}
+< ${msg} >
+${bottom}
+        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||`;
+            addOutput(cow, 'info');
+        }
+
+        // ── sudo (easter egg) ────────────────────────────────────────
+        function handleSudo(args) {
+            if (args.length === 0) {
+                addOutput('usage: sudo <command>', 'error');
+                return;
+            }
+            addOutput('lio is not in the sudoers file. This incident has been reported.', 'error');
+            addOutput('(...just kidding. But nice try. 😉)', 'info');
+        }
+
+        // ── sl (steam locomotive easter egg) ─────────────────────────
+        function handleSl() {
+            const train = `
+      ====        ________                ___________
+  _D _|  |_______/        \\__I_I_____===__|_________|
+   |(_)---  |   H\\________/ |   |        =|___ ___|
+   /     |  |   H  |  |     |   |         ||_| |_||
+  |      |  |   H  |__--------------------| [___] |
+  | ________|___H__/__|_____/[][]~\\_______|       |
+  |/ |   |-----------I_____I [][] []  D   |=======|__
+__/ =| o |=-~~\\  /~~\\  /~~\\  /~~\\ ____Y___________|__
+ |/-=|___|=    ||    ||    ||    |_____/~\\___/
+  \\_/      \\O=====O=====O=====O_/      \\_/
+
+  (you typed sl, not ls — enjoy the train 🚂)`;
+            addOutput(train, 'info');
+        }
+
+        // ── matrix rain (easter egg) ─────────────────────────────────
+        let matrixRAF = null;
+        function handleMatrix() {
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext && canvas.getContext('2d');
+            if (!ctx) { addOutput('matrix: canvas not supported in this browser', 'error'); return; }
+            canvas.classList.add('active');
+
+            const accent = getComputedStyle(document.documentElement)
+                .getPropertyValue('--fg').trim() || '#00ff00';
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+
+            const chars = 'アイウエオカキクケコサシスセソタチツテトﾊﾋﾌﾍﾎ0123456789ABCDEFｦﾝ@#$%'.split('');
+            const fontSize = 16;
+            const columns = Math.floor(canvas.width / fontSize);
+            const drops = Array(columns).fill(1);
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = accent;
+                ctx.font = `${fontSize}px monospace`;
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+                matrixRAF = requestAnimationFrame(draw);
+            }
+            draw();
+
+            function stop() {
+                cancelAnimationFrame(matrixRAF);
+                matrixRAF = null;
+                canvas.classList.remove('active');
+                window.removeEventListener('resize', resize);
+                document.removeEventListener('keydown', stop, true);
+                canvas.removeEventListener('click', stop);
+                if (activeInput) activeInput.focus();
+            }
+            window.addEventListener('resize', resize);
+            // capture phase so the keypress dismisses instead of typing
+            setTimeout(() => {
+                document.addEventListener('keydown', stop, true);
+                canvas.addEventListener('click', stop);
+            }, 50);
+        }
+
+        // ── exit / logout ────────────────────────────────────────────
+        function handleExit() {
+            activeInput = null;
+            const content = document.getElementById('content');
+            content.innerHTML = '';
+            document.getElementById('quickbar').style.display = 'none';
+            const box = document.createElement('div');
+            box.className = 'output info';
+            box.innerHTML =
+                'logout\n\nConnection to lio@terminal closed.\n\n' +
+                'Thanks for stopping by. If you\'d like to talk:\n' +
+                '  • <a href="mailto:leofle@gmail.com">leofle@gmail.com</a>\n' +
+                '  • <a href="https://linkedin.com/in/lio-fleishman" target="_blank" rel="noopener noreferrer">linkedin.com/in/lio-fleishman</a>\n\n' +
+                '<a href="#" id="reconnect">[ click here to reconnect ]</a>';
+            content.appendChild(box);
+            scrollToBottom();
+            document.getElementById('reconnect').addEventListener('click', (e) => {
+                e.preventDefault();
+                location.reload();
+            });
+        }
+
+        // ── Quick-command bar (mobile-friendly, discoverable) ────────
+        function renderQuickbar() {
+            const bar = document.getElementById('quickbar');
+            bar.innerHTML = '';
+            quickCommands.forEach(c => {
+                const chip = document.createElement('button');
+                chip.className = 'chip';
+                chip.textContent = c;
+                chip.addEventListener('click', () => {
+                    if (activeInput) activeInput.value = '';
+                    executeCommand(c);
+                });
+                bar.appendChild(chip);
+            });
         }
 
         // ── Boot sequence ────────────────────────────────────────────
@@ -1323,6 +1991,9 @@ Then: cat <filename>`;
             const p4 = document.createElement('p');
             p4.innerHTML = 'Themes: <span class="info">matrix</span> · <span class="info">dracula</span> · <span class="info">monokai</span> · <span class="info">retro-amber</span> · <span class="info">catppuccin</span> · <span class="info">ubuntu</span> (usage: <span class="info">theme &lt;name&gt;</span>)';
             welcome.appendChild(p4);
+            const p5 = document.createElement('p');
+            p5.innerHTML = 'Recruiter? <span class="info">download</span> a PDF, <span class="info">email</span> me, or <span class="info">open linkedin</span>.';
+            welcome.appendChild(p5);
 
             content.appendChild(welcome);
             scrollToBottom();
@@ -1374,6 +2045,9 @@ Then: cat <filename>`;
             const p4 = document.createElement('p');
             p4.innerHTML = 'Themes: <span class="info">matrix</span> · <span class="info">dracula</span> · <span class="info">monokai</span> · <span class="info">retro-amber</span> · <span class="info">catppuccin</span> · <span class="info">ubuntu</span> (usage: <span class="info">theme &lt;name&gt;</span>)';
             welcome.appendChild(p4);
+            const p5 = document.createElement('p');
+            p5.innerHTML = 'Recruiter? <span class="info">download</span> a PDF, <span class="info">email</span> me, or <span class="info">open linkedin</span>.';
+            welcome.appendChild(p5);
 
             content.appendChild(welcome);
             scrollToBottom();
@@ -1383,6 +2057,8 @@ Then: cat <filename>`;
                 executeCommand('cat resume.txt');
             }
         }
+
+        renderQuickbar();
 
         // Boot sequence only on first visit per session
         if (!sessionStorage.getItem('terminal-booted')) {

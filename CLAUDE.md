@@ -20,16 +20,34 @@ Everything lives in `index.html` (1300+ lines). `resume.html` is a static fallba
 
 ### Key Sections in `index.html`
 
-| Lines | Purpose |
+Line numbers drift as the file grows — search for the named symbol rather than trusting the range.
+
+| Approx. line | Purpose |
 |-------|---------|
-| ~360–408 | **Theme system** — 5 themes (matrix, dracula, monokai, retro-amber, catppuccin) stored as objects of CSS custom properties; `applyTheme()` applies and persists to `localStorage` |
-| ~410–660 | **Virtual file system** — `files` object maps filenames to string content (resume.txt, projects.txt, skills.txt, contact.txt, fun_facts.txt, secret.txt, joke.txt) |
-| ~845–926 | **Command dispatcher** — `executeCommand()` with a `switch` statement routing to individual handlers |
-| ~1296–1301 | **Init** — session-based boot animation on first visit; hash `#resume` auto-loads resume content |
+| ~639 | **Theme system** — 6 themes (matrix, dracula, monokai, retro-amber, catppuccin, ubuntu) stored as objects of CSS custom properties; `applyTheme()` applies and persists to `localStorage` |
+| ~716 | **Virtual file system** — `files` object maps filenames to string content (resume.txt, projects.txt, skills.txt, contact.txt, fun_facts.txt, secret.txt, joke.txt) |
+| ~985 | **Command registry** — `availableCommands` (tab-completion + did-you-mean) and `quickCommands` (mobile chips) |
+| ~1253 | **Command dispatcher** — `executeCommand()` with a `switch` statement routing to individual handlers |
+| ~2063 | **Init** — `renderQuickbar()`, then session-based boot animation on first visit; hash `#resume` auto-loads resume content |
+
+Print-only resume lives in the `#printable` div in the HTML body (not in `<script>`); its styles are under the `@media print` block.
 
 ### Implemented Commands
 
-`ls` (with `-a`), `cat`, `grep`, `help`, `whoami`, `pwd`, `date`, `echo`, `neofetch`/`fetch`, `banner`, `theme <name>`, `clear`, `contact`, `projects`, `skills`, `resume`
+`ls` (with `-a`), `cat`, `grep`, `help`, `whoami`, `pwd`, `date`, `echo`, `neofetch`/`fetch`, `banner`, `theme <name>`, `clear`, `contact`, `projects`, `skills`, `resume`, `download`/`print`, `email`, `open <linkedin|github|email|resume>`, `history`, `man <cmd>`, `tree`, `cowsay`, `matrix`, `sudo`, `sl`, `exit`/`logout`
+
+Conversion-focused commands (`download`, `email`, `open`) drive recruiters to a PDF, mailto, or live link. `download`/`print` triggers `window.print()` against the print-only `#printable` resume (a hand-formatted, black-on-white version in the HTML body — keep it in sync with `resume.txt` when experience changes).
+
+### Terminal authenticity features
+
+- **Ghost autosuggestion** (fish-style): `.ghost` span under the input shows the likeliest completion (most recent matching history entry, else a known command). Accept with `→` (caret at end) or `Tab`. Kept aligned via monospace + a hidden `.typed` prefix span.
+- **Emacs keybindings** in the input keydown handler: `Ctrl+L` clear, `Ctrl+C` cancel line, `Ctrl+A`/`Ctrl+E` line start/end, `Ctrl+U`/`Ctrl+K` clear to start/end, `Ctrl+W` delete word.
+- **History expansion**: `!!` (last), `!<n>` (by number), `!<prefix>` — handled by `expandBang()` at the top of `executeCommand()`.
+- **"Did you mean?"**: unknown commands run `didYouMean()` (Levenshtein) to suggest the closest match.
+- **Quick-command bar** (`.quickbar`, `renderQuickbar()`): tappable chips from the `quickCommands` array — primarily for mobile, where there's no Tab key. Each chip runs `executeCommand()`.
+- A single delegated document click listener keeps focus on the live prompt (tracked via `activeInput`), skipping links/text-selection/matrix overlay.
+
+All terminal output that echoes user input is passed through `escapeHTML()` to avoid HTML injection from typed commands.
 
 ### Available Themes
 
