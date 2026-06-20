@@ -1,12 +1,10 @@
 name: CI
 
-# Runs on every pull request (and on feature-branch pushes) so problems are
-# caught before merging to main. main itself is handled by the deploy workflows.
+# Runs on every pull request so problems are caught before merging to main.
+# (main now requires a PR, so this covers all changes; main's own pushes are
+# handled by the deploy workflows.)
 on:
   pull_request:
-  push:
-    branches-ignore:
-      - main
 
 permissions:
   contents: read
