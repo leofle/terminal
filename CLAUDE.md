@@ -34,7 +34,7 @@ Print-only resume lives in the `#printable` div in the HTML body (not in `<scrip
 
 ### Implemented Commands
 
-`ls` (with `-a`), `cat`, `grep`, `help`, `whoami`, `pwd`, `date`, `echo`, `neofetch`/`fetch`, `banner`, `theme <name>`, `clear`, `contact`, `projects`, `skills`, `resume`, `download`/`print`, `email`, `open <linkedin|github|email|resume>`, `history`, `man <cmd>`, `tree`, `cowsay`, `matrix`, `sudo`, `sl`, `exit`/`logout`
+`ls` (with `-a`, and a path arg), `cd`, `cat`, `grep`, `help`, `whoami`, `pwd`, `date`, `echo`, `neofetch`/`fetch`, `banner`, `theme <name>`, `clear`, `contact`, `projects`, `skills`, `resume`, `download`/`print`, `email`, `open <linkedin|github|email|resume>`, `history`, `man <cmd>`, `tree`, `cowsay`, `matrix`, `sudo`, `sl`, `exit`/`logout`
 
 Conversion-focused commands (`download`, `email`, `open`) drive recruiters to a PDF, mailto, or live link. `download`/`print` triggers `window.print()` against the print-only `#printable` resume (a hand-formatted, black-on-white version in the HTML body — keep it in sync with `resume.txt` when experience changes).
 
@@ -48,6 +48,19 @@ Conversion-focused commands (`download`, `email`, `open`) drive recruiters to a 
 - A single delegated document click listener keeps focus on the live prompt (tracked via `activeInput`), skipping links/text-selection/matrix overlay.
 
 All terminal output that echoes user input is passed through `escapeHTML()` to avoid HTML injection from typed commands.
+
+### Virtual filesystem & the amber games easter egg
+
+The filesystem is no longer flat. The home directory (`~` = `/home/lio/resume`) is the existing `files` map; a nested `games/` directory is grafted on **only while the active theme is `retro-amber`** (`amberActive()` / `buildRoot()`).
+
+- **Tree model**: directories are plain objects, files are strings, and a file can also be a **function** for live content (e.g. `SCORES.DAT` reads the saved high score). `isDir()` distinguishes them.
+- **Navigation**: `cwd` is an array of path segments below `~`. `resolvePath()` handles `~`, absolute `/home/lio/resume/...`, and relative paths with `.`/`..`, matching keys **case-insensitively** (DOS-style). The prompt reflects `cwd` via `promptPrefixHTML()`/`cwdDisplay()`; `syncCwdToTheme()` ejects you from `games/` if you leave amber.
+- **Launching games**: typing a `*.BAT` path falls through the dispatcher's `default` to `tryRunExecutable()`, which maps `SNAKE.BAT`/`TETRIS.BAT` to `launchSnake()`/`launchTetris()`.
+- **Game engine**: both games render to `#gameCanvas` inside the `#gameOverlay` (amber-on-black, shown via `.active`), drive input through a capture-phase `keydown` listener, and are torn down by `closeGame()`. `beginGame()` sets `gameActive` (which suppresses prompt auto-focus) and blurs the input so keystrokes don't leak into the terminal. High scores persist in `localStorage` under `game-hi-<name>` (`hiScore()`/`saveHiScore()`).
+- **Path-aware tab completion**: `completePath()` completes the final path segment for `cat`/`cd`/`ls` against the parent directory; bare-command completion also surfaces runnable `*.BAT` files in the cwd.
+- **Known limitation**: the games are keyboard-only, so they're effectively desktop-only (no touch controls on mobile).
+
+`GAMES_DIR` file contents use deliberately uppercase DOS 8.3 names (`SNAKE.BAT`, `README.TXT`, `SCORES.DAT`) as an intentional period contrast with the lowercase unix-style home files.
 
 ### Available Themes
 
