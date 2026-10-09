@@ -5,3 +5,5 @@
 .env.test.local
 .env.production.local
 .DS_Store
+.DS_Store
+_site/
