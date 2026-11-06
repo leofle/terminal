@@ -3,111 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lio Fleishman - Resume</title>
+    <title>Lio Fleishman — Resume</title>
+    <meta name="theme-color" content="#1a1916">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #1a1916; --wall: #0e0d0b; --fg: #e8e5dc; --bold: #faf9f5;
+            --dim: #8a867b; --accent: #d97757; --accent2: #e8b86d; --line: #3a3832;
+            --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+            --sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #0a0a0a;
-            font-family: 'Courier New', monospace;
-            color: #00ff00;
+            background:
+                radial-gradient(1000px 600px at 0% -10%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
+                var(--wall);
+            background-attachment: fixed;
+            color: var(--fg);
+            font-family: var(--sans);
             line-height: 1.6;
-            padding: 20px;
-            max-width: 800px;
-            margin: 0 auto;
+            padding: 48px 20px;
+            -webkit-font-smoothing: antialiased;
         }
-        a {
-            color: #00ffff;
-            text-decoration: none;
-            border-bottom: 1px dotted #00ffff;
+        main {
+            max-width: 760px; margin: 0 auto;
+            background: color-mix(in srgb, var(--bg) 92%, transparent);
+            border: 1px solid color-mix(in srgb, var(--fg) 10%, transparent);
+            border-radius: 14px;
+            padding: 40px 44px;
+            box-shadow: 0 30px 80px -20px rgba(0,0,0,.7);
         }
-        a:hover {
-            color: #ffff00;
-            border-bottom-color: #ffff00;
+        a { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+        a:hover { color: var(--accent2); }
+        .back { font-family: var(--mono); font-size: 13px; border: none; color: var(--dim); display: inline-block; margin-bottom: 28px; }
+        .back:hover { color: var(--accent); }
+        h1 {
+            font-size: 36px; letter-spacing: -0.02em; line-height: 1.1;
+            background: linear-gradient(92deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
         }
-        .back-link {
-            display: inline-block;
-            margin-bottom: 30px;
-            font-size: 14px;
+        .subtitle { color: var(--bold); font-weight: 500; margin-top: 6px; }
+        .meta { color: var(--dim); font-size: 14px; margin-top: 4px; }
+        h2 {
+            font-family: var(--mono); font-size: 12px; font-weight: 500;
+            letter-spacing: .14em; text-transform: uppercase; color: var(--accent);
+            margin: 34px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--line);
         }
-        .resume-content {
-            white-space: pre-wrap;
-            word-wrap: break-word;
+        p { color: var(--fg); }
+        .role { margin-bottom: 18px; }
+        .role-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; }
+        .role-title { color: var(--bold); font-weight: 600; }
+        .role-title span { color: var(--accent2); font-weight: 500; }
+        .when { font-family: var(--mono); font-size: 12.5px; color: var(--dim); }
+        ul { list-style: none; margin-top: 4px; }
+        li { padding-left: 18px; position: relative; margin-bottom: 4px; }
+        li::before { content: '•'; color: var(--accent); position: absolute; left: 2px; }
+        dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 20px; }
+        dt { font-family: var(--mono); font-size: 13px; color: var(--accent2); padding-top: 2px; }
+        dd { color: var(--fg); }
+        @media (max-width: 640px) {
+            body { padding: 0; }
+            main { border-radius: 0; border: none; padding: 28px 20px; }
+            h1 { font-size: 30px; }
+            dl { grid-template-columns: 1fr; gap: 0; }
+            dd { margin-bottom: 10px; }
         }
-        h1 { color: #00ffff; font-size: 24px; margin-bottom: 20px; }
-        h2 { color: #ffff00; font-size: 18px; margin-top: 25px; margin-bottom: 10px; border-bottom: 1px dashed #444; padding-bottom: 5px; }
-        .section { margin-bottom: 20px; }
-        ul { list-style: none; padding-left: 0; }
-        ul li { margin-bottom: 8px; padding-left: 20px; position: relative; }
-        ul li::before { content: '> '; color: #00ff00; position: absolute; left: 0; }
-        @media (max-width: 768px) {
-            body { padding: 15px; }
+        @media print {
+            body { background: #fff; color: #111; padding: 0; }
+            main { box-shadow: none; border: none; background: #fff; padding: 0; }
+            h1 { color: #111; background: none; }
+            .subtitle, .role-title, p, dd, li { color: #111; }
+            h2, dt, .role-title span, a { color: #111; }
+            .back { display: none; }
         }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-link">← Back to interactive terminal</a>
+<main>
+    <a href="index.html" class="back">← back to the interactive terminal</a>
 
-    <div class="resume-content">
-╔═══════════════════════════════════════╗
-║      LIO FLEISHMAN - RESUME v2.0      ║
-╚═══════════════════════════════════════╝
+    <h1>Lio Fleishman</h1>
+    <div class="subtitle">Sr. Systems Engineer at NVIDIA · AI &amp; Data Infrastructure</div>
+    <div class="meta">Leander, Texas · <a href="mailto:leofle@gmail.com">leofle@gmail.com</a> · <a href="https://linkedin.com/in/lio-fleishman" target="_blank" rel="noopener noreferrer">linkedin.com/in/lio-fleishman</a> · <a href="https://github.com/leofle" target="_blank" rel="noopener noreferrer">github.com/leofle</a></div>
 
-// ABOUT
-Sr. Systems Engineer at NVIDIA | AI & Data Infrastructure
+    <h2>About</h2>
+    <p>Sr. Systems Engineer at NVIDIA, bringing 15+ years of experience in software engineering and architecture. Previously led Sales Engineering at Illumex.ai, helping companies put GenAI into practice by building scalable data infrastructure with AI at its core. Led the design and deployment of AI-powered systems used by Fortune 500 companies, reducing time-to-insight by up to 90% and enabling trusted AI use across hundreds of users.</p>
 
-Sr. Systems Engineer at NVIDIA, bringing 15+ years of experience in software engineering
-and architecture. Previously led Sales Engineering at Illumex.ai, helping companies put
-GenAI into practice by building scalable data infrastructure with AI at its core. Led the
-design and deployment of AI-powered systems used by Fortune 500 companies, reducing
-time-to-insight by up to 90% and enabling trusted AI use across hundreds of users.
-
-// CONTACT
-LinkedIn: <a href="https://linkedin.com/in/lio-fleishman" target="_blank" rel="noopener noreferrer">linkedin.com/in/lio-fleishman</a>
-Location: Leander, Texas, United States
-Network: 1,621 followers · 500+ connections
-
-// TECHNICAL_SKILLS
-Core Technologies: Python, TypeScript, CSS, JavaScript
-Frontend Frameworks: React, Vue, Next.js
-CSS Frameworks: styled-components, Tailwind CSS
-AI & Data Intelligence: Generative AI, Large Language Models, Data Analytics, GenAI Strategies, Data Governance
-Cloud & Infrastructure: Google Cloud Platform, Cloud Infrastructure, Cloud Security, AWS Certified
-Business & Product: Sales Engineering, Strategic Partnerships, Product Management, Developer Experience
-Design & UX: UI/UX Design, User Experience, Web Design, Graphic Design
-
-// EXPERIENCE
-Sr. Systems Engineer | NVIDIA | Feb 2026 - Present
-- Systems engineering for GPU and AI infrastructure platforms
-
-Head of Sales Engineering | Illumex | Aug 2024 - Feb 2026
-- Lead Sales Engineering for AI-powered data infrastructure solutions
-- Help Fortune 500 companies implement scalable GenAI systems
-- Close deals with top data teams demonstrating measurable AI readiness outcomes
-
-Head of Community and Partnerships | Illumex | Jan 2023 - Aug 2024
-- Delivered AI-driven data catalog auto-documenting 10K+ tables and metrics
-- Designed semantic context layer for safe GenAI agents in BI tools
-- Led cross-functional teams integrating LLMs with enterprise metadata
-
-Team Lead, Developer Experience Advocate | Sisense | Jul 2021 - Jan 2023
-- Led development of Compose SDK - developer-first BI application framework
-- Gave developers maximum flexibility free from rigid traditional systems
-- Successfully integrated into production serving enterprise customers
-
-// KEY_ACHIEVEMENTS
-- Reduced time-to-insight by up to 90% for Fortune 500 companies
-- Enabled trusted AI use across hundreds of enterprise users
-- Auto-documented 10K+ tables and metrics using AI-driven catalog
-- Created Compose SDK - developer-first BI framework
-- Designed semantic context layer powering safe GenAI agents
-
-// EDUCATION
-Bachelor of Science (BSc), Computer Science | The Open University of Israel
-Graphic Design | University of Buenos Aires
-
-// CERTIFICATIONS
-Google Cybersecurity Specialization (Jul 2024) - Credential: Q9SNBCDXW2H7
-AWS Certified Cloud Practitioner (Dec 2019 - Dec 2022)
+    <h2>Experience</h2>
+    <div class="role">
+        <div class="role-head"><div class="role-title">Sr. Systems Engineer · <span>NVIDIA</span></div><div class="when">Feb 2026 – Present</div></div>
+        <ul><li>Systems engineering for GPU and AI infrastructure platforms</li></ul>
     </div>
+    <div class="role">
+        <div class="role-head"><div class="role-title">Head of Sales Engineering · <span>Illumex</span></div><div class="when">Aug 2024 – Feb 2026</div></div>
+        <ul>
+            <li>Led Sales Engineering for AI-powered data infrastructure solutions</li>
+            <li>Helped Fortune 500 companies implement scalable GenAI systems</li>
+            <li>Closed deals with top data teams demonstrating measurable AI-readiness outcomes</li>
+        </ul>
+    </div>
+    <div class="role">
+        <div class="role-head"><div class="role-title">Head of Community and Partnerships · <span>Illumex</span></div><div class="when">Jan 2023 – Aug 2024</div></div>
+        <ul>
+            <li>Delivered AI-driven data catalog auto-documenting 10K+ tables and metrics</li>
+            <li>Designed semantic context layer for safe GenAI agents in BI tools</li>
+            <li>Led cross-functional teams integrating LLMs with enterprise metadata</li>
+        </ul>
+    </div>
+    <div class="role">
+        <div class="role-head"><div class="role-title">Team Lead, Developer Experience Advocate · <span>Sisense</span></div><div class="when">Jul 2021 – Jan 2023</div></div>
+        <ul>
+            <li>Led development of Compose SDK — developer-first BI application framework</li>
+            <li>Gave developers maximum flexibility, free from rigid traditional systems</li>
+            <li>Successfully integrated into production serving enterprise customers</li>
+        </ul>
+    </div>
+
+    <h2>Key achievements</h2>
+    <ul>
+        <li>Reduced time-to-insight by up to 90% for Fortune 500 companies</li>
+        <li>Enabled trusted AI use across hundreds of enterprise users</li>
+        <li>Auto-documented 10K+ tables and metrics using an AI-driven catalog</li>
+        <li>Created Compose SDK — developer-first BI framework</li>
+        <li>Designed the semantic context layer powering safe GenAI agents</li>
+    </ul>
+
+    <h2>Skills</h2>
+    <dl>
+        <dt>Core</dt><dd>Python, TypeScript, JavaScript, CSS</dd>
+        <dt>Frontend</dt><dd>React, Vue, Next.js, styled-components, Tailwind CSS</dd>
+        <dt>AI &amp; Data</dt><dd>Generative AI, Large Language Models, Data Analytics, GenAI Strategies, Data Governance</dd>
+        <dt>Cloud</dt><dd>Google Cloud Platform, Cloud Infrastructure, Cloud Security, AWS Certified</dd>
+        <dt>Business</dt><dd>Sales Engineering, Strategic Partnerships, Product Management, Developer Experience</dd>
+        <dt>Design &amp; UX</dt><dd>UI/UX Design, User Experience, Web Design, Graphic Design</dd>
+    </dl>
+
+    <h2>Education</h2>
+    <dl>
+        <dt>BSc</dt><dd>Computer Science · The Open University of Israel</dd>
+        <dt>Design</dt><dd>Graphic Design · University of Buenos Aires</dd>
+    </dl>
+
+    <h2>Certifications</h2>
+    <ul>
+        <li>Google Cybersecurity Specialization (Jul 2024) — Credential Q9SNBCDXW2H7</li>
+        <li>AWS Certified Cloud Practitioner (Dec 2019 – Dec 2022)</li>
+    </ul>
+</main>
 </body>
 </html>
