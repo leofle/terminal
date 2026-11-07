@@ -3,74 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>lio@terminal:~$ resume</title>
+    <title>Lio Fleishman — ~/resume</title>
+    <meta name="description" content="Lio Fleishman — Sr. Systems Engineer at NVIDIA. An interactive terminal resume: ask it questions, run commands, explore.">
+    <meta name="theme-color" content="#1a1916">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #000;
-            --fg: #00ff00;
-            --fg-bold: #0f0;
-            --accent: #00ffff;
-            --accent2: #ffff00;
-            --header-bg: #1a1a1a;
-            --border: #333;
-            --dim: #444;
-            --error: #ff4444;
-            --tag-bg: #003300;
-            --tag-border: #006600;
+            /* Default palette = the "claude" theme (warm graphite + clay orange) */
+            --bg: #1a1916;
+            --fg: #e8e5dc;
+            --fg-bold: #faf9f5;
+            --accent: #d97757;
+            --accent2: #e8b86d;
+            --header-bg: #22211d;
+            --border: #3a3832;
+            --dim: #8a867b;
+            --error: #e5685a;
+            --tag-bg: #2b2925;
+            --tag-border: #3a3832;
+            --info: #cfcbc0;
+            --ok: #8fbf7f;
+            --wall: #0e0d0b;
+
+            --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+            --sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+            --radius: 14px;
+            --fs: 14px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { -webkit-text-size-adjust: 100%; }
 
         body {
-            background: url('images/bg.JPG') center center fixed;
-            background-size: cover;
-            font-family: 'Courier New', monospace;
+            background:
+                radial-gradient(1100px 700px at 8% -12%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 62%),
+                radial-gradient(900px 700px at 105% 110%, color-mix(in srgb, var(--accent2) 16%, transparent), transparent 60%),
+                var(--wall);
+            background-attachment: fixed;
+            font-family: var(--mono);
+            font-size: var(--fs);
+            font-feature-settings: 'calt' 1, 'liga' 1;
             color: var(--fg);
-            padding: 20px;
-            line-height: 1.6;
+            padding: 28px;
+            line-height: 1.65;
             min-height: 100vh;
+            min-height: 100dvh;
             position: relative;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 0.4s ease;
         }
 
+        /* film grain — keeps the gradient from looking flat */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
+            inset: 0;
             pointer-events: none;
             z-index: 0;
+            opacity: 0.06;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
 
+        ::selection { background: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--fg-bold); }
+
+        /* ── Window ─────────────────────────────────────────────────── */
         .terminal-container {
-            max-width: 964px;
+            max-width: 1040px;
             margin: 0 auto;
-            background: var(--bg);
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            background: color-mix(in srgb, var(--bg) 90%, transparent);
+            -webkit-backdrop-filter: blur(24px) saturate(140%);
+            backdrop-filter: blur(24px) saturate(140%);
+            border: 1px solid color-mix(in srgb, var(--fg) 12%, transparent);
+            border-radius: var(--radius);
+            box-shadow:
+                0 0 0 0.5px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 color-mix(in srgb, var(--fg) 8%, transparent),
+                0 30px 80px -20px rgba(0, 0, 0, 0.7),
+                0 12px 30px -12px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 40px);
+            height: calc(100vh - 56px);
+            height: calc(100dvh - 56px);
             position: relative;
             z-index: 1;
+            animation: window-in 0.5s cubic-bezier(.2, .8, .2, 1) both;
+        }
+
+        @keyframes window-in {
+            from { opacity: 0; transform: translateY(10px) scale(0.985); }
+            to   { opacity: 1; transform: none; }
         }
 
         .terminal-header {
-            background: var(--header-bg);
-            padding: 10px 15px;
-            border-bottom: 1px solid var(--border);
+            background: color-mix(in srgb, var(--header-bg) 85%, transparent);
+            padding: 0 14px;
+            height: 40px;
+            border-bottom: 1px solid color-mix(in srgb, var(--fg) 8%, transparent);
             display: flex;
             align-items: center;
             gap: 8px;
             flex-shrink: 0;
+            position: relative;
+            user-select: none;
         }
 
         .terminal-button {
@@ -78,164 +116,156 @@
             height: 12px;
             border-radius: 50%;
             display: inline-block;
+            box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.25);
         }
 
-        .btn-close { background: var(--btn-close, #ff5f56); }
-        .btn-minimize { background: var(--btn-minimize, #ffbd2e); }
-        .btn-maximize { background: var(--btn-maximize, #27c93f); }
+        .btn-close { background: var(--btn-close, #ff5f57); }
+        .btn-minimize { background: var(--btn-minimize, #febc2e); }
+        .btn-maximize { background: var(--btn-maximize, #28c840); }
 
         .terminal-title {
-            margin-left: 10px;
-            color: #666;
-            font-size: 12px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--dim);
+            font-family: var(--sans);
+            font-size: 12.5px;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .terminal-title .t-icon {
+            width: 14px; height: 14px;
+            border-radius: 4px;
+            display: inline-grid; place-items: center;
+            font-family: var(--mono);
+            font-size: 9px; font-weight: 700;
+            color: var(--bg);
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+        }
+
+        .header-meta {
+            margin-left: auto;
+            font-family: var(--sans);
+            font-size: 11.5px;
+            color: var(--dim);
+            opacity: 0.8;
         }
 
         .terminal-body {
-            padding: 20px;
-            background: var(--bg);
+            padding: 22px 26px 12px;
+            background: transparent;
             position: relative;
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+            scrollbar-width: thin;
+            scrollbar-color: color-mix(in srgb, var(--fg) 15%, transparent) transparent;
+            scroll-behavior: smooth;
         }
 
-        .terminal-body::-webkit-scrollbar {
-            display: none;
+        .terminal-body::-webkit-scrollbar { width: 8px; }
+        .terminal-body::-webkit-scrollbar-thumb {
+            background: color-mix(in srgb, var(--fg) 14%, transparent);
+            border-radius: 8px;
         }
 
-        .terminal-body::before {
+        /* CRT scan lines — only for the retro themes */
+        body.theme-crt .terminal-body::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                repeating-linear-gradient(
-                    0deg,
-                    rgba(0, 0, 0, 0.15),
-                    rgba(0, 0, 0, 0.15) 1px,
-                    transparent 1px,
-                    transparent 2px
-                );
+            inset: 0;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,.15), rgba(0,0,0,.15) 1px, transparent 1px, transparent 2px);
             pointer-events: none;
             z-index: 1;
         }
+        body.theme-crt .output, body.theme-crt .prompt-text { text-shadow: 0 0 6px color-mix(in srgb, var(--fg) 35%, transparent); }
 
-        .content {
-            position: relative;
-            z-index: 2;
-        }
+        .content { position: relative; z-index: 2; }
 
+        /* ── Prompt ─────────────────────────────────────────────────── */
         .command-line {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             flex-wrap: wrap;
+            gap: 0;
+        }
+
+        .command-line.echo {
+            margin-top: 18px;
+            color: var(--fg-bold);
+        }
+        .content > .command-line.echo:first-child { margin-top: 0; }
+
+        .rprompt {
+            margin-left: auto;
+            padding-left: 16px;
+            color: var(--dim);
+            font-size: 11.5px;
+            opacity: 0.7;
         }
 
         .prompt {
             color: var(--fg);
-            margin-right: 8px;
+            margin-right: 10px;
             white-space: nowrap;
         }
 
-        .prompt-text {
-            color: var(--fg-bold);
-            font-weight: bold;
-        }
+        .prompt-text { font-weight: 500; }
+        .p-user { color: var(--accent); font-weight: 600; }
+        .p-path { color: var(--accent2); }
+        .p-git { color: var(--dim); }
+        .p-arrow { color: var(--ok); font-weight: 700; }
+        .p-arrow.err { color: var(--error); }
 
         .command-input {
             background: transparent;
             border: none;
             outline: none;
-            color: var(--fg);
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
+            color: var(--fg-bold);
+            font-family: var(--mono);
+            font-size: var(--fs);
             flex: 1;
             min-width: 200px;
+            caret-color: var(--accent);
         }
 
-        .command-input::placeholder {
-            color: var(--dim);
-        }
+        .command-input::placeholder { color: color-mix(in srgb, var(--dim) 70%, transparent); }
 
         .output {
             margin-left: 0;
-            margin-bottom: 20px;
+            margin-bottom: 8px;
             white-space: pre-wrap;
             word-wrap: break-word;
+            animation: out-in 0.18s ease-out both;
         }
 
-        h1 {
-            color: var(--accent);
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        h2 {
-            color: var(--accent2);
-            font-size: 18px;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            border-bottom: 1px dashed var(--dim);
-            padding-bottom: 5px;
-        }
-
-        .section {
-            margin-bottom: 25px;
-        }
-
-        .item {
-            margin-bottom: 15px;
-            padding-left: 20px;
-        }
-
-        .item-header {
-            color: var(--fg);
-            font-weight: bold;
-        }
-
-        .item-subheader {
-            color: #888;
-            font-style: italic;
-        }
-
-        .item-description {
-            color: var(--fg-bold);
-            margin-top: 5px;
-        }
-
-        ul {
-            list-style: none;
-            padding-left: 20px;
-        }
-
-        ul li::before {
-            content: '> ';
-            color: var(--fg);
-        }
+        @keyframes out-in { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: none; } }
 
         a {
             color: var(--accent);
             text-decoration: none;
-            border-bottom: 1px dotted var(--accent);
+            background-image: linear-gradient(currentColor, currentColor);
+            background-size: 100% 1px;
+            background-position: 0 100%;
+            background-repeat: no-repeat;
+            transition: color 0.15s;
         }
+        a:hover { color: var(--accent2); }
 
-        a:hover {
-            color: var(--accent2);
-            border-bottom-color: var(--accent2);
-        }
-
-        .blink {
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
+        code, .kbd {
+            font-family: var(--mono);
+            background: color-mix(in srgb, var(--fg) 8%, transparent);
+            border: 1px solid color-mix(in srgb, var(--fg) 10%, transparent);
+            border-radius: 5px;
+            padding: 0 5px;
+            font-size: 0.92em;
+            color: var(--fg-bold);
         }
 
         .tag {
@@ -245,62 +275,281 @@
             padding: 2px 8px;
             margin: 2px;
             border: 1px solid var(--tag-border);
-            border-radius: 3px;
+            border-radius: 999px;
             font-size: 12px;
         }
 
+        .error { color: var(--error); }
+        .success { color: var(--ok); }
+        .info { color: var(--info, var(--accent)); }
+        .dim { color: var(--dim); }
+        .accent { color: var(--accent); }
+        .accent2 { color: var(--accent2); }
+        .bold { color: var(--fg-bold); font-weight: 600; }
+
+        /* ── Markdown-ish file rendering (cat) ──────────────────────── */
+        .md-h1 {
+            display: inline-block;
+            color: var(--fg-bold);
+            font-weight: 700;
+            font-size: 1.08em;
+            padding-bottom: 2px;
+        }
+        .md-h1::before { content: '# '; color: var(--accent); }
+        .md-h2 { color: var(--accent); font-weight: 600; }
+        .md-h2::before { content: '## '; color: var(--dim); font-weight: 400; }
+        .md-bullet { color: var(--accent); }
+        .md-meta { color: var(--dim); }
+        .md-role { color: var(--fg-bold); font-weight: 600; }
+
+        /* ── ls ─────────────────────────────────────────────────────── */
         .file-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-            margin: 10px 0;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 2px 18px;
+            margin: 2px 0 8px;
         }
 
         .file-item {
-            color: var(--accent);
-            padding: 5px;
-            border: 1px dashed var(--border);
-            border-radius: 3px;
-        }
-
-        .file-item:hover {
-            background: #111;
-            border-color: var(--accent);
-        }
-
-        .error {
-            color: var(--error);
-        }
-
-        .success {
             color: var(--fg);
+            padding: 2px 0;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.12s;
+        }
+        .file-item::before { content: '▪ '; color: var(--dim); }
+        .file-item:hover { color: var(--accent); }
+        .file-item.hidden-file { color: var(--dim); }
+        .file-item.dir { color: var(--accent2); font-weight: 600; }
+        .file-item.dir::before { content: '▸ '; color: var(--accent2); }
+        .file-item.exe { color: var(--ok); }
+        .file-item.exe::before { content: '⚡'; }
+
+        /* ── Welcome ────────────────────────────────────────────────── */
+        .welcome { margin-bottom: 18px; white-space: normal; }
+
+        .m-title {
+            font-family: var(--sans);
+            font-weight: 700;
+            font-size: 30px;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            margin: 4px 0 14px;
+            background: linear-gradient(92deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        .info {
-            color: var(--accent);
-        }
-
-        .welcome {
-            color: var(--accent2);
-            margin-bottom: 20px;
-        }
-
-        .boot-line {
-            color: var(--fg);
-            margin-bottom: 2px;
+        .banner {
+            font-family: var(--mono);
             white-space: pre;
+            line-height: 1;
+            font-size: clamp(5.4px, 1.18vw, 12.5px);
+            background: linear-gradient(92deg, var(--accent) 0%, var(--accent2) 70%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 4px 0 18px;
+            filter: drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 25%, transparent));
+            overflow: hidden;
         }
 
-        .boot-line .ok {
-            color: var(--accent);
+        .welcome-card {
+            border: 1px solid color-mix(in srgb, var(--accent) 70%, transparent);
+            border-radius: 10px;
+            padding: 12px 16px;
+            max-width: 560px;
+            margin-bottom: 16px;
+            background: color-mix(in srgb, var(--accent) 5%, transparent);
+        }
+        .welcome-card .wc-title { color: var(--fg-bold); }
+        .welcome-card .wc-title b { font-weight: 700; }
+        .welcome-card .wc-sub { color: var(--dim); padding-left: 22px; margin-top: 6px; }
+        .welcome-card .wc-sub div { margin-top: 2px; }
+
+        .spark { color: var(--accent); display: inline-block; margin-right: 6px; }
+
+        .tips { color: var(--dim); margin-bottom: 4px; }
+        .tips .tips-h { color: var(--fg); margin-bottom: 4px; }
+        .tips ol { list-style: none; counter-reset: tip; }
+        .tips li { counter-increment: tip; }
+        .tips li::before { content: counter(tip) '. '; color: var(--dim); }
+
+        .run {
+            color: var(--fg-bold);
+            cursor: pointer;
+            border-bottom: 1px dashed color-mix(in srgb, var(--fg) 30%, transparent);
+            transition: color .12s, border-color .12s;
+        }
+        .run:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+        /* boot */
+        .boot-line { color: var(--dim); white-space: pre; }
+        .boot-line .ok { color: var(--ok); }
+        .boot-line .spin { color: var(--accent); display: inline-block; width: 1.2em; }
+        .boot-line b { color: var(--fg); font-weight: 500; }
+
+        .banner-desktop { display: block; }
+        .banner-mobile { display: none; }
+
+        /* ── help / tables ──────────────────────────────────────────── */
+        .help-grid { display: grid; grid-template-columns: max-content 1fr; gap: 1px 22px; margin: 2px 0 12px 2px; }
+        .help-group { color: var(--dim); font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; margin: 12px 0 4px; }
+        .help-group:first-child { margin-top: 0; }
+        .help-cmd { color: var(--accent); white-space: nowrap; }
+        .help-cmd .arg { color: var(--dim); }
+        .help-desc { color: var(--info); }
+
+        /* ── neofetch ───────────────────────────────────────────────── */
+        .fetch { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; margin: 4px 0 10px; }
+        .fetch-logo {
+            white-space: pre; line-height: 1;
+            background: linear-gradient(160deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text; background-clip: text; color: transparent;
+            font-weight: 700;
+        }
+        .fetch-info { white-space: pre-wrap; }
+        .fetch-info .k { color: var(--accent); font-weight: 600; }
+        .fetch-swatches { display: flex; gap: 0; margin-top: 10px; border-radius: 4px; overflow: hidden; width: max-content; }
+        .fetch-swatches span { width: 26px; height: 14px; display: block; }
+
+        /* ── theme picker ───────────────────────────────────────────── */
+        .theme-list { display: grid; gap: 2px; margin: 4px 0 8px; }
+        .theme-row { display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 2px 8px; margin-left: -8px; border-radius: 6px; width: max-content; }
+        .theme-row:hover { background: color-mix(in srgb, var(--fg) 7%, transparent); }
+        .theme-row .sw { display: inline-flex; gap: 3px; }
+        .theme-row .sw i { width: 10px; height: 10px; border-radius: 50%; display: block; box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); }
+        .theme-row .nm { min-width: 110px; }
+        .theme-row.active .nm { color: var(--accent); font-weight: 600; }
+
+        /* ── lio-agent (ask) ────────────────────────────────────────── */
+        .agent { margin: 6px 0 10px; }
+        .agent-row { display: flex; gap: 10px; align-items: flex-start; }
+        .agent-row + .agent-row { margin-top: 8px; }
+        .agent-dot { flex-shrink: 0; width: 1ch; }
+        .agent-dot.tool { color: var(--ok); }
+        .agent-dot.say { color: var(--fg-bold); }
+        .agent-body { white-space: pre-wrap; word-break: break-word; min-width: 0; }
+        .agent-body b { color: var(--fg-bold); font-weight: 700; }
+        .agent-tool-name { color: var(--fg-bold); font-weight: 600; }
+        .agent-tool-arg { color: var(--dim); }
+        .agent-result { color: var(--dim); padding-left: 2ch; }
+        .agent-result::before { content: '⎿  '; }
+        .agent-spinner { color: var(--accent); display: flex; gap: 10px; }
+        .agent-spinner .glyph { width: 1ch; display: inline-block; }
+        .agent-spinner .verb { color: var(--accent); }
+        .agent-spinner .hint { color: var(--dim); }
+        .agent-foot { color: var(--dim); font-size: 12px; margin-top: 8px; padding-left: calc(1ch + 10px); }
+        .agent-foot .run { color: var(--dim); }
+        .agent-foot .run:hover { color: var(--accent); }
+        .cursor-block { display: inline-block; width: 0.6em; height: 1.1em; vertical-align: text-bottom; background: var(--accent); margin-left: 1px; animation: blink 1s steps(1) infinite; }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* ── Slash-command menu ─────────────────────────────────────── */
+        .slash-menu {
+            margin: -2px 0 10px;
+            border-top: 1px solid color-mix(in srgb, var(--fg) 10%, transparent);
+            padding-top: 6px;
+            display: grid;
+            grid-template-columns: max-content 1fr;
+            gap: 0 24px;
+        }
+        .slash-item { display: contents; cursor: pointer; }
+        .slash-item > span { padding: 1px 0; }
+        .slash-item .sc { color: var(--dim); padding-left: 8px; border-left: 2px solid transparent; }
+        .slash-item .sd { color: var(--dim); }
+        .slash-item.sel .sc { color: var(--accent); border-left-color: var(--accent); }
+        .slash-item.sel .sd { color: var(--fg); }
+        .slash-empty { color: var(--dim); grid-column: 1 / -1; padding-left: 10px; }
+
+        /* ── Ghost autosuggestion (fish-style) ──────────────────────── */
+        .input-wrap {
+            position: relative;
+            flex: 1;
+            display: flex;
+            min-width: 200px;
         }
 
-        .banner-desktop {
-            display: block;
+        .input-wrap .command-input { position: relative; z-index: 1; min-width: 0; }
+
+        .ghost {
+            position: absolute;
+            top: 0; bottom: 0; left: 0;
+            display: flex;
+            align-items: center;
+            white-space: pre;
+            pointer-events: none;
+            font-family: var(--mono);
+            font-size: var(--fs);
+            color: color-mix(in srgb, var(--dim) 75%, transparent);
+            z-index: 0;
+            overflow: hidden;
         }
 
-        .banner-mobile {
-            display: none;
+        .ghost .typed { visibility: hidden; }
+
+        /* ── Footer: quick commands + status line ───────────────────── */
+        .footer {
+            flex-shrink: 0;
+            border-top: 1px solid color-mix(in srgb, var(--fg) 8%, transparent);
+            background: color-mix(in srgb, var(--header-bg) 70%, transparent);
+        }
+
+        .quickbar {
+            display: flex;
+            gap: 6px;
+            padding: 10px 14px 6px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .quickbar::-webkit-scrollbar { display: none; }
+
+        .chip {
+            white-space: nowrap;
+            background: color-mix(in srgb, var(--fg) 5%, transparent);
+            color: var(--fg);
+            border: 1px solid color-mix(in srgb, var(--fg) 11%, transparent);
+            border-radius: 999px;
+            padding: 4px 12px;
+            font-family: var(--mono);
+            font-size: 12px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.15s;
+        }
+        .chip:hover { border-color: var(--accent); color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+        .chip:active { transform: scale(0.97); }
+        .chip.primary { border-color: color-mix(in srgb, var(--accent) 60%, transparent); color: var(--accent); }
+
+        .statusline {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 2px 16px 8px;
+            font-size: 11.5px;
+            color: var(--dim);
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .statusline .live { display: inline-flex; align-items: center; gap: 6px; color: var(--fg); }
+        .statusline .live::before {
+            content: ''; width: 7px; height: 7px; border-radius: 50%;
+            background: var(--ok);
+            box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 60%, transparent);
+            animation: pulse 2.4s infinite;
+        }
+        .statusline .sep { opacity: 0.4; }
+        .statusline .right { margin-left: auto; }
+        .statusline .k { color: var(--fg); }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 55%, transparent); }
+            70% { box-shadow: 0 0 0 6px transparent; }
+            100% { box-shadow: 0 0 0 0 transparent; }
         }
 
         /* ── Ubuntu theme overrides ─────────────────────────────────── */
@@ -311,133 +560,30 @@
                 #1a0528;
             background-attachment: fixed;
         }
-
-        body.theme-ubuntu::before {
-            background: rgba(0, 0, 0, 0.06);
-        }
-
-        /* No scan lines in Ubuntu */
-        body.theme-ubuntu .terminal-body::before {
-            display: none;
-        }
-
-        /* Title centered, buttons on the right */
-        body.theme-ubuntu .terminal-title {
-            order: 0;
-            flex: 1;
-            text-align: center;
-            margin-left: 0;
-            color: #c0a0b8;
-            font-size: 13px;
-        }
-
+        body.theme-ubuntu .terminal-header { justify-content: flex-end; }
+        body.theme-ubuntu .header-meta { display: none; }
         body.theme-ubuntu .btn-minimize { order: 1; }
         body.theme-ubuntu .btn-maximize { order: 2; }
         body.theme-ubuntu .btn-close    { order: 3; }
-
-        /* Ubuntu GNOME-style buttons: dark, minimal, light icons */
         body.theme-ubuntu .terminal-button {
-            border-radius: 4px;
-            width: 16px;
-            height: 16px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 9px;
-            font-weight: 800;
-            color: rgba(255, 255, 255, 0.65);
+            border-radius: 50%;
+            width: 18px; height: 18px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 9px; font-weight: 800;
+            color: rgba(255, 255, 255, 0.75);
             line-height: 1;
             font-family: sans-serif;
-            background: #3d1a30;
-            border: 1px solid #5c2845;
+            background: #4a1f3a;
+            box-shadow: none;
         }
-
+        body.theme-ubuntu .btn-close { background: #e95420; }
         body.theme-ubuntu .btn-close::after    { content: '✕'; }
         body.theme-ubuntu .btn-minimize::after { content: '−'; }
         body.theme-ubuntu .btn-maximize::after { content: '▢'; }
-
-        /* Green prompt like Ubuntu terminal */
-        body.theme-ubuntu .prompt-text {
-            color: #8ae234;
-        }
-
-        body.theme-ubuntu .command-input,
-        body.theme-ubuntu .prompt,
-        body.theme-ubuntu .output,
-        body.theme-ubuntu .boot-line {
-            font-family: 'Ubuntu Mono', 'Courier New', monospace;
-        }
-
-        /* ── Ghost autosuggestion (fish-style) ──────────────────────── */
-        .input-wrap {
-            position: relative;
-            flex: 1;
-            display: flex;
-            min-width: 200px;
-        }
-
-        .input-wrap .command-input {
-            position: relative;
-            z-index: 1;
-            min-width: 0;
-        }
-
-        .ghost {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            display: flex;
-            align-items: center;
-            white-space: pre;
-            pointer-events: none;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: var(--dim);
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .ghost .typed {
-            visibility: hidden;
-        }
-
-        body.theme-ubuntu .ghost {
-            font-family: 'Ubuntu Mono', 'Courier New', monospace;
-        }
-
-        /* ── Quick command bar (great on mobile, handy on desktop) ──── */
-        .quickbar {
-            display: flex;
-            gap: 6px;
-            padding: 8px 12px;
-            background: var(--header-bg);
-            border-top: 1px solid var(--border);
-            overflow-x: auto;
-            flex-shrink: 0;
-            scrollbar-width: none;
-        }
-
-        .quickbar::-webkit-scrollbar { display: none; }
-
-        .chip {
-            white-space: nowrap;
-            background: var(--tag-bg);
-            color: var(--fg);
-            border: 1px solid var(--tag-border);
-            border-radius: 4px;
-            padding: 4px 10px;
-            font-family: inherit;
-            font-size: 12px;
-            cursor: pointer;
-            flex-shrink: 0;
-            transition: background 0.12s, border-color 0.12s;
-        }
-
-        .chip:hover, .chip:active {
-            background: var(--accent2);
-            color: var(--bg);
-            border-color: var(--accent2);
+        body.theme-ubuntu .p-user { color: #8ae234; }
+        body.theme-ubuntu .p-path { color: #729fcf; }
+        body.theme-ubuntu {
+            --mono: 'Ubuntu Mono', 'JetBrains Mono', ui-monospace, monospace;
         }
 
         /* ── Matrix rain overlay (easter egg) ───────────────────────── */
@@ -448,7 +594,6 @@
             background: #000;
             display: none;
         }
-
         #matrixCanvas.active { display: block; }
 
         .matrix-hint {
@@ -458,12 +603,11 @@
             transform: translateX(-50%);
             z-index: 10000;
             color: #0f0;
-            font-family: 'Courier New', monospace;
+            font-family: var(--mono);
             font-size: 13px;
             opacity: 0.7;
             display: none;
         }
-
         #matrixCanvas.active + .matrix-hint { display: block; }
 
         /* ── Printable resume (clean PDF via browser print) ─────────── */
@@ -472,7 +616,7 @@
         @media print {
             body { background: #fff !important; padding: 0 !important; }
             body::before { display: none !important; }
-            .terminal-container, .matrix-hint, #matrixCanvas { display: none !important; }
+            .terminal-container, .matrix-hint, #matrixCanvas, #gameOverlay { display: none !important; }
             #printable {
                 display: block;
                 position: absolute;
@@ -495,15 +639,11 @@
             }
             #printable .role { font-weight: bold; font-size: 13px; color: #111; }
             #printable .role .when { float: right; font-weight: normal; color: #555; }
-            #printable ul { margin: 4px 0 10px 18px; }
+            #printable ul { margin: 4px 0 10px 18px; list-style: disc; }
             #printable li { font-size: 12.5px; margin-bottom: 2px; }
             #printable p { font-size: 12.5px; margin-bottom: 6px; }
-            #printable a { color: #111; text-decoration: none; }
+            #printable a { color: #111; text-decoration: none; background: none; }
         }
-
-        /* ── Directory entries in ls (amber games easter egg) ───────── */
-        .file-item.dir { color: var(--accent2); font-weight: bold; }
-        .file-item.exe { color: var(--fg-bold); }
 
         /* ── Game overlay (Snake / Tetris) ──────────────────────────── */
         #gameOverlay {
@@ -518,7 +658,6 @@
             font-family: 'Courier New', monospace;
             color: #ffb000;
         }
-
         #gameOverlay.active { display: flex; }
 
         #gameCanvas {
@@ -537,49 +676,37 @@
             line-height: 1.7;
             text-shadow: 0 0 6px rgba(255, 176, 0, 0.5);
         }
-
         #gameHud .hud-title { font-size: 20px; letter-spacing: 4px; color: #ffc800; }
         #gameHud .hud-keys { color: #b07700; font-size: 12px; }
         #gameHud b { color: #ffda44; }
 
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-                overflow-x: hidden;
-            }
+            :root { --fs: 13.5px; }
+            body { padding: 0; overflow-x: hidden; }
 
             .terminal-container {
                 max-width: 100%;
                 width: 100%;
-                height: calc(100vh - 20px);
+                height: 100vh;
+                height: 100dvh;
                 margin: 0;
+                border-radius: 0;
+                border: none;
             }
 
-            .terminal-body {
-                padding: 15px;
-            }
+            .terminal-body { padding: 16px 16px 8px; }
+            .command-input, .ghost { font-size: 16px; } /* prevents iOS zoom */
+            .header-meta, .rprompt, .statusline .right, .p-git { display: none; }
+            .banner-desktop { display: none; }
+            .banner-mobile { display: block; }
+            .help-grid { grid-template-columns: 1fr; gap: 0; }
+            .help-desc { padding-left: 2ch; margin-bottom: 4px; }
+            .slash-menu { grid-template-columns: max-content 1fr; gap: 0 12px; }
+        }
 
-            .command-input {
-                font-size: 16px;
-            }
-
-            .ghost {
-                font-size: 16px;
-            }
-
-            .banner-desktop {
-                display: none;
-            }
-
-            .banner-mobile {
-                display: block;
-            }
-
-            .banner-mobile pre {
-                font-size: 10px;
-                line-height: 1.2;
-                margin-bottom: 15px;
-            }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
+            .terminal-body { scroll-behavior: auto; }
         }
     </style>
 </head>
@@ -589,15 +716,19 @@
             <span class="terminal-button btn-close"></span>
             <span class="terminal-button btn-minimize"></span>
             <span class="terminal-button btn-maximize"></span>
-            <span class="terminal-title">lio@terminal: ~</span>
+            <span class="terminal-title"><span class="t-icon">›_</span><span id="windowTitle">lio — ~/resume — zsh</span></span>
+            <span class="header-meta" id="headerMeta">type / for commands</span>
         </div>
-        
+
         <div class="terminal-body" id="terminalBody">
-            <div class="content" id="content">
+            <div class="content" id="content" aria-live="polite">
             </div>
         </div>
 
-        <div class="quickbar" id="quickbar"></div>
+        <div class="footer">
+            <div class="quickbar" id="quickbar"></div>
+            <div class="statusline" id="statusline"></div>
+        </div>
     </div>
 
     <canvas id="matrixCanvas"></canvas>
@@ -682,47 +813,80 @@
 
     <script>
         // ── Theme system ────────────────────────────────────────────────
+        // Every theme sets the full variable set so nothing bleeds between them.
+        // `_class` adds a body class for things CSS vars can't express.
+        const DEFAULT_THEME = 'claude';
         const themes = {
+            claude: {
+                '--bg': '#1a1916', '--fg': '#e8e5dc', '--fg-bold': '#faf9f5',
+                '--accent': '#d97757', '--accent2': '#e8b86d', '--header-bg': '#22211d',
+                '--border': '#3a3832', '--dim': '#8a867b', '--error': '#e5685a',
+                '--tag-bg': '#2b2925', '--tag-border': '#3a3832',
+                '--info': '#cfcbc0', '--ok': '#8fbf7f', '--wall': '#0e0d0b'
+            },
             matrix: {
-                '--bg': '#000', '--fg': '#00ff00', '--fg-bold': '#0f0',
-                '--accent': '#00ffff', '--accent2': '#ffff00', '--header-bg': '#1a1a1a',
-                '--border': '#333', '--dim': '#444', '--error': '#ff4444',
-                '--tag-bg': '#003300', '--tag-border': '#006600'
+                '--bg': '#020a04', '--fg': '#39ff6a', '--fg-bold': '#b6ffc8',
+                '--accent': '#00e5ff', '--accent2': '#c6ff3d', '--header-bg': '#06140a',
+                '--border': '#123a1c', '--dim': '#3c8c4f', '--error': '#ff4d4d',
+                '--tag-bg': '#0a2a12', '--tag-border': '#145a26',
+                '--info': '#39ff6a', '--ok': '#39ff6a', '--wall': '#000',
+                '_class': 'theme-crt'
             },
             dracula: {
-                '--bg': '#282a36', '--fg': '#f8f8f2', '--fg-bold': '#f8f8f2',
-                '--accent': '#8be9fd', '--accent2': '#bd93f9', '--header-bg': '#21222c',
-                '--border': '#44475a', '--dim': '#6272a4', '--error': '#ff5555',
-                '--tag-bg': '#44475a', '--tag-border': '#6272a4'
+                '--bg': '#282a36', '--fg': '#f8f8f2', '--fg-bold': '#ffffff',
+                '--accent': '#bd93f9', '--accent2': '#ff79c6', '--header-bg': '#21222c',
+                '--border': '#44475a', '--dim': '#7d88b8', '--error': '#ff5555',
+                '--tag-bg': '#44475a', '--tag-border': '#6272a4',
+                '--info': '#e2e2dc', '--ok': '#50fa7b', '--wall': '#14151c'
             },
             monokai: {
-                '--bg': '#272822', '--fg': '#f8f8f2', '--fg-bold': '#f8f8f2',
+                '--bg': '#272822', '--fg': '#f8f8f2', '--fg-bold': '#ffffff',
                 '--accent': '#66d9ef', '--accent2': '#e6db74', '--header-bg': '#1e1f1c',
-                '--border': '#49483e', '--dim': '#75715e', '--error': '#f92672',
-                '--tag-bg': '#3e3d32', '--tag-border': '#49483e'
+                '--border': '#49483e', '--dim': '#8f8a73', '--error': '#f92672',
+                '--tag-bg': '#3e3d32', '--tag-border': '#49483e',
+                '--info': '#e6e6de', '--ok': '#a6e22e', '--wall': '#121310'
             },
             'retro-amber': {
                 '--bg': '#1a1000', '--fg': '#ffb000', '--fg-bold': '#ffc800',
                 '--accent': '#ffda44', '--accent2': '#ff8800', '--header-bg': '#120b00',
-                '--border': '#4a3500', '--dim': '#7a5a00', '--error': '#ff4444',
-                '--tag-bg': '#2a1a00', '--tag-border': '#4a3500'
+                '--border': '#4a3500', '--dim': '#a07400', '--error': '#ff5a36',
+                '--tag-bg': '#2a1a00', '--tag-border': '#4a3500',
+                '--info': '#ffb000', '--ok': '#ffda44', '--wall': '#0a0600',
+                '_class': 'theme-crt'
             },
             catppuccin: {
-                '--bg': '#1e1e2e', '--fg': '#cdd6f4', '--fg-bold': '#cdd6f4',
-                '--accent': '#89dceb', '--accent2': '#f5c2e7', '--header-bg': '#181825',
-                '--border': '#45475a', '--dim': '#585b70', '--error': '#f38ba8',
-                '--tag-bg': '#313244', '--tag-border': '#45475a'
+                '--bg': '#1e1e2e', '--fg': '#cdd6f4', '--fg-bold': '#ffffff',
+                '--accent': '#cba6f7', '--accent2': '#89dceb', '--header-bg': '#181825',
+                '--border': '#45475a', '--dim': '#7f849c', '--error': '#f38ba8',
+                '--tag-bg': '#313244', '--tag-border': '#45475a',
+                '--info': '#bac2de', '--ok': '#a6e3a1', '--wall': '#11111b'
             },
             ubuntu: {
-                '--bg': '#300a24', '--fg': '#eeeeec', '--fg-bold': '#8ae234',
-                '--accent': '#34e2e2', '--accent2': '#e95420', '--header-bg': '#2c0b1e',
-                '--border': '#5c1a3e', '--dim': '#888a85', '--error': '#cc0000',
+                '--bg': '#300a24', '--fg': '#eeeeec', '--fg-bold': '#ffffff',
+                '--accent': '#e95420', '--accent2': '#34e2e2', '--header-bg': '#2c0b1e',
+                '--border': '#5c1a3e', '--dim': '#a39fa0', '--error': '#ef2929',
                 '--tag-bg': '#4a1040', '--tag-border': '#5c1a3e',
+                '--info': '#eeeeec', '--ok': '#8ae234', '--wall': '#1a0528',
                 '_class': 'theme-ubuntu'
             }
         };
 
-        function applyTheme(name) {
+        const themeBlurbs = {
+            claude: 'warm graphite + clay — the default',
+            matrix: 'phosphor green, scan lines, the classic',
+            dracula: 'purple-pink night mode',
+            monokai: 'the editor theme that started it all',
+            'retro-amber': '1987 amber CRT (…psst: try ls after)',
+            catppuccin: 'soothing pastels (mocha)',
+            ubuntu: 'aubergine GNOME terminal'
+        };
+
+        let currentTheme = DEFAULT_THEME;
+
+        function storageGet(key) { try { return localStorage.getItem(key); } catch { return null; } }
+        function storageSet(key, val) { try { localStorage.setItem(key, val); } catch { /* private mode */ } }
+
+        function applyTheme(name, persist = true) {
             const theme = themes[name];
             if (!theme) return false;
             const root = document.documentElement;
@@ -744,273 +908,222 @@
                 root.style.setProperty(prop, value);
             }
 
-            // Apply special body class (e.g. ubuntu background & button overrides)
-            if (theme._class) {
-                document.body.classList.add(theme._class);
-            }
+            // Apply special body class (e.g. ubuntu window buttons, CRT scan lines)
+            if (theme._class) document.body.classList.add(theme._class);
 
-            localStorage.setItem('terminal-theme', name);
+            const meta = document.querySelector('meta[name="theme-color"]');
+            if (meta) meta.setAttribute('content', theme['--bg']);
+
+            currentTheme = name;
+            if (persist) storageSet('terminal-theme', name);
             return true;
         }
 
-        // Restore saved theme
-        const savedTheme = localStorage.getItem('terminal-theme');
-        if (savedTheme && themes[savedTheme]) {
-            applyTheme(savedTheme);
-        }
+        // Restore saved theme (or the default, without pinning it in storage)
+        const savedTheme = storageGet('terminal-theme');
+        applyTheme(savedTheme && themes[savedTheme] ? savedTheme : DEFAULT_THEME, false);
 
+        // Files are lightly-marked-up text: "# " title, "## " section,
+        // "- " bullet. handleCat() renders that markup; grep sees plain text.
         const files = {
             'resume.txt': {
-                content: `╔═══════════════════════════════════════╗
-║      LIO FLEISHMAN - RESUME v2.0      ║
-╚═══════════════════════════════════════╝
+                content: `# Lio Fleishman — Resume
 
-// ABOUT
-Sr. Systems Engineer at NVIDIA | AI & Data Infrastructure
+Sr. Systems Engineer at NVIDIA · AI & Data Infrastructure
+Leander, Texas · linkedin.com/in/lio-fleishman · github.com/leofle
 
-Sr. Systems Engineer at NVIDIA, bringing 15+ years of experience in software engineering
-and architecture. Previously led Sales Engineering at Illumex.ai, helping companies put
-GenAI into practice by building scalable data infrastructure with AI at its core. Led the
-design and deployment of AI-powered systems used by Fortune 500 companies, reducing
-time-to-insight by up to 90% and enabling trusted AI use across hundreds of users.
+## About
+Sr. Systems Engineer at NVIDIA, bringing 15+ years of experience in software
+engineering and architecture. Previously led Sales Engineering at Illumex.ai,
+helping companies put GenAI into practice by building scalable data
+infrastructure with AI at its core. Led the design and deployment of AI-powered
+systems used by Fortune 500 companies, reducing time-to-insight by up to 90%
+and enabling trusted AI use across hundreds of users.
 
-// CONTACT
-LinkedIn: linkedin.com/in/lio-fleishman
-Location: Leander, Texas, United States
-Network: 1,621 followers · 500+ connections
-
-// TECHNICAL_SKILLS
-Core Technologies: Python, TypeScript, CSS, JavaScript
-Frontend Frameworks: React, Vue, Next.js
-CSS Frameworks: styled-components, Tailwind CSS
-AI & Data Intelligence: Generative AI, Large Language Models, Data Analytics, GenAI Strategies, Data Governance
-Cloud & Infrastructure: Google Cloud Platform, Cloud Infrastructure, Cloud Security, AWS Certified
-Business & Product: Sales Engineering, Strategic Partnerships, Product Management, Developer Experience
-Design & UX: UI/UX Design, User Experience, Web Design, Graphic Design
-
-// EXPERIENCE
-Sr. Systems Engineer | NVIDIA | Feb 2026 - Present
+## Experience
+Sr. Systems Engineer · NVIDIA · Feb 2026 – Present
 - Systems engineering for GPU and AI infrastructure platforms
 
-Head of Sales Engineering | Illumex | Aug 2024 - Feb 2026
-- Lead Sales Engineering for AI-powered data infrastructure solutions
-- Help Fortune 500 companies implement scalable GenAI systems
-- Close deals with top data teams demonstrating measurable AI readiness outcomes
+Head of Sales Engineering · Illumex · Aug 2024 – Feb 2026
+- Led Sales Engineering for AI-powered data infrastructure solutions
+- Helped Fortune 500 companies implement scalable GenAI systems
+- Closed deals with top data teams demonstrating measurable AI-readiness outcomes
 
-Head of Community and Partnerships | Illumex | Jan 2023 - Aug 2024
+Head of Community and Partnerships · Illumex · Jan 2023 – Aug 2024
 - Delivered AI-driven data catalog auto-documenting 10K+ tables and metrics
 - Designed semantic context layer for safe GenAI agents in BI tools
 - Led cross-functional teams integrating LLMs with enterprise metadata
 
-Team Lead, Developer Experience Advocate | Sisense | Jul 2021 - Jan 2023
-- Led development of Compose SDK - developer-first BI application framework
-- Gave developers maximum flexibility free from rigid traditional systems
+Team Lead, Developer Experience Advocate · Sisense · Jul 2021 – Jan 2023
+- Led development of Compose SDK — developer-first BI application framework
+- Gave developers maximum flexibility, free from rigid traditional systems
 - Successfully integrated into production serving enterprise customers
 
-// KEY_ACHIEVEMENTS
+## Key achievements
 - Reduced time-to-insight by up to 90% for Fortune 500 companies
 - Enabled trusted AI use across hundreds of enterprise users
-- Auto-documented 10K+ tables and metrics using AI-driven catalog
-- Created Compose SDK - developer-first BI framework
-- Designed semantic context layer powering safe GenAI agents
+- Auto-documented 10K+ tables and metrics using an AI-driven catalog
+- Created Compose SDK — developer-first BI framework
+- Designed the semantic context layer powering safe GenAI agents
 
-// EDUCATION
-Bachelor of Science (BSc), Computer Science | The Open University of Israel
-Graphic Design | University of Buenos Aires
+## Skills
+Core           Python · TypeScript · JavaScript · CSS
+Frontend       React · Vue · Next.js · styled-components · Tailwind CSS
+AI & Data      Generative AI · LLMs · Data Analytics · GenAI Strategy · Data Governance
+Cloud          Google Cloud Platform · Cloud Infrastructure · Cloud Security · AWS
+Business       Sales Engineering · Strategic Partnerships · Product Management · DevEx
+Design & UX    UI/UX Design · User Experience · Web Design · Graphic Design
 
-// CERTIFICATIONS
-Google Cybersecurity Specialization (Jul 2024) - Credential: Q9SNBCDXW2H7
-AWS Certified Cloud Practitioner (Dec 2019 - Dec 2022)`
+## Education
+BSc, Computer Science · The Open University of Israel
+Graphic Design · University of Buenos Aires
+
+## Certifications
+Google Cybersecurity Specialization · Jul 2024 · Credential Q9SNBCDXW2H7
+AWS Certified Cloud Practitioner · Dec 2019 – Dec 2022`
             },
             'fun_facts.txt': {
-                content: `╔═══════════════════════════════════════╗
-║           FUN FACTS ABOUT ME          ║
-╚═══════════════════════════════════════╝
+                content: `# Fun facts
 
-→ I started in graphic design, not code. Before I wrote
-  software I was studying graphic design in Buenos Aires,
-  and that eye for how things should look and feel never
-  left. This terminal is downstream of it.
+- I started in graphic design, not code. Before I wrote software I was
+  studying graphic design in Buenos Aires, and that eye for how things
+  should look and feel never left. This terminal is downstream of it.
 
-→ The path took the scenic route: Buenos Aires, then Israel,
-  now Texas. Different countries, different stacks, same job
-  underneath — making a complicated thing make sense to
-  someone who didn't build it.
+- The path took the scenic route: Buenos Aires, then Israel, now Texas.
+  Different countries, different stacks, same job underneath — making a
+  complicated thing make sense to someone who didn't build it.
 
-→ Most of my career has been spent in the gap between groups
-  who don't speak the same language: designers and engineers,
-  then engineers and the business, then people and their data.
-  The interesting work usually lives in that gap.
+- Most of my career has been spent in the gap between groups who don't
+  speak the same language: designers and engineers, then engineers and
+  the business, then people and their data. The interesting work usually
+  lives in that gap.
 
-→ I'd rather show than tell. The most convincing thing I've
-  ever put in front of a room wasn't a slide — it was a working
-  system, running live, doing the thing while everyone watched.
+- I'd rather show than tell. The most convincing thing I've ever put in
+  front of a room wasn't a slide — it was a working system, running live,
+  doing the thing while everyone watched.
 
-→ I like the unglamorous layer most people skip: metadata,
-  lineage, governance. AI is only as trustworthy as the
-  plumbing beneath it, and the plumbing is where I'm happiest.
+- I like the unglamorous layer most people skip: metadata, lineage,
+  governance. AI is only as trustworthy as the plumbing beneath it, and
+  the plumbing is where I'm happiest.
 
-→ This resume is the portfolio. No frameworks, no dependencies,
-  no build step — just HTML, CSS, and JavaScript doing an honest
-  day's work. Try "cat secret.txt" to see how far down it goes.
+- This resume is the portfolio. No frameworks, no build step — just HTML,
+  CSS, and JavaScript doing an honest day's work. Try "ls -a" to see how
+  far down it goes.
 
-→ My favorite kind of problem is the one nobody has framed yet.
-  Hand me an ambiguous mess and some room to think, and I'll
-  come back with the question that was actually worth asking.`
+- My favorite kind of problem is the one nobody has framed yet. Hand me an
+  ambiguous mess and some room to think, and I'll come back with the
+  question that was actually worth asking.`
             },
             'projects.txt': {
-                content: `╔═══════════════════════════════════════╗
-║           NOTABLE PROJECTS            ║
-╚═══════════════════════════════════════╝
+                content: `# Notable projects
 
-🤖 AI-Powered Data Catalog (Illumex)
-   - Auto-documented 10K+ tables and metrics
-   - Reduced documentation time by 90%
-   - Enabled safe GenAI agents in BI tools
-   Status: Production | Impact: Fortune 500 companies
+## AI-Powered Data Catalog · Illumex
+- Auto-documented 10K+ tables and metrics
+- Reduced documentation time by 90%
+- Enabled safe GenAI agents in BI tools
+  status: production · impact: Fortune 500 companies
 
-📊 Compose SDK (Sisense)
-   - Developer-first BI application framework
-   - Freed developers from rigid BI constraints
-   - Integrated into production platform
-   Status: Production | Impact: Enterprise customers
+## Semantic Context Layer · Illumex
+- Powers safe GenAI agents
+- Integrated with Tableau and Power BI
+- Real-time chatbot QA and SQL generation
+  status: production · impact: hundreds of users
 
-🔗 Google Sheets Integration (Sisense)
-   - Innovative data solutions
-   - Custom analytics visualizations
-   - Strategic partnership with Google
-   Status: Production | Impact: Enterprise clients
+## Compose SDK · Sisense
+- Developer-first BI application framework
+- Freed developers from rigid BI constraints
+- Integrated into the production platform
+  status: production · impact: enterprise customers
 
-🎨 Adobe XD/Photoshop Integration (Sisense)
-   - Enhanced integration for custom visuals
-   - Amazing custom analytics visualizations
-   Status: Production | Impact: Enterprise clients
+## Google Sheets Integration · Sisense
+- Data solutions and custom analytics visualizations
+- Strategic partnership with Google
+  status: production · impact: enterprise clients
 
-🔐 Semantic Context Layer (Illumex)
-   - Powers safe GenAI agents
-   - Integrated with Tableau, Power BI
-   - Real-time chatbot QA and SQL generation
-   Status: Production | Impact: Hundreds of users`
+## Adobe XD / Photoshop Integration · Sisense
+- Enhanced integration for custom visuals and analytics visualizations
+  status: production · impact: enterprise clients`
             },
             'skills.txt': {
-                content: `╔═══════════════════════════════════════╗
-║           TECHNICAL SKILLS            ║
-╚═══════════════════════════════════════╝
+                content: `# Technical skills
 
-💻 Core Technologies
-   Python | TypeScript | CSS | JavaScript
+## Core
+Python · TypeScript · JavaScript · CSS
 
-⚛️ Frontend Frameworks
-   React | Vue | Next.js
+## Frontend
+React · Vue · Next.js · styled-components · Tailwind CSS
 
-🎨 CSS Frameworks
-   styled-components | Tailwind CSS
+## AI & Data Intelligence
+Generative AI · Large Language Models · Data Analytics
+GenAI Strategies · Data Governance
 
-🤖 AI & Data Intelligence
-   Generative AI | Large Language Models | Data Analytics
-   GenAI Strategies | Data Governance
+## Cloud & Infrastructure
+Google Cloud Platform · Cloud Infrastructure · Cloud Security · AWS Certified
 
-☁️ Cloud & Infrastructure
-   Google Cloud Platform | Cloud Infrastructure
-   Cloud Security | AWS Certified
+## Business & Product
+Sales Engineering · Strategic Partnerships · Product Management · Developer Experience
 
-💼 Business & Product
-   Sales Engineering | Strategic Partnerships
-   Product Management | Developer Experience
+## Design & UX
+UI/UX Design · User Experience · Web Design · Graphic Design
 
-🎨 Design & UX
-   UI/UX Design | User Experience
-   Web Design | Graphic Design
-
-📈 Specializations
-   - Building AI-ready organizations
-   - Scaling GenAI systems for enterprise
-   - Developer experience optimization
-   - Data infrastructure architecture`
+## Specializations
+- Building AI-ready organizations
+- Scaling GenAI systems for the enterprise
+- Developer experience optimization
+- Data infrastructure architecture`
             },
             'contact.txt': {
-                content: `╔═══════════════════════════════════════╗
-║              GET IN TOUCH             ║
-╚═══════════════════════════════════════╝
+                content: `# Get in touch
 
-📧 Email: leofle@gmail.com
+email      leofle@gmail.com
+linkedin   linkedin.com/in/lio-fleishman
+github     github.com/leofle
+location   Leander, Texas, United States
+currently  Sr. Systems Engineer at NVIDIA
 
-🔗 LinkedIn: linkedin.com/in/lio-fleishman
-   Network: 1,621 followers · 500+ connections
-
-🐙 GitHub: github.com/leofle
-
-📍 Location: Leander, Texas, United States
-
-💼 Currently: Sr. Systems Engineer at NVIDIA
-
-💡 Tip: type "open linkedin", "open github", "email",
-   or "download" to grab a PDF of this resume.`
+Shortcuts: "email", "open linkedin", "open github", or "download" for a PDF.`
             },
             'secret.txt': {
-                content: `╔═══════════════════════════════════════╗
-║           🎉 YOU FOUND IT! 🎉          ║
-╚═══════════════════════════════════════╝
+                content: `# You found it 🎉
 
-Congratulations! You found the secret file!
+Congratulations — the hidden file.
 
-This terminal resume was built with:
-- Pure HTML, CSS, and JavaScript
-- Lots of coffee ☕
-- A healthy dose of terminal nostalgia
-- Zero frameworks (because sometimes less is more)
+This terminal resume is built with:
+- Pure HTML, CSS, and JavaScript, in a single file
+- A virtual filesystem, tab completion, history expansion, a slash menu
+- An offline "agent" that answers questions by grepping these files
+- Lots of coffee ☕ and a healthy dose of terminal nostalgia
 
-Did you know?
-- I built this in a single session
-- It's fully interactive (as you've discovered)
-- All files are virtual (they don't actually exist)
-- The terminal emulator is custom-built
+Things to try:
+- ask why should I hire lio?
+- theme retro-amber   (then look around…)
+- matrix · cowsay hello · sl · sudo anything
 
-Want to see something cool?
-Try typing: echo "Hello, World!"
-
-Or maybe: date
-
-Or even: whoami
-
-Thanks for exploring! 🚀`
+Thanks for exploring. 🚀`
             },
             'joke.txt': {
-                content: `╔═══════════════════════════════════════╗
-║         TERMINAL HUMOR                ║
-╚═══════════════════════════════════════╝
+                content: `# Terminal humor
 
 Why do programmers prefer dark mode?
-Because light attracts bugs! 🐛
+  Because light attracts bugs. 🐛
 
 How many programmers does it take to change a light bulb?
-None, that's a hardware problem! 💡
-
-Why did the programmer quit his job?
-He didn't get arrays! 📊
-
-What's a programmer's favorite hangout place?
-Foo Bar! 🍺
-
-Why do Java developers wear glasses?
-Because they can't C#! 👓
+  None — that's a hardware problem. 💡
 
 A SQL query walks into a bar, walks up to two tables and asks:
-"Can I join you?" 🍻
+  "Can I join you?" 🍻
 
 How do you comfort a JavaScript bug?
-You console it! 🐛
+  You console it.
 
 Why did the developer go broke?
-Because he used up all his cache! 💰
+  Because he used up all his cache. 💰
 
 What's the object-oriented way to become wealthy?
-Inheritance! 💎
+  Inheritance. 💎
 
-Why don't programmers like nature?
-It has too many bugs! 🌳
-
-Hope these made you smile! 😊`
+Why did the LLM get a promotion?
+  It always had the most context. ✻`
             }
         };
 
@@ -1125,7 +1238,7 @@ color=amber`
         };
 
         function amberActive() {
-            return (localStorage.getItem('terminal-theme') || 'matrix') === 'retro-amber';
+            return currentTheme === 'retro-amber';
         }
 
         // Current working directory as path segments below ~ (home).
@@ -1189,8 +1302,54 @@ color=amber`
             return cwd.length ? '~/' + cwd.join('/') : '~';
         }
 
-        function promptPrefixHTML() {
-            return `<span class="prompt-text">lio@terminal:${cwdDisplay()}$</span> `;
+        // Starship-style prompt:  lio  resume/games on ⎇ main ❯
+        let lastStatus = 0;   // 1 when the previous command printed an error → red ❯
+
+        function promptPath() {
+            syncCwdToTheme();
+            return ['resume', ...cwd].join('/');
+        }
+
+        function promptPrefixHTML(status = lastStatus) {
+            return `<span class="prompt-text"><span class="p-user">lio</span> <span class="p-path">${escapeHTML(promptPath())}</span> <span class="p-git">on ⎇ main</span> <span class="p-arrow${status ? ' err' : ''}">❯</span></span>`;
+        }
+
+        function nowStamp() {
+            return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+        }
+
+        // Freeze a command line into the scrollback (what you typed + a timestamp)
+        function echoLine(text, status = lastStatus) {
+            const line = document.createElement('div');
+            line.className = 'command-line echo';
+            line.innerHTML = `<span class="prompt">${promptPrefixHTML(status)}</span><span>${escapeHTML(text)}</span><span class="rprompt">${nowStamp()}</span>`;
+            document.getElementById('content').appendChild(line);
+            return line;
+        }
+
+        // Remove the live (editable) prompt so it's replaced by its echo.
+        function retireLiveLine() {
+            if (!activeInput) return;
+            const line = activeInput.closest('.command-line');
+            const menu = line && line.nextElementSibling;
+            if (menu && menu.classList.contains('slash-menu')) menu.remove();
+            if (line) line.remove();
+            activeInput = null;
+        }
+
+        // ── Status line + window title (Claude Code-style footer) ────
+        function renderStatusline() {
+            const el = document.getElementById('statusline');
+            if (!el) return;
+            const path = '~/' + promptPath();
+            el.innerHTML =
+                `<span class="live">lio-agent</span>` +
+                `<span class="sep">│</span><span>⎇ main</span>` +
+                `<span class="sep">│</span><span>${escapeHTML(path)}</span>` +
+                `<span class="sep">│</span><span>theme <span class="k">${escapeHTML(currentTheme)}</span></span>` +
+                `<span class="right"><span class="k">/</span> commands · <span class="k">⇥</span> complete · <span class="k">↑</span> history · <span class="k">esc</span> interrupt</span>`;
+            const title = document.getElementById('windowTitle');
+            if (title) title.textContent = `lio — ${path} — zsh`;
         }
 
         let commandHistory = [];
@@ -1199,29 +1358,79 @@ color=amber`
         let tabIndex = -1;
         let activeInput = null;
 
-        // Single delegated click handler keeps focus on the live prompt.
-        // (Skip when the user is selecting text or tapping a link.)
+        const REDUCED_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const sleep = (ms) => new Promise(r => setTimeout(r, REDUCED_MOTION ? 0 : ms));
+
+        // Single delegated click handler: runs clickable commands (.run[data-run])
+        // and otherwise keeps focus on the live prompt.
         document.addEventListener('click', (e) => {
+            const runner = e.target.closest('[data-run]');
+            if (runner) {
+                e.preventDefault();
+                if (!agentBusy && !gameActive) executeCommand(runner.dataset.run);
+                return;
+            }
             if (e.target.closest('a')) return;
             if (window.getSelection && window.getSelection().toString()) return;
             if (document.getElementById('matrixCanvas').classList.contains('active')) return;
             if (document.getElementById('gameOverlay').classList.contains('active')) return;
-            if (activeInput) activeInput.focus();
+            if (activeInput) activeInput.focus({ preventScroll: true });
         });
-        
-        const availableCommands = ['ls', 'cat', 'cd', 'help', 'clear', 'whoami', 'pwd', 'date', 'echo', 'contact', 'projects', 'skills', 'resume', 'neofetch', 'fetch', 'banner', 'theme', 'grep', 'download', 'print', 'email', 'open', 'history', 'man', 'tree', 'cowsay', 'matrix', 'sudo', 'exit', 'sl'];
+
+        // Documented commands: drives help, the / menu, and man fallbacks.
+        // `args` = needs an argument (the / menu fills it in instead of running).
+        const commandDocs = [
+            { group: 'Resume', name: 'resume',   desc: 'Read the full resume' },
+            { group: 'Resume', name: 'projects', desc: 'Notable projects' },
+            { group: 'Resume', name: 'skills',   desc: 'Technical skills' },
+            { group: 'Resume', name: 'contact',  desc: 'How to reach me' },
+            { group: 'Resume', name: 'download', desc: 'Save a clean PDF (alias: print)' },
+            { group: 'Resume', name: 'email',    desc: 'Write me an email' },
+            { group: 'Resume', name: 'open',     usage: '<where>', desc: 'Jump to linkedin · github · email · resume', args: true },
+            { group: 'Agent',  name: 'ask',      usage: '<question>', desc: 'Ask lio-agent anything about me ✻', args: true },
+            { group: 'Files',  name: 'ls',       usage: '[-a] [dir]', desc: 'List files' },
+            { group: 'Files',  name: 'cat',      usage: '<file>', desc: 'Print a file', args: true },
+            { group: 'Files',  name: 'cd',       usage: '<dir>', desc: 'Change directory', args: true },
+            { group: 'Files',  name: 'grep',     usage: '<pattern>', desc: 'Search every file', args: true },
+            { group: 'Files',  name: 'tree',     desc: 'Show the file tree' },
+            { group: 'Shell',  name: 'help',     desc: 'This list' },
+            { group: 'Shell',  name: 'theme',    usage: '[name]', desc: 'Pick a color theme' },
+            { group: 'Shell',  name: 'neofetch', desc: 'System summary (alias: fetch)' },
+            { group: 'Shell',  name: 'man',      usage: '<command>', desc: 'Manual for a command', args: true },
+            { group: 'Shell',  name: 'history',  desc: 'Past commands (!!, !n, !prefix)' },
+            { group: 'Shell',  name: 'banner',   desc: 'The big name banner' },
+            { group: 'Shell',  name: 'clear',    desc: 'Clear the screen (Ctrl+L)' },
+            { group: 'Shell',  name: 'whoami',   desc: 'Current user' },
+            { group: 'Shell',  name: 'pwd',      desc: 'Working directory' },
+            { group: 'Shell',  name: 'date',     desc: 'Current date and time' },
+            { group: 'Shell',  name: 'echo',     usage: '<text>', desc: 'Print text back', args: true },
+            { group: 'Shell',  name: 'exit',     desc: 'End the session' },
+        ];
+
+        const availableCommands = ['ls', 'cat', 'cd', 'help', 'clear', 'whoami', 'pwd', 'date', 'echo', 'contact', 'projects', 'skills', 'resume', 'neofetch', 'fetch', 'banner', 'theme', 'grep', 'download', 'print', 'email', 'open', 'history', 'man', 'tree', 'ask', 'claude', 'cowsay', 'matrix', 'sudo', 'exit', 'sl'];
 
         // Commands the quick-bar surfaces (great for mobile / discoverability)
-        const quickCommands = ['help', 'resume', 'projects', 'skills', 'download', 'contact', 'theme dracula', 'matrix'];
+        const quickCommands = [
+            { label: '✻ ask me anything', cmd: 'ask what does lio do?', primary: true },
+            { label: 'resume', cmd: 'resume' },
+            { label: 'projects', cmd: 'projects' },
+            { label: 'skills', cmd: 'skills' },
+            { label: 'download pdf', cmd: 'download' },
+            { label: 'contact', cmd: 'contact' },
+            { label: 'theme', cmd: 'theme' },
+            { label: 'help', cmd: 'help' },
+        ];
 
         function getAutocompleteSuggestions(inputValue) {
             const parts = inputValue.trim().split(/\s+/);
-            const command = parts[0].toLowerCase();
+            const slash = parts[0].startsWith('/') ? '/' : '';
+            const command = parts[0].slice(slash.length).toLowerCase();
             const arg = parts.length > 1 ? parts.slice(1).join(' ') : '';
 
             // Completing the command itself (also suggest runnable files in cwd)
             if (parts.length === 1) {
-                const cmds = availableCommands.filter(cmd => cmd.startsWith(command));
+                const cmds = availableCommands.filter(cmd => cmd.startsWith(command)).map(c => slash + c);
+                if (slash) return cmds;
                 const here = resolvePath('');
                 const local = here && isDir(here.node)
                     ? Object.keys(here.node).filter(n => /\.bat$/i.test(n) && n.toLowerCase().startsWith(command))
@@ -1261,12 +1470,12 @@ color=amber`
         function createCommandLine() {
             const content = document.getElementById('content');
             const commandLine = document.createElement('div');
-            commandLine.className = 'command-line';
-            
+            commandLine.className = 'command-line live';
+
             const prompt = document.createElement('span');
             prompt.className = 'prompt';
             prompt.innerHTML = promptPrefixHTML();
-            
+
             const inputWrap = document.createElement('span');
             inputWrap.className = 'input-wrap';
 
@@ -1279,17 +1488,66 @@ color=amber`
             input.autocomplete = 'off';
             input.autocapitalize = 'off';
             input.spellcheck = false;
-            input.placeholder = 'Type a command...';
+            input.setAttribute('aria-label', 'Terminal command');
+            input.setAttribute('enterkeyhint', 'go');
+            input.placeholder = commandHistory.length ? '' : 'Ask me anything, or type / for commands';
 
             inputWrap.appendChild(ghost);
             inputWrap.appendChild(input);
             commandLine.appendChild(prompt);
             commandLine.appendChild(inputWrap);
             content.appendChild(commandLine);
+            renderStatusline();
+            scrollToBottom();
 
-            if (!gameActive) input.focus();
+            if (!gameActive) input.focus({ preventScroll: true });
 
             let lastTabTime = 0;
+
+            // ── Slash-command menu (Claude Code-style) ──
+            let menuEl = null, menuItems = [], menuSel = 0, menuDismissed = false;
+
+            function menuOpen() { return !!menuEl; }
+            function closeMenu() { if (menuEl) { menuEl.remove(); menuEl = null; } menuItems = []; }
+            function updateMenu() {
+                const val = input.value;
+                if (!val.startsWith('/') || /\s/.test(val)) { closeMenu(); menuDismissed = false; return; }
+                if (menuDismissed) return;
+                const q = val.slice(1).toLowerCase();
+                const items = commandDocs.filter(d => d.name.startsWith(q));
+                const fuzzy = commandDocs.filter(d => !d.name.startsWith(q) && (d.name.includes(q) || d.desc.toLowerCase().includes(q)));
+                menuItems = [...items, ...fuzzy].slice(0, 9);
+                if (menuSel >= menuItems.length) menuSel = 0;
+                if (!menuEl) {
+                    menuEl = document.createElement('div');
+                    menuEl.className = 'slash-menu';
+                    commandLine.after(menuEl);
+                }
+                menuEl.innerHTML = menuItems.length
+                    ? menuItems.map((d, i) =>
+                        `<div class="slash-item${i === menuSel ? ' sel' : ''}" data-i="${i}"><span class="sc">/${d.name}${d.usage ? ' <span class="arg">' + escapeHTML(d.usage) + '</span>' : ''}</span><span class="sd">${escapeHTML(d.desc)}</span></div>`
+                    ).join('')
+                    : `<div class="slash-empty">No matching commands — press enter to ask lio-agent instead</div>`;
+                menuEl.querySelectorAll('.slash-item').forEach(row => {
+                    row.addEventListener('mousedown', (ev) => { ev.preventDefault(); menuSel = +row.dataset.i; chooseMenu(true); });
+                });
+                scrollToBottom();
+            }
+            // run=true executes commands that need no argument; otherwise just fills the input
+            function chooseMenu(run) {
+                const d = menuItems[menuSel];
+                if (!d) return false;
+                closeMenu();
+                if (run && !d.args) {
+                    input.value = '';
+                    executeCommand('/' + d.name);
+                } else {
+                    input.value = '/' + d.name + ' ';
+                    menuDismissed = false;
+                    updateGhost();
+                }
+                return true;
+            }
 
             // Fish-style inline suggestion: dim completion of the likeliest next command
             function currentSuggestion() {
@@ -1302,14 +1560,17 @@ color=amber`
                     }
                 }
                 if (!val.includes(' ')) {
-                    const cmd = availableCommands.find(c => c.startsWith(val) && c !== val);
-                    if (cmd) return cmd;
+                    const slash = val.startsWith('/') ? '/' : '';
+                    const q = val.slice(slash.length);
+                    if (!q) return '';
+                    const cmd = availableCommands.find(c => c.startsWith(q) && c !== q);
+                    if (cmd) return slash + cmd;
                 }
                 return '';
             }
 
             function updateGhost() {
-                const sug = currentSuggestion();
+                const sug = menuOpen() ? '' : currentSuggestion();
                 if (!sug) { ghost.innerHTML = ''; return; }
                 ghost.innerHTML = `<span class="typed">${escapeHTML(input.value)}</span>${escapeHTML(sug.slice(input.value.length))}`;
             }
@@ -1320,34 +1581,41 @@ color=amber`
                 return false;
             }
 
-            input.addEventListener('input', updateGhost);
-            
+            input.addEventListener('input', () => { menuSel = 0; updateMenu(); updateGhost(); });
+
             input.addEventListener('keydown', (e) => {
+                // ── Slash menu navigation takes priority while it's open ──
+                if (menuOpen()) {
+                    if (e.key === 'ArrowDown' || (e.ctrlKey && e.key === 'n')) { e.preventDefault(); menuSel = (menuSel + 1) % Math.max(1, menuItems.length); updateMenu(); return; }
+                    if (e.key === 'ArrowUp' || (e.ctrlKey && e.key === 'p')) { e.preventDefault(); menuSel = (menuSel - 1 + menuItems.length) % Math.max(1, menuItems.length); updateMenu(); return; }
+                    if (e.key === 'Tab') { e.preventDefault(); chooseMenu(false); return; }
+                    if (e.key === 'Enter' && menuItems.length) { e.preventDefault(); chooseMenu(true); return; }
+                    if (e.key === 'Escape') { e.preventDefault(); menuDismissed = true; closeMenu(); updateGhost(); return; }
+                }
+
                 // ── Emacs-style control keybindings (like a real shell) ──
                 if (e.ctrlKey && !e.altKey && !e.metaKey) {
                     const k = e.key.toLowerCase();
                     if (k === 'l') { e.preventDefault(); handleClear(); createCommandLine(); return; }
                     if (k === 'c') {
                         e.preventDefault();
-                        const display = document.createElement('div');
-                        display.className = 'command-line';
-                        display.innerHTML = `<span class="prompt">${promptPrefixHTML()}</span><span>${escapeHTML(input.value)}^C</span>`;
-                        document.getElementById('content').appendChild(display);
-                        input.value = '';
-                        updateGhost();
+                        const typed = input.value;
+                        retireLiveLine();
+                        echoLine(typed + '^C');
                         createCommandLine();
                         return;
                     }
                     if (k === 'a') { e.preventDefault(); input.setSelectionRange(0, 0); return; }
                     if (k === 'e') { e.preventDefault(); const n = input.value.length; input.setSelectionRange(n, n); return; }
-                    if (k === 'u') { e.preventDefault(); input.value = input.value.slice(input.selectionStart); input.setSelectionRange(0, 0); updateGhost(); return; }
-                    if (k === 'k') { e.preventDefault(); input.value = input.value.slice(0, input.selectionStart); updateGhost(); return; }
+                    if (k === 'u') { e.preventDefault(); input.value = input.value.slice(input.selectionStart); input.setSelectionRange(0, 0); updateMenu(); updateGhost(); return; }
+                    if (k === 'k') { e.preventDefault(); input.value = input.value.slice(0, input.selectionStart); updateMenu(); updateGhost(); return; }
                     if (k === 'w') {
                         e.preventDefault();
                         const pos = input.selectionStart;
                         const left = input.value.slice(0, pos).replace(/\s*\S+\s*$/, '');
                         input.value = left + input.value.slice(pos);
                         input.setSelectionRange(left.length, left.length);
+                        updateMenu();
                         updateGhost();
                         return;
                     }
@@ -1359,12 +1627,11 @@ color=amber`
 
                 if (e.key === 'Enter') {
                     e.preventDefault();
-                    executeCommand(input.value.trim());
-                    input.value = '';
-                    ghost.innerHTML = '';
+                    const value = input.value.trim();
                     historyIndex = -1;
                     tabCompletions = [];
                     tabIndex = -1;
+                    executeCommand(value);
                 } else if (e.key === 'ArrowUp') {
                     e.preventDefault();
                     if (commandHistory.length > 0) {
@@ -1399,44 +1666,43 @@ color=amber`
                     const parts = inputValue.trim().split(' ');
                     const command = parts[0].toLowerCase();
                     const arg = parts.length > 1 ? parts.slice(1).join(' ') : '';
-                    
-                    // Get completions
-                    const suggestions = getAutocompleteSuggestions(inputValue);
-                    
-                    if (suggestions.length === 0) {
-                        // No matches, beep (visual feedback)
-                        input.style.border = '1px solid #ff4444';
-                        setTimeout(() => input.style.border = '', 100);
+
+                    // Empty line + Tab → open the command menu
+                    if (!inputValue.trim()) {
+                        input.value = '/';
+                        updateMenu();
                         return;
                     }
-                    
+
+                    const suggestions = getAutocompleteSuggestions(inputValue);
+
+                    if (suggestions.length === 0) {
+                        // No matches: brief visual "beep"
+                        commandLine.animate(
+                            [{ transform: 'translateX(0)' }, { transform: 'translateX(-3px)' }, { transform: 'translateX(3px)' }, { transform: 'translateX(0)' }],
+                            { duration: 160 }
+                        );
+                        return;
+                    }
+
                     // Double tab (within 500ms) - show all matches
                     if (currentTime - lastTabTime < 500 && tabCompletions.length > 0) {
-                        if (command === 'cat' && arg) {
-                            addOutput(suggestions.join('  '), 'info');
-                        } else {
-                            addOutput(suggestions.join('  '), 'info');
-                        }
+                        const line = document.createElement('div');
+                        line.className = 'output dim';
+                        line.textContent = suggestions.join('   ');
+                        commandLine.before(line);
                         tabCompletions = [];
                         tabIndex = -1;
                         lastTabTime = 0;
                         return;
                     }
-                    
+
                     lastTabTime = currentTime;
-                    
-                    // Single match - complete it
+
                     if (suggestions.length === 1) {
-                        if (arg) {
-                            // Complete the argument
-                            input.value = `${command} ${suggestions[0]}`;
-                        } else {
-                            // Complete command
-                            input.value = suggestions[0];
-                        }
+                        input.value = arg ? `${command} ${suggestions[0]}` : suggestions[0];
                         tabCompletions = [];
                         tabIndex = -1;
-                        updateGhost();
                     } else {
                         // Multiple matches - cycle through them
                         if (tabCompletions.length === 0 || tabCompletions.join('|') !== suggestions.join('|')) {
@@ -1445,14 +1711,7 @@ color=amber`
                         } else {
                             tabIndex = (tabIndex + 1) % tabCompletions.length;
                         }
-                        
-                        if (arg) {
-                            // Complete the argument
-                            input.value = `${command} ${tabCompletions[tabIndex]}`;
-                        } else {
-                            // Complete command
-                            input.value = tabCompletions[tabIndex];
-                        }
+                        input.value = arg ? `${command} ${tabCompletions[tabIndex]}` : tabCompletions[tabIndex];
                     }
                     updateGhost();
                 } else {
@@ -1462,33 +1721,38 @@ color=amber`
                     lastTabTime = 0;
                 }
             });
-            
+
             activeInput = input;
         }
 
         function escapeHTML(str) {
-            return str
+            return String(str)
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;');
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
         }
 
         function addOutput(text, className = '') {
+            if (className.split(' ').includes('error')) lastStatus = 1;
             const content = document.getElementById('content');
             const output = document.createElement('div');
             output.className = `output ${className}`;
             output.textContent = text;
             content.appendChild(output);
             scrollToBottom();
+            return output;
         }
 
         function addOutputHTML(html, className = '') {
+            if (className.split(' ').includes('error')) lastStatus = 1;
             const content = document.getElementById('content');
             const output = document.createElement('div');
             output.className = `output ${className}`;
             output.innerHTML = html;
             content.appendChild(output);
             scrollToBottom();
+            return output;
         }
 
         function scrollToBottom() {
@@ -1496,8 +1760,26 @@ color=amber`
             terminalBody.scrollTop = terminalBody.scrollHeight;
         }
 
+        // A clickable inline command: <span class="run" data-run="resume">resume</span>
+        function runLink(cmd, label = cmd) {
+            return `<span class="run" data-run="${escapeHTML(cmd)}">${escapeHTML(label)}</span>`;
+        }
+
+        // Plain-English input → lio-agent, instead of "command not found"
+        const QUESTION_WORDS = ['what', 'who', 'whos', "who's", 'where', 'when', 'why', 'how', 'is', 'are', 'does', 'do', 'did', 'can', 'could', 'would', 'should', 'tell', 'describe', 'explain', 'give', 'list', 'show', 'whats', "what's", 'hi', 'hello', 'hey'];
+        function looksLikeQuestion(cmd) {
+            const words = cmd.trim().split(/\s+/);
+            if (/\?\s*$/.test(cmd)) return true;
+            return QUESTION_WORDS.includes(words[0].toLowerCase()) && (words.length >= 2 || /^(hi|hello|hey)$/i.test(words[0]));
+        }
+
         function executeCommand(cmd) {
+            if (agentBusy) return;
+            const prevStatus = lastStatus;
+            retireLiveLine();
+
             if (!cmd) {
+                echoLine('', prevStatus);
                 createCommandLine();
                 return;
             }
@@ -1506,11 +1788,9 @@ color=amber`
             if (cmd[0] === '!' && cmd.length > 1) {
                 const expanded = expandBang(cmd);
                 if (expanded === null) {
-                    const display = document.createElement('div');
-                    display.className = 'command-line';
-                    display.innerHTML = `<span class="prompt">${promptPrefixHTML()}</span><span>${escapeHTML(cmd)}</span>`;
-                    document.getElementById('content').appendChild(display);
-                    addOutput(`${cmd}: event not found`, 'error');
+                    echoLine(cmd, prevStatus);
+                    lastStatus = 0;
+                    addOutput(`zsh: event not found: ${cmd.slice(1)}`, 'error');
                     createCommandLine();
                     return;
                 }
@@ -1518,19 +1798,21 @@ color=amber`
             }
 
             // Add to history
-            if (cmd && (!commandHistory.length || commandHistory[commandHistory.length - 1] !== cmd)) {
+            if (!commandHistory.length || commandHistory[commandHistory.length - 1] !== cmd) {
                 commandHistory.push(cmd);
             }
-            
-            // Display the command
-            const content = document.getElementById('content');
-            const commandDisplay = document.createElement('div');
-            commandDisplay.className = 'command-line';
-            commandDisplay.innerHTML = `<span class="prompt">${promptPrefixHTML()}</span><span>${escapeHTML(cmd)}</span>`;
-            content.appendChild(commandDisplay);
-            
-            const [command, ...args] = cmd.split(' ');
-            
+
+            echoLine(cmd, prevStatus);
+            lastStatus = 0;
+
+            // "/theme dracula" works the same as "theme dracula" — but leave real
+            // absolute paths (/home/lio/resume/...) alone.
+            let line = cmd;
+            const slashCmd = line.match(/^\/(\S+)/);
+            if (slashCmd && availableCommands.includes(slashCmd[1].toLowerCase())) line = line.slice(1);
+
+            const [command, ...args] = line.split(/\s+/);
+
             switch(command.toLowerCase()) {
                 case 'ls':
                     handleLs(args);
@@ -1538,7 +1820,7 @@ color=amber`
                 case 'cat':
                     if (args.length === 0) {
                         addOutput('cat: missing file operand', 'error');
-                        addOutput('Try: cat <filename>', 'info');
+                        addOutputHTML(`Try: ${runLink('cat resume.txt')}`, 'dim');
                     } else {
                         handleCat(args[0]);
                     }
@@ -1553,7 +1835,7 @@ color=amber`
                     handleClear();
                     break;
                 case 'whoami':
-                    addOutput('lio', 'success');
+                    addOutput('lio', 'info');
                     break;
                 case 'pwd':
                     addOutput('/home/lio/resume' + (cwd.length ? '/' + cwd.join('/') : ''), 'info');
@@ -1608,6 +1890,10 @@ color=amber`
                 case 'tree':
                     handleTree();
                     break;
+                case 'ask':
+                case 'claude':
+                    handleAsk(args.join(' '), command.toLowerCase());
+                    return; // async: the agent creates the next prompt when it's done
                 case 'cowsay':
                     handleCowsay(args);
                     break;
@@ -1627,12 +1913,18 @@ color=amber`
                 default:
                     // Maybe it's an executable in the virtual filesystem (a .BAT game)
                     if (tryRunExecutable(command)) break;
-                    addOutput(`Command not found: ${command}`, 'error');
+                    // Plain English? Hand it to the agent.
+                    // (multi-word input counts too, unless it's a near-miss of a real command)
+                    if (looksLikeQuestion(line) || (args.length >= 1 && !didYouMean(command.toLowerCase()))) {
+                        handleAsk(line, 'auto');
+                        return;
+                    }
+                    addOutput(`zsh: command not found: ${command}`, 'error');
                     const guess = didYouMean(command.toLowerCase());
                     if (guess) {
-                        addOutput(`Did you mean "${guess}"?`, 'info');
+                        addOutputHTML(`Did you mean ${runLink(guess)}? Or ${runLink('ask ' + line, 'ask lio-agent')} in plain English.`, 'dim');
                     } else {
-                        addOutput('Type "help" to see available commands.', 'info');
+                        addOutputHTML(`Type ${runLink('help')} for commands — or just ask a question, like ${runLink('ask what does lio do?', 'what does lio do?')}`, 'dim');
                     }
             }
 
@@ -1640,7 +1932,7 @@ color=amber`
         }
 
         function handleLs(args = []) {
-            const showAll = args.includes('-a') || args.includes('--all');
+            const showAll = args.includes('-a') || args.includes('--all') || args.includes('-la') || args.includes('-al');
             const pathArg = args.find(a => !a.startsWith('-')) || '';
 
             const target = resolvePath(pathArg);
@@ -1656,21 +1948,25 @@ color=amber`
 
             let names = Object.keys(target.node);
             if (!showAll) names = names.filter(n => n !== 'secret.txt');
+            // directories first, like eza --group-directories-first
+            names.sort((a, b) => (isDir(target.node[b]) - isDir(target.node[a])) || a.localeCompare(b));
 
             const fileGrid = document.createElement('div');
-            fileGrid.className = 'file-list';
+            fileGrid.className = 'file-list output';
 
             names.forEach(name => {
                 const node = target.node[name];
                 const dir = isDir(node);
                 const exe = /\.bat$/i.test(name);
+                const hidden = name === 'secret.txt';
                 const item = document.createElement('div');
-                item.className = 'file-item' + (dir ? ' dir' : exe ? ' exe' : '');
-                const shown = (name === 'secret.txt' && showAll) ? '.' + name : name;
+                item.className = 'file-item' + (dir ? ' dir' : exe ? ' exe' : '') + (hidden ? ' hidden-file' : '');
+                const shown = hidden ? '.' + name : name;
                 item.textContent = dir ? shown + '/' : shown;
-                item.style.cursor = 'pointer';
                 const fullPath = '~/' + [...target.segs, name].join('/');
+                item.title = dir ? `cd ${fullPath}` : exe ? `run ${name}` : `cat ${fullPath}`;
                 item.addEventListener('click', () => {
+                    if (agentBusy) return;
                     if (dir) executeCommand(`cd ${fullPath}`);
                     else if (exe) executeCommand(fullPath);   // run the .BAT
                     else executeCommand(`cat ${fullPath}`);
@@ -1678,8 +1974,7 @@ color=amber`
                 fileGrid.appendChild(item);
             });
 
-            const content = document.getElementById('content');
-            content.appendChild(fileGrid);
+            document.getElementById('content').appendChild(fileGrid);
             scrollToBottom();
         }
 
@@ -1688,11 +1983,11 @@ color=amber`
             if (pathArg === '' || pathArg === '~') { cwd = []; return; }
             const target = resolvePath(pathArg);
             if (!target) {
-                addOutput(`cd: ${pathArg}: No such file or directory`, 'error');
+                addOutput(`cd: no such file or directory: ${pathArg}`, 'error');
                 return;
             }
             if (!isDir(target.node)) {
-                addOutput(`cd: ${pathArg}: Not a directory`, 'error');
+                addOutput(`cd: not a directory: ${pathArg}`, 'error');
                 return;
             }
             cwd = target.segs;
@@ -1708,74 +2003,94 @@ color=amber`
             return false;
         }
 
+        // Turn LinkedIn / GitHub / email mentions in escaped text into links.
+        function linkify(html) {
+            return html
+                .replace(/linkedin\.com\/in\/[a-zA-Z0-9-]+/g, m => `<a href="https://${m}" target="_blank" rel="noopener noreferrer">${m}</a>`)
+                .replace(/github\.com\/[a-zA-Z0-9-]+/g, m => `<a href="https://${m}" target="_blank" rel="noopener noreferrer">${m}</a>`)
+                .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, m => `<a href="mailto:${m}">${m}</a>`);
+        }
+
+        // Render the light markdown used in the virtual files.
+        function renderFileText(text) {
+            return escapeHTML(text).split('\n').map(line => {
+                let m;
+                if ((m = line.match(/^# (.*)$/))) return `<span class="md-h1">${m[1]}</span>`;
+                if ((m = line.match(/^## (.*)$/))) return `<span class="md-h2">${m[1]}</span>`;
+                if ((m = line.match(/^([^-#\s].*?) · (.*?) · ((?:\w{3} )?\d{4}.*)$/))) {
+                    return `<span class="md-role">${m[1]}</span> <span class="dim">·</span> <span class="accent2">${m[2]}</span> <span class="dim">· ${m[3]}</span>`;
+                }
+                if ((m = line.match(/^(\s+)(status:.*)$/))) return `${m[1]}<span class="dim">${m[2]}</span>`;
+                line = line.replace(/^(\s*)- /, '$1<span class="md-bullet">•</span> ');
+                line = line.replace(/^([A-Za-z&][A-Za-z&;. ]*?)(\s{3,})(\S.*)$/, '<span class="accent">$1</span>$2$3');
+                return line.replace(/ · /g, ' <span class="dim">·</span> ');
+            }).join('\n');
+        }
+
         function handleCat(filename) {
             const target = resolvePath(filename);
             if (!target) {
                 addOutput(`cat: ${filename}: No such file or directory`, 'error');
-                addOutput('Type "ls" to see available files.', 'info');
+                addOutputHTML(`Run ${runLink('ls')} to see what's here.`, 'dim');
                 return;
             }
             if (isDir(target.node)) {
                 addOutput(`cat: ${filename}: Is a directory`, 'error');
                 return;
             }
-            let content = escapeHTML(readFileNode(target.node));
-            // Convert LinkedIn links to clickable HTML links
-            content = content.replace(/linkedin\.com\/in\/[a-zA-Z0-9-]+/g, (match) => {
-                return `<a href="https://${match}" target="_blank" rel="noopener noreferrer">${match}</a>`;
-            });
-            // GitHub
-            content = content.replace(/github\.com\/[a-zA-Z0-9-]+/g, (match) => {
-                return `<a href="https://${match}" target="_blank" rel="noopener noreferrer">${match}</a>`;
-            });
-            // Email addresses
-            content = content.replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, (match) => {
-                return `<a href="mailto:${match}">${match}</a>`;
-            });
-            addOutputHTML(content, '');
+            addOutputHTML(linkify(renderFileText(readFileNode(target.node))), 'file');
+        }
+
+        function themeDots(name) {
+            const t = themes[name];
+            return `<span class="sw">${['--bg', '--accent', '--accent2', '--ok', '--fg'].map(k => `<i style="background:${t[k]}"></i>`).join('')}</span>`;
         }
 
         function handleTheme(args) {
             const name = (args[0] || '').toLowerCase();
             if (!name) {
-                const current = localStorage.getItem('terminal-theme') || 'matrix';
-                const list = Object.keys(themes).map(t => t === current ? `  * ${t} (active)` : `    ${t}`).join('\n');
-                addOutput(`Available themes:\n${list}\n\nUsage: theme <name>`, 'info');
+                const rows = Object.keys(themes).map(t =>
+                    `<div class="theme-row${t === currentTheme ? ' active' : ''}" data-run="theme ${t}">${themeDots(t)}<span class="nm">${t}${t === currentTheme ? ' ✓' : ''}</span><span class="dim">${escapeHTML(themeBlurbs[t] || '')}</span></div>`
+                ).join('');
+                addOutputHTML(`<span class="dim">Pick a theme (click, or <code>theme &lt;name&gt;</code>):</span><div class="theme-list">${rows}</div>`);
                 return;
             }
             if (applyTheme(name)) {
-                addOutput(`Theme switched to "${name}"`, 'success');
+                renderStatusline();
+                addOutputHTML(`<span class="success">✓</span> theme → <span class="accent">${escapeHTML(name)}</span>`);
                 syncCwdToTheme();
                 if (name === 'retro-amber') {
-                    addOutput('...the phosphor warms up. A new directory just appeared. Try "ls".', 'info');
+                    addOutput('…the phosphor warms up. A new directory just appeared. Try "ls".', 'dim');
                 }
             } else {
-                addOutput(`Unknown theme: ${name}`, 'error');
-                addOutput(`Available: ${Object.keys(themes).join(', ')}`, 'info');
+                addOutput(`theme: unknown theme "${name}"`, 'error');
+                addOutputHTML(`Available: ${Object.keys(themes).map(t => runLink('theme ' + t, t)).join(' · ')}`, 'dim');
             }
+        }
+
+        function grepMatches(pattern) {
+            const results = [];
+            for (const [filename, file] of Object.entries(files)) {
+                if (filename === 'secret.txt') continue;
+                file.content.split('\n').forEach((line, i) => {
+                    if (line.toLowerCase().includes(pattern)) results.push({ filename, lineNum: i + 1, line });
+                });
+            }
+            return results;
         }
 
         function handleGrep(args) {
             if (args.length === 0) {
                 addOutput('grep: missing search pattern', 'error');
-                addOutput('Usage: grep <pattern>', 'info');
+                addOutputHTML(`Usage: grep &lt;pattern&gt; — e.g. ${runLink('grep python')}`, 'dim');
                 return;
             }
 
-            const pattern = args.join(' ').toLowerCase();
-            let results = [];
-
-            for (const [filename, file] of Object.entries(files)) {
-                const lines = file.content.split('\n');
-                for (let i = 0; i < lines.length; i++) {
-                    if (lines[i].toLowerCase().includes(pattern)) {
-                        results.push({ filename, lineNum: i + 1, line: lines[i] });
-                    }
-                }
-            }
+            const pattern = args.join(' ').replace(/^["']|["']$/g, '').toLowerCase();
+            const results = grepMatches(pattern);
 
             if (results.length === 0) {
-                addOutput(`No matches found for "${args.join(' ')}"`, 'error');
+                addOutput(`grep: no matches for "${pattern}"`, 'error');
                 return;
             }
 
@@ -1784,150 +2099,102 @@ color=amber`
             for (const r of results) {
                 if (r.filename !== currentFile) {
                     currentFile = r.filename;
-                    output += `\n${r.filename}:\n`;
+                    output += `${output ? '\n' : ''}<span class="accent2">${r.filename}</span>\n`;
                 }
-                // Highlight the match
                 const idx = r.line.toLowerCase().indexOf(pattern);
-                const before = r.line.slice(0, idx);
-                const match = r.line.slice(idx, idx + pattern.length);
-                const after = r.line.slice(idx + pattern.length);
-                output += `  ${r.lineNum}: ${before}<span style="background:var(--accent2);color:var(--bg);font-weight:bold">${match}</span>${after}\n`;
+                const before = escapeHTML(r.line.slice(0, idx));
+                const match = escapeHTML(r.line.slice(idx, idx + pattern.length));
+                const after = escapeHTML(r.line.slice(idx + pattern.length));
+                output += `<span class="ok success">${String(r.lineNum).padStart(3)}</span><span class="dim">:</span> ${before}<span style="background:var(--accent);color:var(--bg);border-radius:3px;padding:0 2px">${match}</span>${after}\n`;
             }
 
-            output += `\n${results.length} match${results.length === 1 ? '' : 'es'} across ${new Set(results.map(r => r.filename)).size} file${new Set(results.map(r => r.filename)).size === 1 ? '' : 's'}`;
-            addOutputHTML(output, 'info');
+            const nFiles = new Set(results.map(r => r.filename)).size;
+            output += `\n<span class="dim">${results.length} match${results.length === 1 ? '' : 'es'} across ${nFiles} file${nFiles === 1 ? '' : 's'}</span>`;
+            addOutputHTML(output);
         }
 
         function handleHelp() {
-            const helpText = `Available commands:
-
-  RESUME
-  resume          - Show full resume
-  projects        - Show notable projects
-  skills          - Show technical skills
-  contact         - Show contact information
-  download        - Save a clean PDF of this resume (alias: print)
-  email           - Email me (leofle@gmail.com)
-  open <where>    - Open a link (linkedin, github, email, resume)
-
-  FILES
-  ls [-a] [dir]   - List files (-a includes hidden ones)
-  cd <dir>        - Change directory
-  cat <file>      - Display a file's contents
-  grep <pattern>  - Search across all files
-  tree            - Show files as a tree
-
-  TERMINAL
-  help            - Show this help message
-  man <command>   - Show the manual for a command
-  history         - Show command history (recall: !!, !n, !prefix)
-  clear           - Clear the terminal
-  whoami / pwd    - Current user / working directory
-  date            - Current date and time
-  echo <text>     - Echo text back
-  theme <name>    - Switch theme (matrix, dracula, monokai, retro-amber, catppuccin, ubuntu)
-  neofetch        - System information
-  banner          - ASCII name banner
-  exit            - End the session
-
-  KEYS
-  Tab             - Autocomplete   →  Accept inline suggestion
-  ↑ / ↓           - Browse history
-  Ctrl+L          - Clear screen   Ctrl+C  Cancel line
-  Ctrl+A / Ctrl+E - Start / end of line     Ctrl+U / Ctrl+K  Clear line
-
-  Hint: there are a few hidden commands. Try exploring. 🥚
-
-Try: ls   then: cat <filename>`;
-            addOutput(helpText, 'info');
+            let html = '<div class="help-grid">';
+            let group = '';
+            for (const d of commandDocs) {
+                if (d.group !== group) {
+                    group = d.group;
+                    html += `<div class="help-group" style="grid-column:1/-1">${group}</div>`;
+                }
+                html += `<span class="help-cmd" data-run="${d.args ? 'man ' + d.name : d.name}" style="cursor:pointer">${d.name}${d.usage ? ' <span class="arg">' + escapeHTML(d.usage) + '</span>' : ''}</span><span class="help-desc">${escapeHTML(d.desc)}</span>`;
+            }
+            html += `<div class="help-group" style="grid-column:1/-1">Keys</div>
+                <span class="help-cmd">/</span><span class="help-desc">Command menu (↑↓ to move, ⏎ to run)</span>
+                <span class="help-cmd">Tab · →</span><span class="help-desc">Autocomplete · accept suggestion</span>
+                <span class="help-cmd">↑ ↓</span><span class="help-desc">Browse history</span>
+                <span class="help-cmd">Ctrl+L · Ctrl+C</span><span class="help-desc">Clear screen · cancel line</span>
+                <span class="help-cmd">Ctrl+A/E/U/K/W</span><span class="help-desc">Line editing, emacs-style</span>
+                <span class="help-cmd">Esc</span><span class="help-desc">Interrupt lio-agent</span>
+            </div>`;
+            html += `<span class="spark">✻</span><span class="dim">Not sure what to type? Just ask in plain English — e.g. </span>${runLink('what has lio built?')}
+<span class="dim">  A few commands aren't listed here. Go exploring. 🥚</span>`;
+            addOutputHTML(html);
         }
 
         function handleClear() {
-            const content = document.getElementById('content');
-            content.innerHTML = '';
-            const welcome = document.createElement('div');
-            welcome.className = 'welcome';
-            
-            const preDesktop = document.createElement('pre');
-            preDesktop.className = 'banner-desktop';
-            preDesktop.style.cssText = 'color: var(--accent); font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
-            preDesktop.textContent = `██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
+            document.getElementById('content').innerHTML = '';
+            lastStatus = 0;
+            scrollToBottom();
+        }
+
+        const pageLoadedAt = Date.now();
+
+        function handleNeofetch() {
+            const up = Math.floor((Date.now() - pageLoadedAt) / 1000);
+            const uptime = up < 60 ? `${up}s` : `${Math.floor(up / 60)}m ${up % 60}s`;
+            const logo = `██╗     ███████╗
+██║     ██╔════╝
+██║     █████╗
+██║     ██╔══╝
+███████╗██║
+╚══════╝╚═╝`;
+            const kv = [
+                ['OS', 'resume-os 3.0 (web)'],
+                ['Host', 'GitHub Pages'],
+                ['Kernel', 'HTML5 + vanilla JS · 0 deps'],
+                ['Shell', 'zsh-ish, lio-agent attached'],
+                ['Theme', currentTheme],
+                ['Font', 'JetBrains Mono'],
+                ['Uptime', uptime],
+                ['Role', 'Sr. Systems Engineer @ NVIDIA'],
+                ['Focus', 'AI & data infrastructure'],
+                ['Stack', 'Python · TypeScript · GenAI · Cloud'],
+                ['Location', 'Leander, Texas'],
+            ];
+            const t = themes[currentTheme];
+            const sw = ['--accent', '--accent2', '--ok', '--error', '--info', '--dim', '--fg', '--fg-bold']
+                .map(k => `<span style="background:${t[k]}"></span>`).join('');
+            const info = `<span class="bold">lio</span><span class="dim">@</span><span class="bold">terminal</span>
+<span class="dim">${'─'.repeat(28)}</span>
+${kv.map(([k, v]) => `<span class="k">${k.padEnd(9)}</span>${escapeHTML(v)}`).join('\n')}<div class="fetch-swatches">${sw}</div>`;
+            addOutputHTML(`<div class="fetch"><div class="fetch-logo">${logo}</div><div class="fetch-info">${info}</div></div>`);
+        }
+
+        const BANNER = `██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
 ██║     ██║██╔═══██╗    ██╔════╝██║     ██╔════╝██║██╔════╝██║  ██║████╗ ████║██╔══██╗████╗  ██║
 ██║     ██║██║   ██║    █████╗  ██║     █████╗  ██║███████╗███████║██╔████╔██║███████║██╔██╗ ██║
 ██║     ██║██║   ██║    ██╔══╝  ██║     ██╔══╝  ██║╚════██║██╔══██║██║╚██╔╝██║██╔══██║██║╚██╗██║
 ███████╗██║╚██████╔╝    ██║     ███████╗███████╗██║███████║██║  ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║
-╚══════╝╚═╝ ╚═════╝     ╚═╝     ╚══════╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
+╚══════╝╚═╝ ╚═════╝     ╚═╝     ╚══════╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝`;
 
-                         RESUME v2.0`;
-            welcome.appendChild(preDesktop);
-            
-            const preMobile = document.createElement('pre');
-            preMobile.className = 'banner-mobile';
-            preMobile.style.cssText = 'color: var(--accent); font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
-            preMobile.textContent = `╔═══════════════════╗
-║  LIO FLEISHMAN    ║
-║    RESUME v2.0    ║
-╚═══════════════════╝`;
-            welcome.appendChild(preMobile);
-            
-            const p = document.createElement('p');
-            p.innerHTML = 'Terminal cleared. Type <span class="info">help</span> for commands.';
-            welcome.appendChild(p);
-            content.appendChild(welcome);
-            scrollToBottom();
-        }
-
-        function handleNeofetch() {
-            const theme = localStorage.getItem('terminal-theme') || 'matrix';
-            const pad = (s) => (s + ' '.repeat(34)).slice(0, 34);
-            const neofetch = `
-       ╭──────────────────────────────────────────╮
-       │  lio@terminal                             │
-       ├──────────────────────────────────────────┤
-       │  OS: Resume Terminal v2.0                 │
-       │  Host: GitHub Pages                       │
-       │  Kernel: HTML5 + JavaScript               │
-       │  Uptime: Since you opened this page       │
-       │  Shell: Interactive Terminal               │
-       │  Editor: Your browser                     │
-       │  Theme: ${pad(theme)}    │
-       │  Cmds: ${pad(String(availableCommands.length) + ' available')}     │
-       │  Skills: AI, GenAI, Data, Cloud           │
-       │  Location: Leander, Texas                 │
-       │  Status: Sr. Systems Engineer @NVIDIA     │
-       ╰──────────────────────────────────────────╯`;
-            addOutput(neofetch, 'info');
+        function bannerHTML() {
+            return `<div class="banner banner-desktop" aria-label="Lio Fleishman">${BANNER}</div>
+                <div class="banner-mobile m-title">Lio Fleishman</div>`;
         }
 
         function handleBanner() {
-            const banner = `
-╔═══════════════════════════════════════════════════════════════════════════╗
-║                                                                           ║
-║  ██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗      ║
-║  ██║     ██║██╔═══██╗    ██╔════╝██║     ██╔════╝██║██╔════╝██║  ██║      ║
-║  ██║     ██║██║   ██║    █████╗  ██║     █████╗  ██║███████╗███████║      ║
-║  ██║     ██║██║   ██║    ██╔══╝  ██║     ██╔══╝  ██║╚════██║██╔══██║      ║
-║  ███████╗██║╚██████╔╝    ██║     ███████╗███████╗██║███████║██║  ██║      ║
-║  ╚══════╝╚═╝ ╚═════╝     ╚═╝     ╚══════╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝      ║
-║                                                                           ║
-║  ███╗   ███╗ █████╗ ███╗   ██╗                                            ║
-║  ████╗ ████║██╔══██╗████╗  ██║                                            ║
-║  ██╔████╔██║███████║██╔██╗ ██║                                            ║
-║  ██║╚██╔╝██║██╔══██║██║╚██╗██║                                            ║
-║  ██║ ╚═╝ ██║██║  ██║██║ ╚████║                                            ║
-║  ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝                                            ║
-║                                                                           ║
-║                    Building AI-Ready Organizations | Sales Engineering    ║
-║                    Generative AI & Data Intelligence Specialist           ║
-║                                                                           ║
-╚═══════════════════════════════════════════════════════════════════════════╝`;
-            addOutput(banner, 'info');
+            addOutputHTML(`${bannerHTML()}<span class="dim">Sr. Systems Engineer @ NVIDIA · AI & Data Infrastructure</span>`);
         }
 
         // ── Resume download (clean PDF via browser print) ────────────
         function handleDownload() {
-            addOutput('Generating resume.pdf...', 'success');
-            addOutputHTML('Your browser\'s print dialog will open — choose <span class="info">"Save as PDF"</span> as the destination.', 'info');
+            addOutputHTML(`<span class="success">✓</span> Generating <span class="bold">resume.pdf</span>…`);
+            addOutputHTML('Your print dialog will open — choose <span class="accent">Save as PDF</span>.', 'dim');
             setTimeout(() => window.print(), 450);
         }
 
@@ -1941,25 +2208,25 @@ Try: ls   then: cat <filename>`;
             };
             if (target === 'resume' || target === 'pdf') { handleDownload(); return; }
             if (links[target]) {
-                const label = target === 'email' ? 'leofle@gmail.com' : links[target];
-                addOutputHTML(`Opening <a href="${links[target]}" target="_blank" rel="noopener noreferrer">${label}</a> ...`, 'success');
+                const label = target === 'email' ? 'leofle@gmail.com' : links[target].replace('https://', '');
+                addOutputHTML(`<span class="success">↗</span> Opening <a href="${links[target]}" target="_blank" rel="noopener noreferrer">${label}</a>`);
                 window.open(links[target], target === 'email' ? '_self' : '_blank');
                 return;
             }
             addOutput(`open: don't know how to open "${args[0] || ''}"`, 'error');
-            addOutput('Try: open linkedin | open github | email | download', 'info');
+            addOutputHTML(`Try: ${runLink('open linkedin')} · ${runLink('open github')} · ${runLink('email')} · ${runLink('download')}`, 'dim');
         }
 
         // ── history + bang expansion ─────────────────────────────────
         function handleHistory() {
             if (commandHistory.length === 0) {
-                addOutput('No commands in history yet.', 'info');
+                addOutput('No commands in history yet.', 'dim');
                 return;
             }
             const out = commandHistory
-                .map((c, i) => `  ${String(i + 1).padStart(3)}  ${c}`)
+                .map((c, i) => `<span class="dim">${String(i + 1).padStart(4)}</span>  ${runLink(c)}`)
                 .join('\n');
-            addOutput(out, 'info');
+            addOutputHTML(out);
         }
 
         function expandBang(cmd) {
@@ -2010,8 +2277,11 @@ Try: ls   then: cat <filename>`;
         const manPages = {
             ls: 'ls — list the files in this resume.\n  -a, --all   include hidden files (there\'s a secret one...)',
             cat: 'cat — print a file to the terminal.\n  Usage: cat <filename>   e.g. cat resume.txt',
+            cd: 'cd — change directory.\n  Usage: cd <dir>   (cd with no argument goes home)',
             grep: 'grep — search every file for a pattern.\n  Usage: grep <pattern>   e.g. grep python',
-            theme: 'theme — change the color scheme.\n  Usage: theme <name>\n  Themes: matrix, dracula, monokai, retro-amber, catppuccin, ubuntu',
+            theme: `theme — change the color scheme.\n  Usage: theme [name]   (no name = interactive picker)\n  Themes: ${Object.keys(themes).join(', ')}`,
+            ask: 'ask — ask lio-agent a question about Lio, in plain English.\n  Usage: ask <question>   e.g. ask what did lio build at sisense?\n\n  You can also skip "ask" — anything that looks like a question is routed\n  to the agent automatically.\n\n  lio-agent runs entirely in your browser: it greps the files in ~/resume\n  and answers from them. No API calls, no LLM, nothing leaves the page.\n  Press Esc while it\'s working to interrupt.',
+            claude: 'claude — alias of ask. (You\'re already talking to an agent.)',
             download: 'download — save a clean PDF of this resume via your browser\'s print dialog. Alias: print.',
             print: 'print — alias of download. Save this resume as a PDF.',
             email: 'email — open a new message to leofle@gmail.com.',
@@ -2030,15 +2300,15 @@ Try: ls   then: cat <filename>`;
         };
 
         function handleMan(args) {
-            const name = (args[0] || '').toLowerCase();
+            const name = (args[0] || '').toLowerCase().replace(/^\//, '');
             if (!name) {
-                addOutput('What manual page do you want?\nUsage: man <command>   e.g. man grep', 'info');
+                addOutput('What manual page do you want?\nUsage: man <command>   e.g. man ask', 'dim');
                 return;
             }
             if (manPages[name]) {
-                addOutput(`${name.toUpperCase()}(1)\n\n${manPages[name]}`, 'info');
+                addOutputHTML(`<span class="bold">${name.toUpperCase()}(1)</span>\n\n${escapeHTML(manPages[name])}`, 'info');
             } else if (availableCommands.includes(name)) {
-                addOutput(`No manual entry for ${name}, but it's a real command — just try it.`, 'info');
+                addOutput(`No manual entry for ${name}, but it's a real command — just try it.`, 'dim');
             } else {
                 addOutput(`No manual entry for ${name}`, 'error');
             }
@@ -2046,14 +2316,22 @@ Try: ls   then: cat <filename>`;
 
         // ── tree ─────────────────────────────────────────────────────
         function handleTree() {
-            const names = Object.keys(files);
-            let out = '/home/lio/resume\n';
-            names.forEach((f, i) => {
-                const last = i === names.length - 1;
-                out += `${last ? '└── ' : '├── '}${f}\n`;
-            });
-            out += `\n${names.length} files, 0 directories`;
-            addOutput(out, 'info');
+            let nDirs = 0, nFiles = 0;
+            function walk(node, prefix) {
+                const names = Object.keys(node).filter(n => n !== 'secret.txt')
+                    .sort((a, b) => (isDir(node[b]) - isDir(node[a])) || a.localeCompare(b));
+                return names.map((name, i) => {
+                    const last = i === names.length - 1;
+                    const dir = isDir(node[name]);
+                    dir ? nDirs++ : nFiles++;
+                    const label = dir ? `<span class="accent2 bold">${escapeHTML(name)}/</span>` : escapeHTML(name);
+                    let s = `<span class="dim">${prefix}${last ? '└── ' : '├── '}</span>${label}\n`;
+                    if (dir) s += walk(node[name], prefix + (last ? '    ' : '│   '));
+                    return s;
+                }).join('');
+            }
+            const body = walk(buildRoot(), '');
+            addOutputHTML(`<span class="accent">~/resume</span>\n${body}\n<span class="dim">${nDirs} director${nDirs === 1 ? 'y' : 'ies'}, ${nFiles} files</span>`);
         }
 
         // ── cowsay ───────────────────────────────────────────────────
@@ -2078,8 +2356,8 @@ ${bottom}
                 addOutput('usage: sudo <command>', 'error');
                 return;
             }
-            addOutput('lio is not in the sudoers file. This incident has been reported.', 'error');
-            addOutput('(...just kidding. But nice try. 😉)', 'info');
+            addOutput('lio is not in the sudoers file. This incident will be reported.', 'error');
+            addOutput('(…just kidding. But nice try. 😉)', 'dim');
         }
 
         // ── sl (steam locomotive easter egg) ─────────────────────────
@@ -2109,7 +2387,7 @@ __/ =| o |=-~~\\  /~~\\  /~~\\  /~~\\ ____Y___________|__
             canvas.classList.add('active');
 
             const accent = getComputedStyle(document.documentElement)
-                .getPropertyValue('--fg').trim() || '#00ff00';
+                .getPropertyValue('--accent').trim() || '#00ff00';
 
             function resize() {
                 canvas.width = window.innerWidth;
@@ -2161,15 +2439,15 @@ __/ =| o |=-~~\\  /~~\\  /~~\\  /~~\\ ____Y___________|__
             activeInput = null;
             const content = document.getElementById('content');
             content.innerHTML = '';
-            document.getElementById('quickbar').style.display = 'none';
+            document.querySelector('.footer').style.display = 'none';
             const box = document.createElement('div');
-            box.className = 'output info';
+            box.className = 'output';
             box.innerHTML =
-                'logout\n\nConnection to lio@terminal closed.\n\n' +
-                'Thanks for stopping by. If you\'d like to talk:\n' +
-                '  • <a href="mailto:leofle@gmail.com">leofle@gmail.com</a>\n' +
-                '  • <a href="https://linkedin.com/in/lio-fleishman" target="_blank" rel="noopener noreferrer">linkedin.com/in/lio-fleishman</a>\n\n' +
-                '<a href="#" id="reconnect">[ click here to reconnect ]</a>';
+                '<span class="dim">logout</span>\n\n<span class="dim">[Process completed]</span>\n\n' +
+                '<span class="bold">Thanks for stopping by.</span> If you\'d like to talk:\n' +
+                '  <span class="accent">→</span> <a href="mailto:leofle@gmail.com">leofle@gmail.com</a>\n' +
+                '  <span class="accent">→</span> <a href="https://linkedin.com/in/lio-fleishman" target="_blank" rel="noopener noreferrer">linkedin.com/in/lio-fleishman</a>\n\n' +
+                '<a href="#" id="reconnect">[ reconnect ]</a>';
             content.appendChild(box);
             scrollToBottom();
             document.getElementById('reconnect').addEventListener('click', (e) => {
@@ -2182,16 +2460,349 @@ __/ =| o |=-~~\\  /~~\\  /~~\\  /~~\\ ____Y___________|__
         function renderQuickbar() {
             const bar = document.getElementById('quickbar');
             bar.innerHTML = '';
-            quickCommands.forEach(c => {
+            quickCommands.forEach(({ label, cmd, primary }) => {
                 const chip = document.createElement('button');
-                chip.className = 'chip';
-                chip.textContent = c;
-                chip.addEventListener('click', () => {
-                    if (activeInput) activeInput.value = '';
-                    executeCommand(c);
-                });
+                chip.className = 'chip' + (primary ? ' primary' : '');
+                chip.textContent = label;
+                chip.title = cmd;
+                chip.addEventListener('click', () => { if (!agentBusy) executeCommand(cmd); });
                 bar.appendChild(chip);
             });
+        }
+
+        // ── lio-agent: an offline, Claude Code-flavored Q&A ──────────
+        // No model, no network. It scores the question against a small set of
+        // intents, "runs" real Grep/Read calls over the virtual files (the
+        // counts shown are genuine), then streams an answer written from the
+        // resume content. Anything it can't answer is redirected to email.
+        let agentBusy = false;
+        let agentRuns = 0;
+
+        const agentIntents = [
+            {
+                id: 'illumex', file: 'resume.txt',
+                keys: ['illumex', 'catalog', 'semantic', 'sales', 'partnerships', 'community', 'fortune'],
+                answer: `At **Illumex** (2023 – 2026), Lio held two roles:
+
+- **Head of Community & Partnerships** — delivered an AI-driven data catalog that auto-documented **10K+ tables and metrics**, designed the **semantic context layer** for safe GenAI agents in BI tools, and led cross-functional teams integrating LLMs with enterprise metadata.
+- **Head of Sales Engineering** — led sales engineering for AI-powered data infrastructure, helping **Fortune 500** companies implement scalable GenAI and cutting time-to-insight by **up to 90%**.`,
+                follow: ['projects', 'ask what about sisense?']
+            },
+            {
+                id: 'sisense', file: 'resume.txt',
+                keys: ['sisense', 'compose', 'sdk', 'devex', 'dx', 'developer', 'advocate', 'bi'],
+                answer: `At **Sisense** (2021 – 2023), Lio was Team Lead and Developer Experience Advocate, and led development of **Compose SDK** — a developer-first BI application framework that gave developers flexibility outside rigid, traditional BI systems. It shipped to production for enterprise customers.
+
+Also from that era: a Google Sheets integration (a partnership with Google) and Adobe XD / Photoshop integrations for custom visuals.`,
+                follow: ['projects', 'ask what about illumex?']
+            },
+            {
+                id: 'experience', file: 'resume.txt',
+                keys: ['experience', 'career', 'background', 'history', 'previous', 'past', 'jobs', 'worked', 'companies', 'roles', 'years', 'resume', 'cv'],
+                answer: `15+ years across software engineering, architecture, developer experience, and sales engineering:
+
+- **NVIDIA** — Sr. Systems Engineer · Feb 2026 – present
+- **Illumex** — Head of Sales Engineering · 2024 – 2026
+- **Illumex** — Head of Community & Partnerships · 2023 – 2024
+- **Sisense** — Team Lead, Developer Experience Advocate · 2021 – 2023
+
+The common thread: building AI and data systems, then making them make sense to the people who use them. Run \`resume\` for the full version.`,
+                follow: ['ask what did lio build at illumex?', 'resume', 'download']
+            },
+            {
+                id: 'now', file: 'resume.txt',
+                keys: ['nvidia', 'current', 'currently', 'now', 'today', 'job', 'work', 'working', 'doing', 'role', 'position', 'title', 'gpu'],
+                answer: `Lio is a **Sr. Systems Engineer at NVIDIA** (since Feb 2026), doing systems engineering for **GPU and AI infrastructure platforms**.
+
+It's the natural next step after years of putting GenAI into production for enterprises at Illumex — now working on the layer AI actually runs on.`,
+                follow: ["ask what's lio's experience?", 'ask how does lio use ai?', 'contact']
+            },
+            {
+                id: 'projects', file: 'projects.txt',
+                keys: ['project', 'projects', 'built', 'build', 'shipped', 'made', 'portfolio', 'achievement', 'achievements', 'impact', 'proud'],
+                answer: `Highlights:
+
+- **AI-powered data catalog** (Illumex) — auto-documented 10K+ tables and metrics; documentation time down 90%
+- **Semantic context layer** (Illumex) — the foundation for safe GenAI agents in Tableau and Power BI, with real-time chatbot QA and SQL generation
+- **Compose SDK** (Sisense) — a developer-first BI framework, in production with enterprise customers
+
+And this terminal: one HTML file, zero dependencies. More in \`projects\`.`,
+                follow: ['projects', "ask what's lio's stack?"]
+            },
+            {
+                id: 'skills', file: 'skills.txt',
+                keys: ['skill', 'skills', 'stack', 'tech', 'technologies', 'languages', 'language', 'python', 'typescript', 'javascript', 'react', 'vue', 'next', 'frontend', 'code', 'coding', 'program', 'tools'],
+                answer: `- **Core:** Python, TypeScript, JavaScript, CSS
+- **Frontend:** React, Vue, Next.js, styled-components, Tailwind
+- **AI & data:** generative AI, LLMs, data analytics, GenAI strategy, data governance
+- **Cloud:** Google Cloud, AWS (Certified Cloud Practitioner), cloud security
+- **Beyond code:** sales engineering, partnerships, product management, developer experience — and a graphic design background
+
+Full list: \`skills\`.`,
+                follow: ['skills', 'ask what has lio built?']
+            },
+            {
+                id: 'ai', file: 'resume.txt',
+                keys: ['ai', 'genai', 'llm', 'llms', 'agent', 'agents', 'gpt', 'claude', 'ml', 'machine', 'artificial', 'generative', 'data'],
+                answer: `AI has been the through-line of Lio's recent work:
+
+- Designed the **semantic context layer** that lets GenAI agents operate safely inside BI tools
+- Led teams **integrating LLMs with enterprise metadata**
+- Helped **Fortune 500** companies put GenAI into production — up to **90% faster time-to-insight**, trusted by hundreds of users
+- Now at **NVIDIA**, on the GPU and AI infrastructure underneath it all
+
+Lio's take: AI is only as trustworthy as the data plumbing beneath it — and that plumbing is the fun part.`,
+                follow: ['ask what has lio built?', 'cat fun_facts.txt']
+            },
+            {
+                id: 'education', file: 'resume.txt',
+                keys: ['education', 'degree', 'study', 'studied', 'school', 'university', 'college', 'certif', 'certification', 'certifications', 'certified', 'aws', 'cybersecurity', 'bsc'],
+                answer: `- **BSc, Computer Science** — The Open University of Israel
+- **Graphic Design** — University of Buenos Aires
+
+Certifications:
+- **Google Cybersecurity Specialization** (Jul 2024)
+- **AWS Certified Cloud Practitioner** (2019 – 2022)`,
+                follow: ['resume', "ask what's lio's stack?"]
+            },
+            {
+                id: 'location', file: 'contact.txt',
+                keys: ['where', 'location', 'located', 'live', 'lives', 'based', 'city', 'texas', 'austin', 'remote', 'relocate', 'country', 'from'],
+                answer: `**Leander, Texas**, USA — by way of Buenos Aires and Israel. Different countries, different stacks, same job underneath: making complicated things make sense.`,
+                follow: ['contact', 'cat fun_facts.txt']
+            },
+            {
+                id: 'hire', file: 'resume.txt',
+                keys: ['hire', 'hiring', 'why', 'should', 'fit', 'strength', 'strengths', 'good', 'best', 'value', 'unique', 'recruiter', 'candidate'],
+                answer: `The short version: someone who can **build the system _and_ explain it to the room**.
+
+- 15+ years in software engineering and architecture
+- Shipped AI systems used by Fortune 500 companies — up to **90% faster time-to-insight**
+- Created a developer SDK, led teams, and closed deals on measurable outcomes
+- Equally at home with engineers, executives, and designers
+
+Best next step: \`email\` — or grab a PDF with \`download\`.`,
+                follow: ['email', 'download', 'open linkedin']
+            },
+            {
+                id: 'contact', file: 'contact.txt',
+                keys: ['contact', 'email', 'mail', 'reach', 'touch', 'linkedin', 'github', 'connect', 'talk', 'call', 'phone', 'message'],
+                answer: `- **email:** leofle@gmail.com
+- **linkedin:** linkedin.com/in/lio-fleishman
+- **github:** github.com/leofle
+
+Shortcuts: \`email\`, \`open linkedin\`, \`download\`.`,
+                follow: ['email', 'open linkedin', 'download']
+            },
+            {
+                id: 'fun', file: 'fun_facts.txt',
+                keys: ['fun', 'hobby', 'hobbies', 'personal', 'facts', 'fact', 'interesting', 'person', 'yourself', 'design', 'designer'],
+                answer: `A few things:
+
+- Lio started in **graphic design** in Buenos Aires before writing software — this terminal is downstream of that.
+- Prefers **showing over telling**: the most convincing pitch is a working system, running live.
+- Loves the unglamorous layer — **metadata, lineage, governance** — because that's what makes AI trustworthy.
+
+More in \`cat fun_facts.txt\`.`,
+                follow: ['cat fun_facts.txt', 'cat joke.txt']
+            },
+            {
+                id: 'site', file: 'secret.txt',
+                keys: ['site', 'website', 'terminal', 'this', 'page', 'made', 'how', 'built'],
+                minScore: 2,
+                answer: `Hand-built, **zero dependencies**: one HTML file of vanilla JS and CSS. A virtual filesystem, tab completion, fish-style suggestions, \`!!\` history expansion, a slash menu, seven themes — and me, an offline agent that answers by grepping these files.
+
+There are a few easter eggs, too. \`ls -a\` is a good place to start.`,
+                follow: ['ls -a', 'theme', 'neofetch']
+            },
+            {
+                id: 'hello', file: null,
+                keys: ['hi', 'hello', 'hey', 'yo', 'sup', 'hola', 'thanks', 'thank'],
+                answer: `Hey! I'm **lio-agent** — a tiny offline assistant that knows what's in \`~/resume\`. Ask me about Lio's work at NVIDIA, past roles, projects, skills, AI experience, or how to get in touch.`,
+                follow: ['ask what does lio do at nvidia?', 'ask what has lio built?', 'ask why hire lio?']
+            },
+            {
+                id: 'about', file: 'resume.txt', weight: 0.4,   // generic words: any specific match should win
+                keys: ['lio', 'who', 'about', 'summary', 'overview', 'intro', 'introduce', 'tell', 'fleishman'],
+                answer: `Lio Fleishman is a **Sr. Systems Engineer at NVIDIA**, working on GPU and AI infrastructure platforms, with 15+ years across software engineering and architecture.
+
+Before NVIDIA: led Sales Engineering at **Illumex**, helping Fortune 500 companies put GenAI into production (up to 90% faster time-to-insight), and before that led **Compose SDK** at **Sisense**. Started out in graphic design — and still cares a lot about how things look and feel.
+
+Based in Leander, Texas.`,
+                follow: ["ask what's lio's experience?", 'ask what has lio built?', 'ask why hire lio?']
+            },
+        ];
+
+        const agentFallback = {
+            answer: `I don't have that in my context — I only know what's in \`~/resume\`. Lio can answer it directly at leofle@gmail.com (or run \`email\`).
+
+Things I *can* help with: current role, experience, projects, skills, AI work, education, location, contact.`,
+            follow: ['ask what does lio do?', 'help', 'email']
+        };
+
+        function tokenize(q) {
+            return (q.toLowerCase().replace(/[’']/g, '').match(/[a-z0-9+#]+/g) || []);
+        }
+
+        function planAnswer(question) {
+            const words = tokenize(question);
+            let best = null, bestScore = 0, bestKey = null;
+            for (const intent of agentIntents) {
+                let score = 0, firstKey = null;
+                for (const key of intent.keys) {
+                    const hit = words.some(w => w === key || (key.length >= 5 && w.startsWith(key)));
+                    if (hit) { score++; if (!firstKey) firstKey = key; }
+                }
+                const weighted = score * (intent.weight || 1);
+                if (score >= (intent.minScore || 1) && weighted > bestScore) {
+                    best = intent; bestScore = weighted; bestKey = firstKey;
+                }
+            }
+            const STOP = ['what', 'whats', 'your', 'youre', 'about', 'does', 'have', 'with', 'that', 'this', 'there', 'their', 'would', 'could', 'should', 'tell', 'know', 'favorite', 'which', 'when', 'where'];
+            return best ? { intent: best, grepKey: bestKey } : { intent: null, grepKey: words.find(w => w.length > 3 && !STOP.includes(w)) || null };
+        }
+
+        // Tiny markdown → HTML for agent replies. Inline `code` becomes a
+        // clickable command. Unmatched markers (mid-stream) are hidden.
+        function agentMarkdown(text) {
+            let t = text;
+            if ((t.match(/\*\*/g) || []).length % 2) t = t.replace(/\*\*(?!.*\*\*)/, '');
+            if ((t.match(/`/g) || []).length % 2) t = t.replace(/`(?!.*`)/, '');
+            let html = escapeHTML(t);
+            html = html.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+            html = html.replace(/(^|[\s(])_(.+?)_(?=[\s.,)]|$)/g, '$1<em>$2</em>');
+            html = html.replace(/(^|[\s(])\*(.+?)\*(?=[\s.,)]|$)/g, '$1<em>$2</em>');
+            html = html.replace(/`([^`]+)`/g, (_, c) => availableCommands.includes(c.split(' ')[0])
+                ? `<code class="run" data-run="${c}">${c}</code>`
+                : `<code>${c}</code>`);
+            html = html.replace(/^- /gm, '<span class="md-bullet">•</span> ');
+            return linkify(html);
+        }
+
+        function agentRow(wrap, dotClass, dot, html) {
+            const row = document.createElement('div');
+            row.className = 'agent-row';
+            row.innerHTML = `<span class="agent-dot ${dotClass}">${dot}</span><div class="agent-body">${html}</div>`;
+            wrap.appendChild(row);
+            scrollToBottom();
+            return row.querySelector('.agent-body');
+        }
+
+        const SPIN_GLYPHS = ['·', '✢', '✳', '✶', '✻', '✽', '✻', '✶', '✳', '✢'];
+        const SPIN_VERBS = ['Pondering', 'Grepping', 'Synthesizing', 'Cross-referencing', 'Percolating', 'Recollecting', 'Noodling', 'Reticulating', 'Contextualizing'];
+
+        async function agentSpin(wrap, ms, signal) {
+            const row = document.createElement('div');
+            row.className = 'agent-spinner';
+            const verb = SPIN_VERBS[Math.floor(Math.random() * SPIN_VERBS.length)];
+            row.innerHTML = `<span class="glyph">·</span><span class="verb">${verb}…</span><span class="hint">(0s · esc to interrupt)</span>`;
+            wrap.appendChild(row);
+            scrollToBottom();
+            const glyph = row.querySelector('.glyph'), hint = row.querySelector('.hint');
+            const start = performance.now();
+            let i = 0;
+            while (performance.now() - start < ms && !signal.aborted) {
+                glyph.textContent = SPIN_GLYPHS[i++ % SPIN_GLYPHS.length];
+                hint.textContent = `(${Math.floor((performance.now() - start) / 1000)}s · esc to interrupt)`;
+                await sleep(110);
+                if (REDUCED_MOTION) break;
+            }
+            row.remove();
+        }
+
+        async function handleAsk(question, via) {
+            const q = question.trim();
+            if (!q) {
+                const lead = via === 'claude'
+                    ? `<span class="spark">✻</span>You're already talking to one. `
+                    : '';
+                addOutputHTML(`${lead}Usage: <code>ask &lt;question&gt;</code> — or just type a question.
+<span class="dim">Try:</span> ${runLink('ask what does lio do at nvidia?')}
+     ${runLink('ask what has lio built?')}
+     ${runLink('ask why should I hire lio?')}`);
+                createCommandLine();
+                return;
+            }
+
+            agentBusy = true;
+            const signal = { aborted: false };
+            const onKey = (e) => {
+                if (e.key === 'Escape' || (e.ctrlKey && e.key.toLowerCase() === 'c')) { e.preventDefault(); signal.aborted = true; }
+            };
+            document.addEventListener('keydown', onKey, true);
+
+            const wrap = document.createElement('div');
+            wrap.className = 'agent output';
+            document.getElementById('content').appendChild(wrap);
+            if (via === 'auto') agentRow(wrap, 'dim', '›', '<span class="dim">Not a command — routing to lio-agent.</span>');
+
+            const t0 = performance.now();
+            const { intent, grepKey } = planAnswer(q);
+            const reply = intent || agentFallback;
+            const filesRead = new Set();
+
+            try {
+                await agentSpin(wrap, 650 + Math.random() * 600, signal);
+
+                // Real tool calls over the virtual filesystem
+                if (!signal.aborted && grepKey) {
+                    const hits = grepMatches(grepKey);
+                    const body = agentRow(wrap, 'tool', '●', `<span class="agent-tool-name">Grep</span><span class="agent-tool-arg">(pattern: "${escapeHTML(grepKey)}", path: "~/resume")</span>`);
+                    await sleep(260);
+                    const nf = new Set(hits.map(h => h.filename)).size;
+                    body.insertAdjacentHTML('beforeend', `<div class="agent-result">${hits.length ? `Found ${hits.length} line${hits.length === 1 ? '' : 's'} in ${nf} file${nf === 1 ? '' : 's'}` : 'No matches'}</div>`);
+                    hits.forEach(h => filesRead.add(h.filename));
+                    scrollToBottom();
+                    await sleep(180);
+                }
+                if (!signal.aborted && intent && intent.file) {
+                    const lines = files[intent.file].content.split('\n').length;
+                    const body = agentRow(wrap, 'tool', '●', `<span class="agent-tool-name">Read</span><span class="agent-tool-arg">(${intent.file})</span>`);
+                    await sleep(240);
+                    body.insertAdjacentHTML('beforeend', `<div class="agent-result">Read ${lines} lines</div>`);
+                    filesRead.add(intent.file);
+                    scrollToBottom();
+                    await sleep(200);
+                }
+
+                // Stream the answer token by token
+                if (!signal.aborted) {
+                    const body = agentRow(wrap, 'say', '●', '');
+                    const tokens = reply.answer.split(/(\s+)/);
+                    const step = REDUCED_MOTION ? tokens.length : 2;
+                    for (let i = 0; i < tokens.length && !signal.aborted; i += step) {
+                        body.innerHTML = agentMarkdown(tokens.slice(0, i + step).join('')) + '<span class="cursor-block"></span>';
+                        scrollToBottom();
+                        await sleep(16 + Math.random() * 18);
+                    }
+                    if (signal.aborted) {
+                        const cur = body.querySelector('.cursor-block');
+                        if (cur) cur.remove();
+                    } else {
+                        body.innerHTML = agentMarkdown(reply.answer);
+                    }
+                }
+            } finally {
+                document.removeEventListener('keydown', onKey, true);
+                agentBusy = false;
+            }
+
+            if (signal.aborted) {
+                const r = document.createElement('div');
+                r.className = 'agent-result';
+                r.style.color = 'var(--error)';
+                r.textContent = 'Interrupted by user';
+                wrap.appendChild(r);
+            } else {
+                agentRuns++;
+                const secs = ((performance.now() - t0) / 1000).toFixed(1);
+                const followUps = (reply.follow || []).map(c => runLink(c, c.replace(/^ask /, ''))).join(' · ');
+                const note = agentRuns === 1 ? ' · offline: answered from the files in ~/resume, no API calls' : '';
+                wrap.insertAdjacentHTML('beforeend',
+                    `<div class="agent-foot">✻ ${secs}s · ${filesRead.size || 0} file${filesRead.size === 1 ? '' : 's'} read${note}${followUps ? `<br>↳ try: ${followUps}` : ''}</div>`);
+            }
+            scrollToBottom();
+            createCommandLine();
         }
 
         // ── Amber arcade: Snake & Tetris ─────────────────────────────
@@ -2410,172 +3021,86 @@ __/ =| o |=-~~\\  /~~\\  /~~\\  /~~\\ ____Y___________|__
             reset();
         }
 
-        // ── Boot sequence ────────────────────────────────────────────
-        const bootLines = [
-            { text: 'BIOS v3.14 ... ', delay: 80 },
-            { text: 'OK', delay: 200, cls: 'ok' },
-            { text: 'Loading kernel .............. ', delay: 60 },
-            { text: 'OK', delay: 300, cls: 'ok' },
-            { text: 'Mounting /home/lio .......... ', delay: 50 },
-            { text: 'OK', delay: 200, cls: 'ok' },
-            { text: 'Initializing network ........ ', delay: 40 },
-            { text: 'OK', delay: 250, cls: 'ok' },
-            { text: 'Loading resume data ......... ', delay: 50 },
-            { text: 'OK', delay: 200, cls: 'ok' },
-            { text: 'Starting terminal v2.0 ...... ', delay: 60 },
-            { text: 'OK', delay: 400, cls: 'ok' },
-        ];
+        // ── Boot sequence + welcome ──────────────────────────────────
+        const BRAILLE = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
 
-        async function typeText(element, text, charDelay) {
-            for (const char of text) {
-                element.textContent += char;
-                scrollToBottom();
-                await new Promise(r => setTimeout(r, charDelay));
-            }
+        function bootSteps() {
+            const nFiles = Object.keys(files).length;
+            return [
+                { doing: 'Mounting <b>~/resume</b>', done: `Mounted <b>~/resume</b> <span class="dim">· ${nFiles} files</span>`, ms: 380 },
+                { doing: 'Indexing <b>experience</b>', done: `Indexed <b>experience</b> <span class="dim">· 4 roles · 15+ yrs</span>`, ms: 420 },
+                { doing: 'Starting <b>lio-agent</b>', done: `<b>lio-agent</b> ready <span class="dim">· offline</span>`, ms: 460 },
+            ];
         }
 
         async function runBootSequence() {
             const content = document.getElementById('content');
-            const bootContainer = document.createElement('div');
-            bootContainer.style.marginBottom = '20px';
-            content.appendChild(bootContainer);
+            const boot = document.createElement('div');
+            boot.style.marginBottom = '16px';
+            content.appendChild(boot);
 
-            let currentLine = null;
-
-            for (const step of bootLines) {
-                if (step.cls === 'ok') {
-                    // Append OK to current line
-                    const ok = document.createElement('span');
-                    ok.className = 'ok';
-                    ok.style.color = 'var(--accent)';
-                    if (currentLine) currentLine.appendChild(ok);
-                    await typeText(ok, step.text, 30);
-                    await new Promise(r => setTimeout(r, step.delay));
-                } else {
-                    currentLine = document.createElement('div');
-                    currentLine.className = 'boot-line';
-                    bootContainer.appendChild(currentLine);
-                    await typeText(currentLine, step.text, step.delay);
+            for (const step of bootSteps()) {
+                const line = document.createElement('div');
+                line.className = 'boot-line';
+                line.innerHTML = `<span class="spin">${BRAILLE[0]}</span>${step.doing}…`;
+                boot.appendChild(line);
+                const spin = line.querySelector('.spin');
+                const start = performance.now();
+                let i = 0;
+                while (performance.now() - start < step.ms) {
+                    spin.textContent = BRAILLE[i++ % BRAILLE.length];
+                    await sleep(70);
+                    if (REDUCED_MOTION) break;
                 }
+                line.innerHTML = `<span class="spin ok">✓</span>${step.done}`;
             }
 
-            await new Promise(r => setTimeout(r, 300));
+            await sleep(380);
+            boot.animate([{ opacity: 1 }, { opacity: 0 }], { duration: REDUCED_MOTION ? 0 : 220, fill: 'forwards' });
+            await sleep(220);
+            boot.remove();
+            showWelcome();
+        }
 
-            // Clear boot and show welcome
-            bootContainer.remove();
-
-            const welcome = document.createElement('div');
-            welcome.className = 'welcome';
-
-            const preDesktop = document.createElement('pre');
-            preDesktop.className = 'banner-desktop';
-            preDesktop.style.cssText = 'color: var(--accent); font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
-            preDesktop.textContent = `██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
-██║     ██║██╔═══██╗    ██╔════╝██║     ██╔════╝██║██╔════╝██║  ██║████╗ ████║██╔══██╗████╗  ██║
-██║     ██║██║   ██║    █████╗  ██║     █████╗  ██║███████╗███████║██╔████╔██║███████║██╔██╗ ██║
-██║     ██║██║   ██║    ██╔══╝  ██║     ██╔══╝  ██║╚════██║██╔══██║██║╚██╔╝██║██╔══██║██║╚██╗██║
-███████╗██║╚██████╔╝    ██║     ███████╗███████╗██║███████║██║  ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║
-╚══════╝╚═╝ ╚═════╝     ╚═╝     ╚══════╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
-
-                         RESUME v2.0`;
-            welcome.appendChild(preDesktop);
-
-            const preMobile = document.createElement('pre');
-            preMobile.className = 'banner-mobile';
-            preMobile.style.cssText = 'color: var(--accent); font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
-            preMobile.textContent = `╔═══════════════════╗
-║  LIO FLEISHMAN    ║
-║    RESUME v2.0    ║
-╚═══════════════════╝`;
-            welcome.appendChild(preMobile);
-
-            const p1 = document.createElement('p');
-            p1.textContent = 'Welcome to my interactive resume terminal!';
-            welcome.appendChild(p1);
-            const p2 = document.createElement('p');
-            p2.innerHTML = 'Type <span class="info">help</span> to see available commands.';
-            welcome.appendChild(p2);
-            const p3 = document.createElement('p');
-            p3.innerHTML = 'Try <span class="info">ls</span> to see available files.';
-            welcome.appendChild(p3);
-            const p4 = document.createElement('p');
-            p4.innerHTML = 'Themes: <span class="info">matrix</span> · <span class="info">dracula</span> · <span class="info">monokai</span> · <span class="info">retro-amber</span> · <span class="info">catppuccin</span> · <span class="info">ubuntu</span> (usage: <span class="info">theme &lt;name&gt;</span>)';
-            welcome.appendChild(p4);
-            const p5 = document.createElement('p');
-            p5.innerHTML = 'Recruiter? <span class="info">download</span> a PDF, <span class="info">email</span> me, or <span class="info">open linkedin</span>.';
-            welcome.appendChild(p5);
-
-            content.appendChild(welcome);
-            scrollToBottom();
-
+        function showWelcome() {
+            const themeList = Object.keys(themes).map(t => runLink('theme ' + t, t)).join(' · ');
+            addOutputHTML(`<div class="welcome">${bannerHTML()}<div class="welcome-card">
+<div class="wc-title"><span class="spark">✻</span>Welcome to <b>lio's terminal</b>!</div>
+<div class="wc-sub"><div>Sr. Systems Engineer @ NVIDIA · AI &amp; Data Infrastructure</div><div><span class="k">/</span>help for commands · or just ask a question</div><div>cwd: /home/lio/resume</div></div>
+</div><div class="tips"><div class="tips-h">Tips for getting started:</div><ol>
+<li>Read it all with ${runLink('resume')}, or grab a PDF with ${runLink('download')}</li>
+<li>Ask anything in plain English — ${runLink('ask what does lio do at nvidia?', 'what does lio do at nvidia?')}</li>
+<li>Type <code>/</code> for the command menu · <code>Tab</code> completes · <code>↑</code> recalls history</li>
+<li>Change the look: ${themeList}</li>
+</ol></div><div class="dim" style="margin-top:10px">Recruiter? ${runLink('email')} me or ${runLink('open linkedin')} — happy to talk.</div></div>`);
             createCommandLine();
 
             // If URL has #resume, auto-show resume
             if (window.location.hash === '#resume') {
-                executeCommand('cat resume.txt');
+                executeCommand('resume');
             }
         }
 
-        function showWelcomeOnly() {
-            const content = document.getElementById('content');
-            const welcome = document.createElement('div');
-            welcome.className = 'welcome';
-
-            const preDesktop = document.createElement('pre');
-            preDesktop.className = 'banner-desktop';
-            preDesktop.style.cssText = 'color: var(--accent); font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
-            preDesktop.textContent = `██╗     ██╗ ██████╗     ███████╗██╗     ███████╗██╗███████╗██╗  ██╗███╗   ███╗ █████╗ ███╗   ██╗
-██║     ██║██╔═══██╗    ██╔════╝██║     ██╔════╝██║██╔════╝██║  ██║████╗ ████║██╔══██╗████╗  ██║
-██║     ██║██║   ██║    █████╗  ██║     █████╗  ██║███████╗███████║██╔████╔██║███████║██╔██╗ ██║
-██║     ██║██║   ██║    ██╔══╝  ██║     ██╔══╝  ██║╚════██║██╔══██║██║╚██╔╝██║██╔══██║██║╚██╗██║
-███████╗██║╚██████╔╝    ██║     ███████╗███████╗██║███████║██║  ██║██║ ╚═╝ ██║██║  ██║██║ ╚████║
-╚══════╝╚═╝ ╚═════╝     ╚═╝     ╚══════╝╚══════╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝
-
-                         RESUME v2.0`;
-            welcome.appendChild(preDesktop);
-
-            const preMobile = document.createElement('pre');
-            preMobile.className = 'banner-mobile';
-            preMobile.style.cssText = 'color: var(--accent); font-family: "Courier New", monospace; margin-bottom: 20px; white-space: pre;';
-            preMobile.textContent = `╔═══════════════════╗
-║  LIO FLEISHMAN    ║
-║    RESUME v2.0    ║
-╚═══════════════════╝`;
-            welcome.appendChild(preMobile);
-
-            const p1 = document.createElement('p');
-            p1.textContent = 'Welcome to my interactive resume terminal!';
-            welcome.appendChild(p1);
-            const p2 = document.createElement('p');
-            p2.innerHTML = 'Type <span class="info">help</span> to see available commands.';
-            welcome.appendChild(p2);
-            const p3 = document.createElement('p');
-            p3.innerHTML = 'Try <span class="info">ls</span> to see available files.';
-            welcome.appendChild(p3);
-            const p4 = document.createElement('p');
-            p4.innerHTML = 'Themes: <span class="info">matrix</span> · <span class="info">dracula</span> · <span class="info">monokai</span> · <span class="info">retro-amber</span> · <span class="info">catppuccin</span> · <span class="info">ubuntu</span> (usage: <span class="info">theme &lt;name&gt;</span>)';
-            welcome.appendChild(p4);
-            const p5 = document.createElement('p');
-            p5.innerHTML = 'Recruiter? <span class="info">download</span> a PDF, <span class="info">email</span> me, or <span class="info">open linkedin</span>.';
-            welcome.appendChild(p5);
-
-            content.appendChild(welcome);
-            scrollToBottom();
-            createCommandLine();
-
-            if (window.location.hash === '#resume') {
-                executeCommand('cat resume.txt');
-            }
-        }
+        // Global: typing "/" anywhere (e.g. after clicking a link) jumps to the prompt
+        document.addEventListener('keydown', (e) => {
+            if (e.key !== '/' || !activeInput || document.activeElement === activeInput) return;
+            if (gameActive || agentBusy) return;
+            e.preventDefault();
+            activeInput.focus();
+            activeInput.value = '/';
+            activeInput.dispatchEvent(new Event('input'));
+        });
 
         renderQuickbar();
+        renderStatusline();
 
         // Boot sequence only on first visit per session
-        if (!sessionStorage.getItem('terminal-booted')) {
-            sessionStorage.setItem('terminal-booted', '1');
+        let booted = false;
+        try { booted = !!sessionStorage.getItem('terminal-booted'); sessionStorage.setItem('terminal-booted', '1'); } catch { /* storage blocked */ }
+        if (!booted) {
             runBootSequence();
         } else {
-            showWelcomeOnly();
+            showWelcome();
         }
     </script>
 </body>
