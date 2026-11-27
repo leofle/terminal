@@ -781,8 +781,17 @@
             <li>Shipped to production serving enterprise customers.</li>
         </ul>
 
+        <h2>Open Source</h2>
+        <div class="role">Creator &mdash; Trix <span class="when">Nov 2026 &ndash; Present</span></div>
+        <ul>
+            <li>A terminal workspace where coding agents live &mdash; free and open source (MIT), built in Rust.</li>
+            <li>Runs Claude Code, Codex, Gemini CLI and other agents side by side, with live per-agent status.</li>
+            <li><a href="https://trixapp.ai">trixapp.ai</a> &middot; <a href="https://github.com/leofle/trix">github.com/leofle/trix</a></li>
+        </ul>
+
         <h2>Key Achievements</h2>
         <ul>
+            <li>Created Trix, an open-source terminal workspace for coding agents.</li>
             <li>Reduced time-to-insight by up to 90% for Fortune 500 companies.</li>
             <li>Enabled trusted AI use across hundreds of enterprise users.</li>
             <li>Auto-documented 10K+ tables and metrics via AI-driven catalog.</li>
@@ -961,7 +970,15 @@ Team Lead, Developer Experience Advocate · Sisense · Jul 2021 – Jan 2023
 - Gave developers maximum flexibility, free from rigid traditional systems
 - Successfully integrated into production serving enterprise customers
 
+## Open source
+Creator · Trix · Nov 2026 – Present
+- A terminal workspace where coding agents live — free and open source (MIT)
+- Run Claude Code, Codex, Gemini CLI and other agents side by side, and see
+  which one is working, which one needs you, and which one has finished
+- Built in Rust · trixapp.ai · github.com/leofle/trix
+
 ## Key achievements
+- Created Trix — an open-source terminal workspace for coding agents
 - Reduced time-to-insight by up to 90% for Fortune 500 companies
 - Enabled trusted AI use across hundreds of enterprise users
 - Auto-documented 10K+ tables and metrics using an AI-driven catalog
@@ -1018,6 +1035,15 @@ AWS Certified Cloud Practitioner · Dec 2019 – Dec 2022`
             },
             'projects.txt': {
                 content: `# Notable projects
+
+## Trix · creator · open source
+- A terminal workspace where coding agents live
+- Run Claude Code, Codex, Gemini CLI and more side by side, with a live
+  status per agent: working, needs you, or done
+- Git worktree per agent, built-in diff review, cost and context tracking
+- Built in Rust · free and open source (MIT)
+- trixapp.ai · github.com/leofle/trix
+  status: active · license: MIT
 
 ## AI-Powered Data Catalog · Illumex
 - Auto-documented 10K+ tables and metrics
@@ -1388,7 +1414,7 @@ color=amber`
             { group: 'Resume', name: 'contact',  desc: 'How to reach me' },
             { group: 'Resume', name: 'download', desc: 'Save a clean PDF (alias: print)' },
             { group: 'Resume', name: 'email',    desc: 'Write me an email' },
-            { group: 'Resume', name: 'open',     usage: '<where>', desc: 'Jump to linkedin · github · email · resume', args: true },
+            { group: 'Resume', name: 'open',     usage: '<where>', desc: 'Jump to linkedin · github · trix · email · resume', args: true },
             { group: 'Agent',  name: 'ask',      usage: '<question>', desc: 'Ask lio-agent anything about me ✻', args: true },
             { group: 'Files',  name: 'ls',       usage: '[-a] [dir]', desc: 'List files' },
             { group: 'Files',  name: 'cat',      usage: '<file>', desc: 'Print a file', args: true },
@@ -1450,7 +1476,7 @@ color=amber`
                 return availableCommands.filter(c => c.startsWith(arg));
             }
             if (command === 'open') {
-                return ['linkedin', 'github', 'email', 'resume'].filter(o => o.startsWith(arg));
+                return ['linkedin', 'github', 'trix', 'email', 'resume'].filter(o => o.startsWith(arg));
             }
             return [];
         }
@@ -2005,12 +2031,13 @@ color=amber`
             return false;
         }
 
-        // Turn LinkedIn / GitHub / email mentions in escaped text into links.
+        // Turn LinkedIn / GitHub / email / Trix mentions in escaped text into links.
         function linkify(html) {
             return html
                 .replace(/linkedin\.com\/in\/[a-zA-Z0-9-]+/g, m => `<a href="https://${m}" target="_blank" rel="noopener noreferrer">${m}</a>`)
-                .replace(/github\.com\/[a-zA-Z0-9-]+/g, m => `<a href="https://${m}" target="_blank" rel="noopener noreferrer">${m}</a>`)
-                .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, m => `<a href="mailto:${m}">${m}</a>`);
+                .replace(/github\.com\/[a-zA-Z0-9-]+(?:\/[a-zA-Z0-9_-]+)?/g, m => `<a href="https://${m}" target="_blank" rel="noopener noreferrer">${m}</a>`)
+                .replace(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g, m => `<a href="mailto:${m}">${m}</a>`)
+                .replace(/\btrixapp\.ai\b/g, m => `<a href="https://${m}" target="_blank" rel="noopener noreferrer">${m}</a>`);
         }
 
         // Render the light markdown used in the virtual files.
@@ -2206,7 +2233,8 @@ ${kv.map(([k, v]) => `<span class="k">${k.padEnd(9)}</span>${escapeHTML(v)}`).jo
             const links = {
                 linkedin: 'https://linkedin.com/in/lio-fleishman',
                 github: 'https://github.com/leofle',
-                email: 'mailto:leofle@gmail.com'
+                email: 'mailto:leofle@gmail.com',
+                trix: 'https://trixapp.ai'
             };
             if (target === 'resume' || target === 'pdf') { handleDownload(); return; }
             if (links[target]) {
@@ -2216,7 +2244,7 @@ ${kv.map(([k, v]) => `<span class="k">${k.padEnd(9)}</span>${escapeHTML(v)}`).jo
                 return;
             }
             addOutput(`open: don't know how to open "${args[0] || ''}"`, 'error');
-            addOutputHTML(`Try: ${runLink('open linkedin')} · ${runLink('open github')} · ${runLink('email')} · ${runLink('download')}`, 'dim');
+            addOutputHTML(`Try: ${runLink('open linkedin')} · ${runLink('open github')} · ${runLink('open trix')} · ${runLink('email')} · ${runLink('download')}`, 'dim');
         }
 
         // ── history + bang expansion ─────────────────────────────────
@@ -2287,7 +2315,7 @@ ${kv.map(([k, v]) => `<span class="k">${k.padEnd(9)}</span>${escapeHTML(v)}`).jo
             download: 'download — save a clean PDF of this resume via your browser\'s print dialog. Alias: print.',
             print: 'print — alias of download. Save this resume as a PDF.',
             email: 'email — open a new message to leofle@gmail.com.',
-            open: 'open — jump to a destination.\n  Usage: open <linkedin|github|email|resume>',
+            open: 'open — jump to a destination.\n  Usage: open <linkedin|github|trix|email|resume>',
             history: 'history — show the commands you\'ve run.\n  Recall with !! (last), !<n> (by number), or !<prefix>.',
             man: 'man — show the manual for a command.\n  Usage: man <command>',
             tree: 'tree — show the file layout as a tree.',
@@ -2520,16 +2548,29 @@ It's the natural next step after years of putting GenAI into production for ente
                 follow: ["ask what's lio's experience?", 'ask how does lio use ai?', 'contact']
             },
             {
+                id: 'trix', file: 'projects.txt', weight: 1.1,   // wins ties, e.g. "open source work"
+                keys: ['trix', 'trixapp', 'source', 'opensource', 'oss', 'rust', 'creator', 'founder', 'multiplexer', 'tmux', 'codex'],
+                answer: `Lio is the **creator of Trix** — a terminal workspace where coding agents live. It's **free and open source** (MIT) and written in **Rust**.
+
+- Run **Claude Code, Codex, Gemini CLI** and other agents side by side
+- See at a glance which agent is **working**, which one **needs you**, and which one has **finished**
+- A git worktree per agent, built-in diff review, and live cost and context tracking
+
+Site: trixapp.ai · code: github.com/leofle/trix`,
+                follow: ['open trix', 'projects', 'ask what has lio built?']
+            },
+            {
                 id: 'projects', file: 'projects.txt',
                 keys: ['project', 'projects', 'built', 'build', 'shipped', 'made', 'portfolio', 'achievement', 'achievements', 'impact', 'proud'],
                 answer: `Highlights:
 
+- **Trix** (creator, open source) — a terminal workspace where coding agents live; free, MIT-licensed, built in Rust
 - **AI-powered data catalog** (Illumex) — auto-documented 10K+ tables and metrics; documentation time down 90%
 - **Semantic context layer** (Illumex) — the foundation for safe GenAI agents in Tableau and Power BI, with real-time chatbot QA and SQL generation
 - **Compose SDK** (Sisense) — a developer-first BI framework, in production with enterprise customers
 
 And this terminal: one HTML file, zero dependencies. More in \`projects\`.`,
-                follow: ['projects', "ask what's lio's stack?"]
+                follow: ['projects', 'ask what is trix?', "ask what's lio's stack?"]
             },
             {
                 id: 'skills', file: 'skills.txt',
@@ -2629,6 +2670,8 @@ There are a few easter eggs, too. \`ls -a\` is a good place to start.`,
                 answer: `Lio Fleishman is a **Sr. Systems Engineer at NVIDIA**, working on GPU and AI infrastructure platforms, with 15+ years across software engineering and architecture.
 
 Before NVIDIA: led Sales Engineering at **Illumex**, helping Fortune 500 companies put GenAI into production (up to 90% faster time-to-insight), and before that led **Compose SDK** at **Sisense**. Started out in graphic design — and still cares a lot about how things look and feel.
+
+Outside work, Lio created **Trix**, a free, open-source terminal workspace for coding agents (trixapp.ai).
 
 Based in Leander, Texas.`,
                 follow: ["ask what's lio's experience?", 'ask what has lio built?', 'ask why hire lio?']
