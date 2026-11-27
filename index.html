@@ -788,6 +788,12 @@
             <li>Runs Claude Code, Codex, Gemini CLI and other agents side by side, with live per-agent status.</li>
             <li><a href="https://trixapp.ai">trixapp.ai</a> &middot; <a href="https://github.com/leofle/trix">github.com/leofle/trix</a></li>
         </ul>
+        <div class="role">Core Team &mdash; NVIDIA Auto-Ontology <span class="when">Apr 2026 &ndash; Present</span></div>
+        <ul>
+            <li>Python framework for building semantic, graph-based reasoning layers over data (Apache 2.0).</li>
+            <li>Deterministic query generation, better context retrieval, and more explainable AI for LLM and agent workflows.</li>
+            <li><a href="https://github.com/NVIDIA/auto-ontology">github.com/NVIDIA/auto-ontology</a></li>
+        </ul>
 
         <h2>Key Achievements</h2>
         <ul>
@@ -977,6 +983,12 @@ Creator · Trix · Nov 2026 – Present
   which one is working, which one needs you, and which one has finished
 - Built in Rust · trixapp.ai · github.com/leofle/trix
 
+Core team · NVIDIA Auto-Ontology · Apr 2026 – Present
+- Python framework for building semantic, graph-based reasoning layers over data
+- Deterministic query generation, better context retrieval, and more explainable
+  AI for LLM and agent workflows
+- Open source (Apache 2.0) · github.com/NVIDIA/auto-ontology
+
 ## Key achievements
 - Created Trix — an open-source terminal workspace for coding agents
 - Reduced time-to-insight by up to 90% for Fortune 500 companies
@@ -1044,6 +1056,13 @@ AWS Certified Cloud Practitioner · Dec 2019 – Dec 2022`
 - Built in Rust · free and open source (MIT)
 - trixapp.ai · github.com/leofle/trix
   status: active · license: MIT
+
+## Auto-Ontology · NVIDIA · core team
+- Python framework for semantic, graph-based reasoning layers over data
+- Deterministic query generation and better context retrieval
+- More explainable AI for LLM and agent workflows
+- github.com/NVIDIA/auto-ontology
+  status: active · license: Apache 2.0
 
 ## AI-Powered Data Catalog · Illumex
 - Auto-documented 10K+ tables and metrics
@@ -2542,14 +2561,23 @@ The common thread: building AI and data systems, then making them make sense to 
             {
                 id: 'now', file: 'resume.txt',
                 keys: ['nvidia', 'current', 'currently', 'now', 'today', 'job', 'work', 'working', 'doing', 'role', 'position', 'title', 'gpu', 'ontology', 'auto-ontology'],
-                answer: `Lio is a **Sr. Systems Engineer at NVIDIA** (since Feb 2026), doing systems engineering for **GPU and AI infrastructure platforms**, and is part of the **Auto-Ontology core team**.
+                answer: `Lio is a **Sr. Systems Engineer at NVIDIA** (since Feb 2026), doing systems engineering for **GPU and AI infrastructure platforms**, and is part of the **Auto-Ontology core team** — NVIDIA's open-source (Apache 2.0) Python framework for semantic, graph-based reasoning layers over data, built for deterministic query generation and more explainable AI in LLM and agent workflows: github.com/NVIDIA/auto-ontology
 
 It's the natural next step after years of putting GenAI into production for enterprises at Illumex — now working on the layer AI actually runs on.`,
                 follow: ["ask what's lio's experience?", 'ask how does lio use ai?', 'contact']
             },
             {
-                id: 'trix', file: 'projects.txt', weight: 1.1,   // wins ties, e.g. "open source work"
-                keys: ['trix', 'trixapp', 'source', 'opensource', 'oss', 'rust', 'creator', 'founder', 'multiplexer', 'tmux', 'codex'],
+                id: 'oss', file: 'projects.txt', weight: 1.1,   // wins ties, e.g. "open source work"
+                keys: ['source', 'opensource', 'oss', 'repo', 'repos', 'contribute', 'contributes', 'contributor', 'contributions'],
+                answer: `Two open-source projects:
+
+- **Trix** (creator) — a terminal workspace where coding agents live. Free, MIT-licensed, written in Rust: trixapp.ai · github.com/leofle/trix
+- **Auto-Ontology** (core team, NVIDIA) — a Python framework for semantic, graph-based reasoning layers over data, for deterministic query generation and more explainable AI in LLM and agent workflows. Apache 2.0: github.com/NVIDIA/auto-ontology`,
+                follow: ['ask what is trix?', 'open trix', 'projects']
+            },
+            {
+                id: 'trix', file: 'projects.txt', weight: 1.1,
+                keys: ['trix', 'trixapp', 'rust', 'creator', 'founder', 'multiplexer', 'tmux', 'codex'],
                 answer: `Lio is the **creator of Trix** — a terminal workspace where coding agents live. It's **free and open source** (MIT) and written in **Rust**.
 
 - Run **Claude Code, Codex, Gemini CLI** and other agents side by side
@@ -2565,6 +2593,7 @@ Site: trixapp.ai · code: github.com/leofle/trix`,
                 answer: `Highlights:
 
 - **Trix** (creator, open source) — a terminal workspace where coding agents live; free, MIT-licensed, built in Rust
+- **Auto-Ontology** (NVIDIA, core team, open source) — semantic, graph-based reasoning layers over data for LLM and agent workflows
 - **AI-powered data catalog** (Illumex) — auto-documented 10K+ tables and metrics; documentation time down 90%
 - **Semantic context layer** (Illumex) — the foundation for safe GenAI agents in Tableau and Power BI, with real-time chatbot QA and SQL generation
 - **Compose SDK** (Sisense) — a developer-first BI framework, in production with enterprise customers
